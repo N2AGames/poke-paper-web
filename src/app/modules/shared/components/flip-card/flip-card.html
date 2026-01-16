@@ -1,5 +1,5 @@
 <div class="card-container">
-    <div class="card" [class]="isFlipped ? 'is-flipped' : ''" id="card" (click)="toggleFlip()">
+    <div class="card" [class]="cardInfo?.flipped ? 'is-flipped' : ''" id="card">
         <div class="card-face">
             <img src="/imgs/reverso_carta.png" class="back-template">
         </div>

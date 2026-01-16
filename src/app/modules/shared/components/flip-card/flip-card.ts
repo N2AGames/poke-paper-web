@@ -10,10 +10,4 @@ import { CardInfo } from '../../models/card-info.model';
 export class FlipCard {
 
   @Input() cardInfo!: CardInfo;
-
-  isFlipped = false;
-
-  toggleFlip() {
-    this.isFlipped = !this.isFlipped;
-  }
 }
