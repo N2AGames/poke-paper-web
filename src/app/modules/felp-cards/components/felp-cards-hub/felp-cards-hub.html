@@ -1,3 +1,5 @@
 <div class="felp-cards-hub-container">
-    <flip-card *ngFor="let card of pokemonCards" [cardInfo]="card"></flip-card>
+    @for (card of pokemonCards; track card.title) {
+        <flip-card [cardInfo]="card"></flip-card>
+    }
 </div>

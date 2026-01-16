@@ -1,0 +1,9 @@
+.felp-cards-hub-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vmin;
+    justify-content: center;
+    align-items: center;
+    padding: 4vmin;
+    min-height: 100vh;
+}
