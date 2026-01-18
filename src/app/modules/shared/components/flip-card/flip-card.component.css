@@ -1,5 +1,5 @@
 .card-container {
-    width: clamp(10vh, 10vw, 18vmin);
+    width: clamp(10vh, 10vw, 18vmin); /* Default size, can be overridden by [size] input */
     aspect-ratio: 2 / 3;
     perspective: 60vmin;
     filter: drop-shadow(0 1.2vmin 1vmin rgba(0,0,0,0.5));
@@ -60,8 +60,8 @@
 
 .back-content {
     position: absolute;
-    top: 20%; 
-    left: 12%;
+    top: 22%; 
+    left: 8%;
     width: 76%;
     height: auto;
     max-height: 60%;
@@ -96,11 +96,13 @@
 
 .name-left, .name-right {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
 }
 
 .name-left img, .name-right img {
     display: block;
-    height: clamp(1.2vmin, 2.4vw, 1.8vmin);
+    height: 100%;
     width: auto;
 }
 
@@ -110,11 +112,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: clamp(2vmin, 3vw, 2.5vmin);
 }
 
 .name-center-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: fill;
 }
 
 .text-display {

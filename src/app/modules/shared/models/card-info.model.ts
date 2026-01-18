@@ -5,7 +5,7 @@ export class CardInfo {
     title: string;
     flipped: boolean;
     
-    constructor(imgSrc: string, title: string, flipped: boolean = false) {
+    constructor(imgSrc: string = '', title: string = '', flipped: boolean = false) {
         this.imgSrc = imgSrc;
         this.title = title;
         this.flipped = flipped;

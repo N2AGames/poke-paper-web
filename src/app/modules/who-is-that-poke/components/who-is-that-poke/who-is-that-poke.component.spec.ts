@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlipCard } from './flip-card';
+import { WhoIsThatPoke } from './who-is-that-poke.component';
 
-describe('FlipCard', () => {
-  let component: FlipCard;
-  let fixture: ComponentFixture<FlipCard>;
+describe('WhoIsThatPoke', () => {
+  let component: WhoIsThatPoke;
+  let fixture: ComponentFixture<WhoIsThatPoke>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FlipCard]
+      imports: [WhoIsThatPoke]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FlipCard);
+    fixture = TestBed.createComponent(WhoIsThatPoke);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

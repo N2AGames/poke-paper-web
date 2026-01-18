@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardInfo } from '../models/card-info.model';
+import { PokemonApiResponse } from '../models/pokemon-api.model';
 
 const POKEMON_FELP_CARDS: CardInfo[] = [
   new CardInfo('/imgs/pokemons/agenda2030.png', 'Agenda 2030', false),
@@ -18,5 +19,13 @@ export class PokemonDataService {
     return new Promise((resolve) => {
         resolve(POKEMON_FELP_CARDS);
     });
+  }
+
+  async getPokemonData(pokemonName: string): Promise<PokemonApiResponse> {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+    if (!response.ok) {
+      throw new Error('Pokemon not found');
+    }
+    return await response.json();
   }
 }

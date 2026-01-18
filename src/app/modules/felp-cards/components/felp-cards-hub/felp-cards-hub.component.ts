@@ -1,5 +1,5 @@
 import { Component, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
-import { FlipCard } from "../../../shared/components/flip-card/flip-card";
+import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
 import { CardInfo } from '../../../shared/models/card-info.model';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { CommonModule } from '@angular/common';
@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-felp-cards-hub',
   imports: [CommonModule, FlipCard],
-  templateUrl: './felp-cards-hub.html',
-  styleUrl: './felp-cards-hub.css',
+  templateUrl: './felp-cards-hub.component.html',
+  styleUrl: './felp-cards-hub.component.css',
 })
 export class FelpCardsHub implements AfterViewInit {
   @ViewChildren(FlipCard) cardComponents!: QueryList<FlipCard>;

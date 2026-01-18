@@ -5,11 +5,14 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'flip-card',
   imports: [CommonModule],
-  templateUrl: './flip-card.html',
-  styleUrl: './flip-card.css'
+  templateUrl: './flip-card.component.html',
+  styleUrl: './flip-card.component.css'
 })
 export class FlipCard {
   @Input() cardInfo!: CardInfo;
+  @Input() size: string = '10vw';
+  @Input() pokePorcentaje: number = 80;
+  @Input() showPokeName: boolean = true;
   
   isFlipped = signal(false);
 
@@ -21,7 +24,8 @@ export class FlipCard {
     this.isFlipped.set(false);
   }
 
-  toggle() {
+  public toggle() {
+    console.log(this.cardInfo);
     this.isFlipped.update(value => !value);
   }
 }
