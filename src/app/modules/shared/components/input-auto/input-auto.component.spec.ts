@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FelpCardsHub } from './felp-cards-hub.component';
+import { InputAuto } from './input-auto.component';
 
-describe('FelpCardsHub', () => {
-  let component: FelpCardsHub;
-  let fixture: ComponentFixture<FelpCardsHub>;
+describe('InputAuto', () => {
+  let component: InputAuto;
+  let fixture: ComponentFixture<InputAuto>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FelpCardsHub]
+      imports: [InputAuto]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FelpCardsHub);
+    fixture = TestBed.createComponent(InputAuto);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

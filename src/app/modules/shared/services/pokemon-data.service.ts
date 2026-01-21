@@ -11,6 +11,9 @@ const POKEMON_FELP_CARDS: CardInfo[] = [
   new CardInfo('/imgs/pokemons/tomboy.png', 'Tomboy', false)
 ];
 
+const MAX_POKEMON_ID = 898; // Total number of Pokémons in the API
+const POKEMON_API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -22,9 +25,26 @@ export class PokemonDataService {
   }
 
   async getPokemonData(pokemonName: string): Promise<PokemonApiResponse> {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+    const response = await fetch(`${POKEMON_API_URL}${pokemonName.toLowerCase()}`);
     if (!response.ok) {
       throw new Error('Pokemon not found');
+    }
+    return await response.json();
+  }
+
+  async getPokemonDataRandom(): Promise<PokemonApiResponse> {
+    const randomId = Math.floor(Math.random() * MAX_POKEMON_ID) + 1; // There are 898 Pokemons in the API
+    const response = await fetch(`${POKEMON_API_URL}${randomId}`);
+    if (!response.ok) {
+      throw new Error('Pokemon not found');
+    }
+    return await response.json();
+  }
+
+  async getAllPokemonNames() {
+    const response = await fetch(`${POKEMON_API_URL}?limit=${MAX_POKEMON_ID}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch Pokemon names');
     }
     return await response.json();
   }

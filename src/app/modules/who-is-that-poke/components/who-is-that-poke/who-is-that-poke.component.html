@@ -1,1 +1,7 @@
-<flip-card [cardInfo]="pokeInfo" [size]="'15vw'" [showPokeName]="false"></flip-card>
+<div id="game-config"></div>
+<div id="game-container">
+    <div id="game-title">Who is that Pokèmon?</div>
+    <div id="game-instructions">Try to guess the Pokèmon!</div>
+    <flip-card [cardInfo]="pokeInfo" [size]="'15vw'" [showPokeName]="false"></flip-card>
+    <input-auto id="poke-input" [pokemonNames]="pokeNames"></input-auto>
+</div>

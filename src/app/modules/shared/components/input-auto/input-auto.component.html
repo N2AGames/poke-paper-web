@@ -1,0 +1,24 @@
+<div class="autocomplete-container">
+    <input
+        type="text"
+        class="autocomplete-input"
+        [(ngModel)]="searchText"
+        (input)="onInputChange()"
+        (keydown)="onKeyDown($event)"
+        (blur)="onBlur()"
+        [placeholder]="placeholder"
+    />
+    @if(showDropdown) {
+        <ul class="autocomplete-dropdown">
+            @for(option of filteredOptions; track option; let i = $index) {
+                <li
+                    class="autocomplete-item"
+                    [class.selected]="i === selectedIndex"
+                    (click)="selectOption(option)"
+                >
+                <span class="pokemon-name">{{ option }}</span>
+                </li>
+            }
+        </ul>
+    }
+</div>
