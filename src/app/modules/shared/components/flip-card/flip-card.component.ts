@@ -1,6 +1,8 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, signal } from '@angular/core';
 import { CardInfo } from '../../models/card-info.model';
 import { CommonModule } from '@angular/common';
+import { PokemonDataService } from '../../services/pokemon-data.service';
+import { PokemonApiResponse } from '../../models/pokemon-api.model';
 
 @Component({
   selector: 'flip-card',
@@ -8,13 +10,50 @@ import { CommonModule } from '@angular/common';
   templateUrl: './flip-card.component.html',
   styleUrl: './flip-card.component.css'
 })
-export class FlipCard {
-  @Input() cardInfo!: CardInfo;
+export class FlipCard implements OnInit {
   @Input() size: string = '10vw';
   @Input() pokePorcentaje: number = 80;
   @Input() showPokeName: boolean = true;
-  
+  @Input() autoLoad: boolean = false;
+
+  isShadowed = signal(true);
   isFlipped = signal(false);
+  isRevealing = signal(false);
+  cardInfo: CardInfo = new CardInfo();
+
+  constructor(
+    private readonly pokemonDataService: PokemonDataService
+  ) {}
+
+  ngOnInit(): void {
+    if (this.autoLoad) {
+      this.loadPokemon();
+    }
+  }
+
+  async loadPokemon(): Promise<void> {
+    try {
+      console.log('Loading pokemon data...');
+      const pokemonData = await this.pokemonDataService.getPokemonDataRandom();
+      this.cardInfo = this.parseFromPokemonData(pokemonData);
+      this.isFlipped.set(true);
+      this.isShadowed.set(true);
+    } catch (error) {
+      console.error('Error fetching pokemon data:', error);
+    }
+  }
+
+  parseFromPokemonData(data: PokemonApiResponse): CardInfo {
+    return {
+      title: data.name,
+      imgSrc: data.sprites.front_default,
+      flipped: true
+    };
+  }
+
+  getPokemonInfo(): CardInfo {
+    return this.cardInfo;
+  }
 
   flip() {
     this.isFlipped.set(true);
@@ -27,5 +66,25 @@ export class FlipCard {
   public toggle() {
     console.log(this.cardInfo);
     this.isFlipped.update(value => !value);
+  }
+
+  shadow() {
+    this.isShadowed.set(true);
+  }
+
+  unshadow() {
+    this.isRevealing.set(true);
+    setTimeout(() => {
+      this.isShadowed.set(false);
+      this.isRevealing.set(false);
+    }, 1500);
+  }
+
+  togleShadow() {
+    if (this.isShadowed()) {
+      this.unshadow();
+    } else {
+      this.shadow();
+    }
   }
 }

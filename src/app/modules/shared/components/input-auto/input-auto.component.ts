@@ -83,4 +83,15 @@ export class InputAuto implements OnChanges {
       this.selectedIndex = -1;
     }, 200);
   }
+
+  getInputValue(): string {
+    return this.searchText;
+  }
+
+  clearInput(): void {
+    this.searchText = '';
+    this.filteredOptions = [];
+    this.showDropdown = false;
+    this.selectedIndex = -1;
+  }
 }

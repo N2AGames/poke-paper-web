@@ -1,11 +1,12 @@
 <div class="card-container" [style.width]="size">
-    <div class="card" [class.is-flipped]="isFlipped()">
+    <div class="card" [class.is-flipped]="isFlipped()" [class.is-revealing]="isRevealing()">
         <div class="card-face">
             <img src="/imgs/reverso_carta.png" class="back-template">
         </div>
         <div class="card-face card-back">
             <img src="/imgs/fondo_carta.png" class="back-template">
-            <img [src]="cardInfo.imgSrc" [style.width.%]="pokePorcentaje" class="back-content">
+            <img [src]="cardInfo.imgSrc" [style.width.%]="pokePorcentaje" class="back-content"
+                 [class.shadowed]="isShadowed()">
             @if(showPokeName) {
                 <div class="back-text">
                     <div class="name-box">

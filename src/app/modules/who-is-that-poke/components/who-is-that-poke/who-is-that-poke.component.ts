@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
-import { CardInfo } from '../../../shared/models/card-info.model';
-import { PokemonApiResponse } from '../../../shared/models/pokemon-api.model';
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
 
 @Component({
@@ -16,8 +14,8 @@ export class WhoIsThatPoke implements OnInit {
   @ViewChild(FlipCard) flipCardComponent!: FlipCard;
   @ViewChild(InputAuto) inputAutoComponent!: InputAuto;
 
-  pokeInfo: CardInfo = new CardInfo();
   pokeNames: string[] = [];
+  resultMessage: string = '';
 
   constructor(
     private readonly pokemonDataService: PokemonDataService
@@ -29,27 +27,25 @@ export class WhoIsThatPoke implements OnInit {
     try {
       console.log('Starting to load data...');
       
-      const [pokemonData, allNamesData] = await Promise.all([
-        this.pokemonDataService.getPokemonDataRandom(),
-        this.pokemonDataService.getAllPokemonNames()
-      ]);
-      
-      this.pokeInfo = this.parseFromPokemonData(pokemonData);
+      const allNamesData = await this.pokemonDataService.getAllPokemonNames();
       this.pokeNames = allNamesData.results.map((entry: any) => entry.name);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   }
 
-  parseFromPokemonData(data: PokemonApiResponse): CardInfo {
-    return {
-      title: data.name,
-      imgSrc: data.sprites.front_default,
-      flipped: false
-    };
+  ngOnInit(): void {
   }
 
-  ngOnInit(): void {
-
+  submitGuess() {
+    const userGuess = this.inputAutoComponent.getInputValue().toLowerCase();
+    const pokeInfo = this.flipCardComponent.getPokemonInfo();
+    const correctName = pokeInfo.title.toLowerCase();
+    if (userGuess === correctName) {
+      this.resultMessage = "Correct! It's " + pokeInfo.title + "!";
+    } else {
+      this.resultMessage = "Wrong! It was " + pokeInfo.title + ".";
+    }
+    this.flipCardComponent.unshadow();
   }
 }
