@@ -25,10 +25,11 @@ h1 {
 }
 
 button {
-  background-color: #ff6f61;
+  background-color: #667eea;
   color: #fff;
   border: none;
   padding: 15px 30px;
+  font-family: 'Press Start 2P', cursive;
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -36,5 +37,5 @@ button {
 }
 
 button:hover {
-  background-color: #ff4a3d;
+  background-color: #764ba2;
 }

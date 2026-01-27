@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'input-auto',
   imports: [CommonModule, FormsModule],
   templateUrl: './input-auto.component.html',
-  styleUrls: ['./input-auto.component.css', '../../../../app.css'],
+  styleUrls: ['./input-auto.component.css', '../../../../../styles.css']
 })
 export class InputAuto implements OnChanges {
   @Input() pokemonNames: string[] = [];

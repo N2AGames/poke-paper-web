@@ -26,7 +26,15 @@ export class PokemonDataService {
     return await response.json();
   }
 
-  async getAllPokemonNames() {
+  async getRandomPokemons(pokeAmount: number): Promise<PokemonApiResponse[]> {
+    const promises: Promise<PokemonApiResponse>[] = [];
+    for (let i = 0; i < pokeAmount; i++) {
+      promises.push(this.getPokemonDataRandom());
+    }
+    return await Promise.all(promises);
+  }
+
+  async getAllPokemonNames(): Promise<{ results: { name: string }[] }> {
     const response = await fetch(`${POKEMON_API_URL}?limit=${MAX_POKEMON_ID}`);
     if (!response.ok) {
       throw new Error('Failed to fetch Pokemon names');

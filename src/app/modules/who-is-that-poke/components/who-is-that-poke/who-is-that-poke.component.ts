@@ -8,7 +8,7 @@ import { InputAuto } from '../../../shared/components/input-auto/input-auto.comp
   selector: 'app-who-is-that-poke',
   imports: [FlipCard, InputAuto],
   templateUrl: './who-is-that-poke.component.html',
-  styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
+  styleUrls: ['./who-is-that-poke.component.css', '../../../../../styles.css']
 })
 export class WhoIsThatPoke implements OnInit, OnDestroy {
 

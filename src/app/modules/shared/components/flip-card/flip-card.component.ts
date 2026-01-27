@@ -8,7 +8,7 @@ import { PokemonApiResponse } from '../../models/pokemon-api.model';
   selector: 'flip-card',
   imports: [CommonModule],
   templateUrl: './flip-card.component.html',
-  styleUrls: ['./flip-card.component.css', '../../../../app.css']
+  styleUrls: ['./flip-card.component.css', '../../../../../styles.css']
 })
 export class FlipCard implements OnInit {
   @Input() size: string = '10vw';
