@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
@@ -7,7 +7,7 @@ import { InputAuto } from '../../../shared/components/input-auto/input-auto.comp
   selector: 'app-who-is-that-poke',
   imports: [FlipCard, InputAuto],
   templateUrl: './who-is-that-poke.component.html',
-  styleUrl: './who-is-that-poke.component.css',
+  styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
 })
 export class WhoIsThatPoke implements OnInit {
 
@@ -16,11 +16,12 @@ export class WhoIsThatPoke implements OnInit {
 
   pokeNames: string[] = [];
   resultMessage: string = '';
+  isResultVisible: boolean = false;
 
   constructor(
-    private readonly pokemonDataService: PokemonDataService
+    private readonly pokemonDataService: PokemonDataService,
+    private readonly cdr: ChangeDetectorRef
   ) {
-    this.loadData();
   }
 
   async loadData() {
@@ -29,12 +30,14 @@ export class WhoIsThatPoke implements OnInit {
       
       const allNamesData = await this.pokemonDataService.getAllPokemonNames();
       this.pokeNames = allNamesData.results.map((entry: any) => entry.name);
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   }
 
   ngOnInit(): void {
+    this.loadData();
   }
 
   submitGuess() {
@@ -47,5 +50,21 @@ export class WhoIsThatPoke implements OnInit {
       this.resultMessage = "Wrong! It was " + pokeInfo.title + ".";
     }
     this.flipCardComponent.unshadow();
+    this.isResultVisible = true;
+  }
+
+  skipGuess() {
+    const pokeInfo = this.flipCardComponent.getPokemonInfo();
+    this.resultMessage = "Skipped! It was " + pokeInfo.title + ".";
+    this.flipCardComponent.unshadow();
+    this.isResultVisible = true;
+  }
+
+  resetPokemon() {
+    this.flipCardComponent.unflip();
+    this.resultMessage = '';
+    this.isResultVisible = false;
+    this.inputAutoComponent.clearInput();
+    this.flipCardComponent.loadPokemon();
   }
 }

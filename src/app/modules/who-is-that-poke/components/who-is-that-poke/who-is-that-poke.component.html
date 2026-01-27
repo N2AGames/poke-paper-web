@@ -4,6 +4,11 @@
     <div id="game-instructions">Try to guess the Pokèmon!</div>
     <flip-card [autoLoad]="true" [size]="'15vw'" [showPokeName]="false"></flip-card>
     <input-auto id="poke-input" [pokemonNames]="pokeNames"></input-auto>
-    <button id="submit-btn" (click)="submitGuess()">Submit Guess</button>
+    @if (!isResultVisible) {
+        <button id="submit-btn" (click)="submitGuess()">Submit Guess</button>
+        <button id="skip-btn" (click)="skipGuess()">Skip Guess</button>
+    } @else {
+        <button id="next-btn" (click)="resetPokemon()">Next Pokémon</button>
+    }
     <div id="result-message">{{ resultMessage }}</div>
 </div>

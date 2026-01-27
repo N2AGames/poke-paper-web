@@ -15,3 +15,25 @@ body {
   align-items: center;
   padding: 20px;
 }
+
+h1 {
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #ff6f61;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff4a3d;
+}

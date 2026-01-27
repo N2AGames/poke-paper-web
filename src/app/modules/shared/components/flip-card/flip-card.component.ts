@@ -8,7 +8,7 @@ import { PokemonApiResponse } from '../../models/pokemon-api.model';
   selector: 'flip-card',
   imports: [CommonModule],
   templateUrl: './flip-card.component.html',
-  styleUrl: './flip-card.component.css'
+  styleUrls: ['./flip-card.component.css', '../../../../app.css']
 })
 export class FlipCard implements OnInit {
   @Input() size: string = '10vw';
@@ -47,6 +47,7 @@ export class FlipCard implements OnInit {
     return {
       title: data.name,
       imgSrc: data.sprites.front_default,
+      cryUrl: data.cries.legacy ? data.cries.legacy : data.cries.latest,
       flipped: true
     };
   }
@@ -77,7 +78,12 @@ export class FlipCard implements OnInit {
     setTimeout(() => {
       this.isShadowed.set(false);
       this.isRevealing.set(false);
-    }, 1500);
+      this.launchCry();
+    }, 1000);
+  }
+
+  launchCry() {
+    new Audio(this.cardInfo.cryUrl).play();
   }
 
   togleShadow() {

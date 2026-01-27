@@ -103,4 +103,8 @@ export interface PokemonApiResponse {
   sprites: PokemonSprites;
   stats: PokemonStat[];
   types: PokemonType[];
+  cries: {
+    latest: string;
+    legacy: string;
+  };
 }
