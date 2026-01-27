@@ -24,7 +24,7 @@
 }
 
 #game-title {
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Pokemon Solid';
   font-size: 24px;
   color: #ffcb05;
   text-shadow: 3px 3px 0 #3b4cca;
@@ -58,8 +58,6 @@ flip-card {
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, #3b4cca 0%, #5a6fd8 100%);
-  border: none;
-  border-radius: 25px;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(59, 76, 202, 0.4);
   transition: all 0.3s ease;
@@ -91,8 +89,6 @@ flip-card {
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, #991a04 0%, #b33a2a 100%);
-  border: none;
-  border-radius: 25px;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(153, 26, 4, 0.4);
   transition: all 0.3s ease;
@@ -124,8 +120,6 @@ flip-card {
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, rgb(187, 169, 3) 0%, rgb(211, 190, 1) 0% 100%);
-  border: none;
-  border-radius: 25px;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(187, 169, 3, 0.4);
   transition: all 0.3s ease;
