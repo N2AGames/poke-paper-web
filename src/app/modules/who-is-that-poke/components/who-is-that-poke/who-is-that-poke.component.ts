@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
@@ -9,7 +10,7 @@ import { InputAuto } from '../../../shared/components/input-auto/input-auto.comp
   templateUrl: './who-is-that-poke.component.html',
   styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
 })
-export class WhoIsThatPoke implements OnInit {
+export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   @ViewChild(FlipCard) flipCardComponent!: FlipCard;
   @ViewChild(InputAuto) inputAutoComponent!: InputAuto;
@@ -18,11 +19,16 @@ export class WhoIsThatPoke implements OnInit {
   resultMessage: string = '';
   isResultVisible: boolean = false;
   cardSize: string = '15vw';
+  private resizeListener: () => void;
+  private isBrowser: boolean;
 
   constructor(
     private readonly pokemonDataService: PokemonDataService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.resizeListener = () => this.setCardSize();
   }
 
   async loadData() {
@@ -38,6 +44,11 @@ export class WhoIsThatPoke implements OnInit {
   }
 
   setCardSize() {
+    if (!this.isBrowser) {
+      this.cardSize = '15vw';
+      return;
+    }
+
     const width = window.innerWidth;
     let size = '15vw';
     if (width < 400) {
@@ -46,7 +57,7 @@ export class WhoIsThatPoke implements OnInit {
       size = '40vw';
     } else if (width < 800) {
       size = '30vw';
-    } else {
+    } else if (width < 1000) {
       size = '20vw';
     }
     this.cardSize = size;
@@ -55,9 +66,15 @@ export class WhoIsThatPoke implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.setCardSize();
-    window.addEventListener('resize', () => {
-      this.setCardSize();
-    });
+    if (this.isBrowser) {
+      window.addEventListener('resize', this.resizeListener);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.isBrowser) {
+      window.removeEventListener('resize', this.resizeListener);
+    }
   }
 
   submitGuess() {
