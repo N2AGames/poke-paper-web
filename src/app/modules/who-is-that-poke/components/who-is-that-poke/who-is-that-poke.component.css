@@ -1,15 +1,16 @@
 #game-container {
   background: white;
   border-radius: 20px;
-  padding: 40px;
+  padding: 3vw;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   max-width: 600px;
   width: 100%;
   text-align: center;
   animation: fadeIn 0.5s ease-in;
-  overflow: visible;
+  overflow: auto;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
 }
 
 @keyframes fadeIn {
@@ -25,21 +26,22 @@
 
 #game-title {
   font-family: 'Pokemon Solid';
-  font-size: 24px;
+  font-size: 30px;
   color: #ffcb05;
   text-shadow: 3px 3px 0 #3b4cca;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   letter-spacing: 2px;
 }
 
 #game-instructions {
-  font-size: 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
   color: #666;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 #poke-input {
-  margin-top: 32px;
+  margin-top: 16px;
   width: 100%;
   max-width: 400px;
   margin-left: auto;
@@ -48,13 +50,13 @@
 
 flip-card {
   display: block;
-  margin: 32px auto;
+  margin: 12px auto;
 }
 
 #submit-btn {
-  margin-top: 24px;
-  padding: 12px 32px;
-  font-size: 16px;
+  margin-top: 12px;
+  padding: 10px 24px;
+  font-size: 14px;
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, #3b4cca 0%, #5a6fd8 100%);
@@ -83,9 +85,9 @@ flip-card {
 }
 
 #skip-btn {
-  margin-top: 24px;
-  padding: 12px 32px;
-  font-size: 16px;
+  margin-top: 12px;
+  padding: 10px 24px;
+  font-size: 14px;
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, #991a04 0%, #b33a2a 100%);
@@ -114,9 +116,9 @@ flip-card {
 }
 
 #next-btn {
-  margin-top: 24px;
-  padding: 12px 32px;
-  font-size: 16px;
+  margin-top: 12px;
+  padding: 10px 24px;
+  font-size: 14px;
   font-weight: bold;
   color: white;
   background: linear-gradient(135deg, rgb(187, 169, 3) 0%, rgb(211, 190, 1) 0% 100%);
@@ -145,9 +147,9 @@ flip-card {
 }
 
 #result-message {
-  margin-top: 24px;
-  padding: 16px 24px;
-  font-size: 18px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
   font-weight: bold;
   border-radius: 12px;
   min-height: 20px;

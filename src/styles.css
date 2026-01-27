@@ -9,18 +9,19 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 }
 
 h1 {
   font-family: 'Press Start 2P', cursive;
   color: #fff;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 button {
