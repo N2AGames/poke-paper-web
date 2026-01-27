@@ -2,7 +2,7 @@
 <div id="game-container">
     <div id="game-title">Who is that Pokémon?</div>
     <div id="game-instructions">Try to guess the Pokémon!</div>
-    <flip-card [autoLoad]="true" [size]="'15vw'" [showPokeName]="false"></flip-card>
+    <flip-card [autoLoad]="true" [size]="cardSize" [showPokeName]="false"></flip-card>
     <input-auto id="poke-input" [pokemonNames]="pokeNames"></input-auto>
     @if (!isResultVisible) {
         <button id="submit-btn" (click)="submitGuess()">Submit Guess</button>

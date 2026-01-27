@@ -17,6 +17,7 @@ export class WhoIsThatPoke implements OnInit {
   pokeNames: string[] = [];
   resultMessage: string = '';
   isResultVisible: boolean = false;
+  cardSize: string = '15vw';
 
   constructor(
     private readonly pokemonDataService: PokemonDataService,
@@ -36,8 +37,27 @@ export class WhoIsThatPoke implements OnInit {
     }
   }
 
+  setCardSize() {
+    const width = window.innerWidth;
+    let size = '15vw';
+    if (width < 400) {
+      size = '60vw';
+    } else if (width < 600) {
+      size = '40vw';
+    } else if (width < 800) {
+      size = '30vw';
+    } else {
+      size = '20vw';
+    }
+    this.cardSize = size;
+  }
+
   ngOnInit(): void {
     this.loadData();
+    this.setCardSize();
+    window.addEventListener('resize', () => {
+      this.setCardSize();
+    });
   }
 
   submitGuess() {
