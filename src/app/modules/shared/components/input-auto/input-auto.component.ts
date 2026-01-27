@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class InputAuto implements OnChanges {
   @Input() pokemonNames: string[] = [];
-  @Input() placeholder: string = 'Buscar Pokémon...';
+  @Input() placeholder: string = 'Search Pokémon...';
   @Output() onSelect = new EventEmitter<string>();
 
   searchText: string = '';

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, PLATFORM_ID, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
@@ -8,7 +8,8 @@ import { InputAuto } from '../../../shared/components/input-auto/input-auto.comp
   selector: 'app-who-is-that-poke',
   imports: [FlipCard, InputAuto],
   templateUrl: './who-is-that-poke.component.html',
-  styleUrls: ['./who-is-that-poke.component.css', '../../../../../styles.css']
+  styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WhoIsThatPoke implements OnInit, OnDestroy {
 
@@ -37,7 +38,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       
       const allNamesData = await this.pokemonDataService.getAllPokemonNames();
       this.pokeNames = allNamesData.results.map((entry: any) => entry.name);
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -64,11 +65,12 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadData();
     this.setCardSize();
     if (this.isBrowser) {
       window.addEventListener('resize', this.resizeListener);
     }
+    // Cargar datos en el siguiente ciclo para evitar ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => this.loadData(), 0);
   }
 
   ngOnDestroy(): void {
