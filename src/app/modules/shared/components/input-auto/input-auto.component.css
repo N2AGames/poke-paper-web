@@ -6,7 +6,8 @@
 .autocomplete-input {
   width: 100%;
   padding: 12px 16px;
-  font-size: 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
   border: 2px solid #ddd;
   border-radius: 8px;
   outline: none;
@@ -42,6 +43,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   gap: 12px;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .autocomplete-item:hover,

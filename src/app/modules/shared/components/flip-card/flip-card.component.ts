@@ -101,7 +101,18 @@ export class FlipCard implements OnInit {
     }
   }
 
+  resetImage() {
+    // Only run in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
+      if (fondoCartaElement) {
+        fondoCartaElement.src = 'imgs/fondo_carta.png';
+      }
+    }
+  }
+
   tintCardBackground() {
+    this.resetImage();
     // Only run in browser environment
     if (isPlatformBrowser(this.platformId)) {
       const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
