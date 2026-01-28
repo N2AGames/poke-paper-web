@@ -1,3 +1,10 @@
 <div id="app-container">
-    <router-outlet />
+    @if (isLoading()) {
+        <div class="loading-screen">
+            <div class="loading-spinner"></div>
+            <p>Cargando Pokémons...</p>
+        </div>
+    } @else {
+        <router-outlet />
+    }
 </div>
