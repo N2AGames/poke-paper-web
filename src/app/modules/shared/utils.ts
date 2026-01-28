@@ -21,6 +21,11 @@ export class Utils {
         fairy: '#D685AD'
     };
 
+    static AVOID_COLORS: string[] = [
+        '#FFFFFF', // blanco
+        '#4D5253', // gris oscuro
+    ];
+
     static getColorByType(type: string): string {
         return this.TYPE_COLOR_MAP[type] || '#ffffff';
     }
@@ -57,7 +62,8 @@ export class Utils {
 
                 // Umbral para definir qué es "blanco" (255 es blanco puro)
                 // Usamos 240 para incluir blancos que no sean perfectos
-                const isWhite = r > 240 && g > 240 && b > 240;
+                const colorRgb = Utils.rgbToHex(r, g, b).toUpperCase();
+                const isWhite = Utils.AVOID_COLORS.includes(colorRgb);
 
                 if (!isWhite) {
                     // Aplicar el tinte (mezcla simple al porcentaje establecido)
@@ -81,5 +87,9 @@ export class Utils {
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
         } : { r: 0, g: 0, b: 0 };
+    }
+
+    static rgbToHex(r: number, g: number, b: number): string {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
     }
 }
