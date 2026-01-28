@@ -25,7 +25,7 @@ export class App {
       const diamondWidth = 100;
       const diamondHeight = 60;
       const cols = Math.ceil(window.innerWidth / diamondWidth) + 4;
-      const rows = Math.ceil(window.innerHeight / (diamondHeight / 2)) + 4;
+      const rows = Math.ceil(window.innerHeight / (diamondHeight / 2)) + 12;
       const totalPokemons = rows * cols;
       
       this.pokemonDataService.getRandomPokemons(totalPokemons).then(pokemons => {
@@ -55,8 +55,8 @@ function createBackgroundPokemons(pokemons: PokemonApiResponse[]) {
   backgroundContainer.style.opacity = '0.40';
 
   // Parámetros del patrón de diamantes
-  const diamondWidth = 150;
-  const diamondHeight = 120;
+  const diamondWidth = 75;
+  const diamondHeight = 60;
   const cols = Math.ceil(window.innerWidth / diamondWidth) + 4;
   const rows = Math.ceil(window.innerHeight / (diamondHeight / 2)) + 4;
 
