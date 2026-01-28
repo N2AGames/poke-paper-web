@@ -1,8 +1,10 @@
-import { Component, Input, OnChanges, OnInit, signal } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
 import { CardInfo } from '../../models/card-info.model';
 import { CommonModule } from '@angular/common';
 import { PokemonDataService } from '../../services/pokemon-data.service';
 import { PokemonApiResponse } from '../../models/pokemon-api.model';
+import { Utils } from '../../utils';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'flip-card',
@@ -21,8 +23,11 @@ export class FlipCard implements OnInit {
   isRevealing = signal(false);
   cardInfo: CardInfo = new CardInfo();
 
+  fondoCarta: string = 'imgs/fondo_carta.png';
+
   constructor(
-    private readonly pokemonDataService: PokemonDataService
+    private readonly pokemonDataService: PokemonDataService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +43,7 @@ export class FlipCard implements OnInit {
       this.cardInfo = this.parseFromPokemonData(pokemonData);
       this.isFlipped.set(true);
       this.isShadowed.set(true);
+      this.tintCardBackground();
     } catch (error) {
       console.error('Error fetching pokemon data:', error);
     }
@@ -48,6 +54,7 @@ export class FlipCard implements OnInit {
       title: data.name,
       imgSrc: data.sprites.front_default,
       cryUrl: data.cries.legacy ? data.cries.legacy : data.cries.latest,
+      color: data.types.length > 0 ? Utils.getColorByType(data.types[0].type.name) : '#FFFFFF',
       flipped: true
     };
   }
@@ -91,6 +98,16 @@ export class FlipCard implements OnInit {
       this.unshadow();
     } else {
       this.shadow();
+    }
+  }
+
+  tintCardBackground() {
+    // Only run in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
+      if (fondoCartaElement) {
+        Utils.tintImage(fondoCartaElement, this.cardInfo.color);
+      }
     }
   }
 }

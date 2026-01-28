@@ -4,7 +4,7 @@
             <img src="imgs/reverso_carta.png" class="back-template">
         </div>
         <div class="card-face card-back">
-            <img src="imgs/fondo_carta.png" class="back-template">
+            <img id="fondo-carta" [src]="fondoCarta" class="back-template">
             <img [src]="cardInfo.imgSrc" [style.width.%]="pokePorcentaje" class="back-content"
                  [class.shadowed]="isShadowed()">
             @if(showPokeName) {
