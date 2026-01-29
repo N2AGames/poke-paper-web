@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
 import { CardInfo } from '../../models/card-info.model';
 import { CommonModule } from '@angular/common';
 import { PokemonDataService } from '../../services/pokemon-data.service';
@@ -17,7 +17,7 @@ export class FlipCard implements OnInit {
   @Input() pokePorcentaje: number = 80;
   @Input() showPokeName: boolean = true;
   @Input() autoLoad: boolean = false;
-  @Input() selectedMode: number = 9;
+  @Input() selectedMode: string = '1gen';
 
   isShadowed = signal(true);
   isFlipped = signal(false);
@@ -37,17 +37,31 @@ export class FlipCard implements OnInit {
     }
   }
 
-  async loadPokemon(selectedMode: number): Promise<void> {
+  async loadPokemon(selectedMode: string): Promise<void> {
     this.selectedMode = selectedMode;
     try {
       console.log('Loading pokemon data...');
-      const pokemonData = await this.pokemonDataService.getPokemonDataRandom(this.selectedMode);
+      const pokemonData = await this.getPokemonDataByMode(this.selectedMode);
       this.cardInfo = this.parseFromPokemonData(pokemonData);
       this.isFlipped.set(true);
       this.isShadowed.set(true);
       this.tintCardBackground();
     } catch (error) {
       console.error('Error fetching pokemon data:', error);
+    }
+  }
+
+  async getPokemonDataByMode(selectedMode: string): Promise<PokemonApiResponse> {
+    if(selectedMode === '1gen') {
+      return this.pokemonDataService.getPokemonDataRandom(1);
+    } else if (selectedMode === 'classics') {
+      return this.pokemonDataService.getPokemonDataRandom(3);
+    } else if (selectedMode === 'all') {
+      return this.pokemonDataService.getPokemonDataRandom(9);
+    } else if (selectedMode === 'daily') {
+      return this.pokemonDataService.getDailyPokemonData();
+    } else {
+      throw new Error('Invalid mode selected');
     }
   }
 

@@ -16,7 +16,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   @ViewChild(FlipCard) flipCardComponent!: FlipCard;
   @ViewChild(InputAuto) inputAutoComponent!: InputAuto;
 
-  selectedMode: number = 9;
+  selectedMode: string = '1gen';
   modeSelected: boolean = false;
 
   pokeNames: string[] = [];
@@ -111,7 +111,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     }
   }
 
-  selectMode(mode: number) {
+  selectMode(mode: string) {
     this.selectedMode = mode;
     this.modeSelected = true;
     this.resetPokemon();

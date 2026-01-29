@@ -5,9 +5,10 @@
         @if (!modeSelected) {
             <div id="mode-config">Select Mode</div>
             <div id="mode-selection">
-                <button class="config-btn" (click)="selectMode(1)">1 Generation</button>
-                <button class="config-btn" (click)="selectMode(3)">Classics (Generations 1, 2 & 3)</button>
-                <button class="config-btn" (click)="selectMode(9)">All Generations</button>
+                <button class="config-btn" (click)="selectMode('1gen')">1 Generation</button>
+                <button class="config-btn" (click)="selectMode('classics')">Classics (Generations 1, 2 & 3)</button>
+                <button class="config-btn" (click)="selectMode('all')">All Generations</button>
+                <button class="config-btn" (click)="selectMode('daily')">Daily Pokémon</button>
             </div>
         } @else {
             <flip-card [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"></flip-card>
