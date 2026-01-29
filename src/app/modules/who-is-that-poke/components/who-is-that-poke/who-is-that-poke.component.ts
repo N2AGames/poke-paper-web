@@ -22,6 +22,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   pokeNames: string[] = [];
   resultMessage: string = '';
   isResultVisible: boolean = false;
+  noGuess: boolean = true;
   cardSize: string = '15vw';
 
   private resizeListener: () => void;
@@ -102,6 +103,8 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   }
 
   resetPokemon(loadNew: boolean = true) {
+    if (!this.flipCardComponent) return;
+    
     this.flipCardComponent.unflip();
     this.resultMessage = '';
     this.isResultVisible = false;
@@ -119,6 +122,10 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   changeMode() {
     this.modeSelected = false;
-    this.resetPokemon();
+    this.resetPokemon(false);
+  }
+
+  pokemonSelected($event: string) {
+    this.noGuess = !$event || $event.trim() === '';
   }
 }

@@ -85,7 +85,7 @@ export class InputAuto implements OnChanges {
   }
 
   getInputValue(): string {
-    return this.searchText;
+    return this.searchText ? this.searchText.trim() : '';
   }
 
   clearInput(): void {
