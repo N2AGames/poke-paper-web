@@ -114,12 +114,12 @@ src/
 
 ## 🚀 Características por implementar
 
-- Nuevo modo de juego: Doble amenaza:
+- **Nuevo modo de juego: Doble amenaza:**
     - Se mostrarán dos siluetas superpuestas y el usuario deberá adivinar los pokemons ocultos.
     - A medida que se fallen pokemons las dos siluetas se irán diferenciando (cambiando de color o separándose).
-- Nuevo modo de juego: Desafío diario:
+- **Nuevo modo de juego: Desafío diario:**
     - Mismo pokemon para todo el mundo.
-- Tabla de puntuaciones y estadísticas de acierto.
+- **Tabla de puntuaciones y estadísticas de acierto.**
 
 ## 🛠️ Instalación y Ejecución
 
