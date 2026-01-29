@@ -1,14 +1,25 @@
-<div id="game-config"></div>
-<div id="game-container">
-    <div id="game-title">Who is that Pokémon?</div>
-    <div id="game-instructions">Try to guess the Pokémon!</div>
-    <flip-card [autoLoad]="true" [size]="cardSize" [showPokeName]="false"></flip-card>
-    <input-auto id="poke-input" [pokemonNames]="pokeNames"></input-auto>
-    @if (!isResultVisible) {
-        <button id="submit-btn" (click)="submitGuess()">Submit Guess</button>
-        <button id="skip-btn" (click)="skipGuess()">Skip Guess</button>
-    } @else {
-        <button id="next-btn" (click)="resetPokemon()">Next Pokémon</button>
-    }
-    <div id="result-message">{{ resultMessage }}</div>
+<div id="container">
+    <div id="game-container" [class.flipping]="modeSelected">
+        <div id="game-title">Who is that Pokémon?</div>
+        <div id="game-instructions">Try to guess the Pokémon!</div>
+        @if (!modeSelected) {
+            <div id="mode-config">Select Mode</div>
+            <div id="mode-selection">
+                <button class="config-btn" (click)="selectMode(1)">1 Generation</button>
+                <button class="config-btn" (click)="selectMode(3)">Classics (Generations 1, 2 & 3)</button>
+                <button class="config-btn" (click)="selectMode(9)">All Generations</button>
+            </div>
+        } @else {
+            <flip-card [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"></flip-card>
+            <input-auto id="poke-input" [pokemonNames]="pokeNames"></input-auto>
+            @if (!isResultVisible) {
+                <button id="submit-btn" (click)="submitGuess()">Submit Guess</button>
+                <button id="skip-btn" (click)="skipGuess()">Skip Guess</button>
+            } @else {
+                <button id="next-btn" (click)="resetPokemon()">Next Pokémon</button>
+            }
+            <button id="next-btn" (click)="changeMode()">Change mode</button>
+            <div id="result-message">{{ resultMessage }}</div>
+        }
+    </div>
 </div>

@@ -16,16 +16,19 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   @ViewChild(FlipCard) flipCardComponent!: FlipCard;
   @ViewChild(InputAuto) inputAutoComponent!: InputAuto;
 
+  selectedMode: number = 9;
+  modeSelected: boolean = false;
+
   pokeNames: string[] = [];
   resultMessage: string = '';
   isResultVisible: boolean = false;
   cardSize: string = '15vw';
+
   private resizeListener: () => void;
   private isBrowser: boolean;
 
   constructor(
     private readonly pokemonDataService: PokemonDataService,
-    private readonly cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -38,7 +41,6 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       
       const allNamesData = await this.pokemonDataService.getAllPokemonNames();
       this.pokeNames = allNamesData.results.map((entry: any) => entry.name);
-      this.cdr.markForCheck();
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -99,11 +101,24 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     this.isResultVisible = true;
   }
 
-  resetPokemon() {
+  resetPokemon(loadNew: boolean = true) {
     this.flipCardComponent.unflip();
     this.resultMessage = '';
     this.isResultVisible = false;
     this.inputAutoComponent.clearInput();
-    this.flipCardComponent.loadPokemon();
+    if (loadNew) {
+      this.flipCardComponent.loadPokemon(this.selectedMode);
+    }
+  }
+
+  selectMode(mode: number) {
+    this.selectedMode = mode;
+    this.modeSelected = true;
+    this.resetPokemon();
+  }
+
+  changeMode() {
+    this.modeSelected = false;
+    this.resetPokemon();
   }
 }

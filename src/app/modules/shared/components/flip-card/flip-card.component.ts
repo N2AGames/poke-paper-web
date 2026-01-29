@@ -17,6 +17,7 @@ export class FlipCard implements OnInit {
   @Input() pokePorcentaje: number = 80;
   @Input() showPokeName: boolean = true;
   @Input() autoLoad: boolean = false;
+  @Input() selectedMode: number = 9;
 
   isShadowed = signal(true);
   isFlipped = signal(false);
@@ -32,14 +33,15 @@ export class FlipCard implements OnInit {
 
   ngOnInit(): void {
     if (this.autoLoad) {
-      this.loadPokemon();
+      this.loadPokemon(this.selectedMode);
     }
   }
 
-  async loadPokemon(): Promise<void> {
+  async loadPokemon(selectedMode: number): Promise<void> {
+    this.selectedMode = selectedMode;
     try {
       console.log('Loading pokemon data...');
-      const pokemonData = await this.pokemonDataService.getPokemonDataRandom();
+      const pokemonData = await this.pokemonDataService.getPokemonDataRandom(this.selectedMode);
       this.cardInfo = this.parseFromPokemonData(pokemonData);
       this.isFlipped.set(true);
       this.isShadowed.set(true);
