@@ -2,7 +2,8 @@
     width: clamp(10vh, 10vw, 18vmin); /* Default size, can be overridden by [size] input */
     aspect-ratio: 2 / 3;
     perspective: 60vmin;
-    filter: drop-shadow(0 1.2vmin 1vmin rgba(0,0,0,0.5));
+    filter: drop-shadow(0 0.6vmin 0 rgba(0,0,0,0.7))
+            drop-shadow(0 1.2vmin 0 rgba(0,0,0,0.85));
     /* Firefox fix: ensure container doesn't interfere with 3D transforms */
     transform-style: preserve-3d;
 }  
@@ -64,14 +65,14 @@
 
 .card-front {
     transform: rotateY(0deg);
-    border-radius: 0.6vmin;
+    border-radius: 0.2vmin;
 }
 
 .card-back {
     transform: rotateY(180deg);
     position: relative;
     overflow: hidden;
-    border-radius: 0.6vmin;
+    border-radius: 0.2vmin;
 }
 
 .back-template {
@@ -92,7 +93,7 @@
     max-height: 60%;
     z-index: 2;
     object-fit: cover;
-    border-radius: 0.6vmin;
+    border-radius: 0.2vmin;
 }
 
 .back-content.shadowed {
