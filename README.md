@@ -21,7 +21,8 @@ Un juego interactivo basado en Pokémon desarrollado con **Angular 21** que desa
 El jugador puede seleccionar el modo de juego:
 - **Generación 1**: Pokémons de primera generación.
 - **Modo clásico**: Pokémons de los juegos clásicos (Gen 1, 2 y 3).
-- **Modo complleto**: Pokémons de todas las generaciones (Gen 1-9).
+- **Modo completo**: Pokémons de todas las generaciones (Gen 1-9).
+- **Nuevo modo de juego: Desafío diario:**: Mismo pokemon para todo el mundo.
 
 ### 2. **Carta Flip (Flip Card)**
 - Muestra una **imagen silhueteada** del Pokémon
@@ -114,12 +115,10 @@ src/
 
 ## 🚀 Características por implementar
 
-- **Nuevo modo de juego: Doble amenaza:**
+- **Nuevo modo de juego: Doble amenaza**:
     - Se mostrarán dos siluetas superpuestas y el usuario deberá adivinar los pokemons ocultos.
     - A medida que se fallen pokemons las dos siluetas se irán diferenciando (cambiando de color o separándose).
-- **Nuevo modo de juego: Desafío diario:**
-    - Mismo pokemon para todo el mundo.
-- **Tabla de puntuaciones y estadísticas de acierto.**
+- **Tabla de puntuaciones y estadísticas de acierto**
 
 ## 🛠️ Instalación y Ejecución
 
