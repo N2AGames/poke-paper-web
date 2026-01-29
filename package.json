@@ -10,7 +10,7 @@
     "serve:ssr:poke-paper-web": "node dist/poke-paper-web/server/server.mjs",
     "github-build": "ng build --configuration production --base-href https://n2agames.github.io/poke-paper-web/",
     "predeploy": "npm run github-build && copy dist\\poke-paper-web\\browser\\index.csr.html dist\\poke-paper-web\\browser\\index.html && copy dist\\poke-paper-web\\browser\\index.html dist\\poke-paper-web\\browser\\404.html",
-    "deploy-gh-pages": "npm run predeploy && npx angular-cli-ghpages --dir=dist/poke-paper-web/browser --no-silent"
+    "deploy": "npm run predeploy && npx angular-cli-ghpages --dir=dist/poke-paper-web/browser --no-silent"
   },
   "prettier": {
     "printWidth": 100,
