@@ -1,0 +1,54 @@
+<div class="save-score-container">
+  @if (!isScoreSaved()) {
+    <div class="score-input-group">
+      <div class="score-display">
+        <h3>Tu Puntuación</h3>
+        <p class="score-value">{{ score }}</p>
+      </div>
+
+      @if (currentUser(); as user) {
+        <div class="user-section">
+          <p class="user-info">Jugando como: <strong>{{ userName() }}</strong></p>
+          <input
+            type="text"
+            [(ngModel)]="tempUserName"
+            placeholder="Tu nombre de usuario"
+            class="username-input"
+          />
+          <button (click)="saveScore()" class="btn btn-save" [disabled]="isSaving()">
+            {{ isSaving() ? 'Guardando...' : 'Guardar Puntuación' }}
+          </button>
+          <button (click)="logout()" class="btn btn-logout">
+            Cambiar usuario
+          </button>
+        </div>
+      } @else {
+        <button (click)="showAuthModal.set(true)" class="btn btn-login">
+          Inicia sesión para guardar tu puntuación
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="score-saved-message">
+      <h3>¡Puntuación Guardada! 🎉</h3>
+      <p>Tu puntuación ha sido registrada en el leaderboard</p>
+      <button (click)="goToLeaderboard()" class="btn btn-leaderboard">
+        Ver Leaderboard
+      </button>
+    </div>
+  }
+
+  @if (showError()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+  }
+</div>
+
+<!-- Auth Modal -->
+@if (showAuthModal()) {
+  <app-auth-modal
+    (authSuccess)="onAuthSuccess($event)"
+    (close)="showAuthModal.set(false)">
+  </app-auth-modal>
+}

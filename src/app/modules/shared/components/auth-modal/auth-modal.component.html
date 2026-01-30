@@ -1,0 +1,101 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ isLogin() ? 'Iniciar Sesión' : 'Crear Cuenta' }}</h2>
+      <button class="close-btn" (click)="closeModal()">×</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="tu@email.com"
+          required
+          class="form-input"
+        />
+      </div>
+
+      <!-- Username (solo en registro) -->
+      @if (!isLogin()) {
+        <div class="form-group">
+          <label for="username">Nombre de usuario</label>
+          <input
+            type="text"
+            id="username"
+            [(ngModel)]="username"
+            name="username"
+            placeholder="Tu nombre de usuario"
+            required
+            class="form-input"
+          />
+        </div>
+      }
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Mínimo 6 caracteres"
+          required
+          class="form-input"
+        />
+      </div>
+
+      <!-- Confirm Password (solo en registro) -->
+      @if (!isLogin()) {
+        <div class="form-group">
+          <label for="confirm-password">Confirmar Contraseña</label>
+          <input
+            type="password"
+            id="confirm-password"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            placeholder="Repite tu contraseña"
+            required
+            class="form-input"
+          />
+        </div>
+      }
+
+      <!-- Error Message -->
+      @if (error()) {
+        <div class="error-message">
+          {{ error() }}
+        </div>
+      }
+
+      <!-- Buttons -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isLoading()"
+      >
+        {{ isLoading() ? 'Procesando...' : (isLogin() ? 'Iniciar Sesión' : 'Crear Cuenta') }}
+      </button>
+
+      <!-- Toggle Mode -->
+      <div class="toggle-mode">
+        @if (isLogin()) {
+          <p>
+            ¿No tienes cuenta?
+            <button type="button" (click)="toggleMode()">Crear una</button>
+          </p>
+        } @else {
+          <p>
+            ¿Ya tienes cuenta?
+            <button type="button" (click)="toggleMode()">Inicia sesión</button>
+          </p>
+        }
+      </div>
+    </form>
+  </div>
+</div>

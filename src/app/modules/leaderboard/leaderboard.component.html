@@ -1,0 +1,92 @@
+<div class="leaderboard-container">
+  <div class="header">
+    <h1>🏆 Leaderboard</h1>
+    <div class="header-actions">
+      @if (currentUser(); as user) {
+        <div class="user-info">
+          <span>{{ gameUsername() || user.email }}</span>
+          <button (click)="logout()" class="btn btn-logout">Cerrar sesión</button>
+        </div>
+      } @else {
+        <button (click)="openAuthModal()" class="btn btn-login">
+          Inicia sesión
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="game-mode-filter">
+      <label for="gameMode">Modo de juego:</label>
+      <select
+        id="gameMode"
+        [(ngModel)]="selectedGameMode"
+        (change)="onGameModeChange()"
+        class="select-control"
+      >
+        @for (mode of gameModes; track mode) {
+          <option [value]="mode">
+            {{ mode === 'all' ? 'Todos' : mode }}
+          </option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">
+      <p>Cargando leaderboard...</p>
+    </div>
+  } @else {
+    <div class="leaderboard-table-wrapper">
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th class="rank-col">Ranking</th>
+            <th class="player-col">Jugador</th>
+            <th class="score-col">Puntuación</th>
+            <th class="mode-col">Modo</th>
+            <th class="date-col">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (leaderboardEntries().length > 0) {
+            @for (entry of leaderboardEntries(); let index = $index; track entry.id) {
+              <tr [ngClass]="getRowClass(index)">
+                <td class="rank-col">
+                  @if (getRankBadge(index)) {
+                    {{ getRankBadge(index) }}
+                  } @else {
+                    #{{ index + 1 }}
+                  }
+                </td>
+                <td class="player-col">{{ entry.username }}</td>
+                <td class="score-col">
+                  <strong>{{ entry.score }}</strong>
+                </td>
+                <td class="mode-col">{{ entry.game_mode }}</td>
+                <td class="date-col">
+                  {{ entry.created_at | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr>
+              <td colspan="5" class="empty-state">
+                <p>No hay registros en el leaderboard aún</p>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Auth Modal -->
+  @if (showAuthModal()) {
+    <app-auth-modal
+      (authSuccess)="onAuthSuccess($event)"
+      (close)="showAuthModal.set(false)">
+    </app-auth-modal>
+  }
+</div>
