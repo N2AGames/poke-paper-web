@@ -48,14 +48,32 @@ export class PokemonDataService {
 
   async getDailyPokemonData(): Promise<PokemonApiResponse> {
     const actualDate = new Date();
-    // Use date to generate a consistent daily index
-    const dayOfYear = Math.floor((actualDate.getTime() - new Date(actualDate.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
-    const dailyIndex = (dayOfYear % GENERATION_LIMITS[LAST_GENERATION]) + 1;
+    // Generate consistent daily index based on date (YYYY-MM-DD)
+    const dailyIndex = this.getDailyPokemonIndex(actualDate);
     const response = await fetch(`${this.pokemonApiUrl}${dailyIndex}`);
     if (!response.ok) {
       throw new Error('Pokemon not found');
     }
     return await response.json();
+  }
+
+  private getDailyPokemonIndex(date: Date): number {
+    // Format date as YYYY-MM-DD to ensure consistency across timezones
+    const dateString = date.toISOString().split('T')[0];
+    
+    // Simple hash function using date string
+    let hash = 0;
+    for (let i = 0; i < dateString.length; i++) {
+      const char = dateString.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    
+    // Convert hash to valid pokemon index (1 to GENERATION_LIMITS)
+    const maxPokemon = GENERATION_LIMITS[LAST_GENERATION];
+    const pokemonIndex = (Math.abs(hash) % maxPokemon) + 1;
+    
+    return pokemonIndex;
   }
 
   async getAllPokemonNames(): Promise<{ results: { name: string }[] }> {
