@@ -1,7 +1,26 @@
 <div id="container">
     <div id="game-container" [class.flipping]="modeSelected">
-        <div id="game-title">Who is that Pokémon?</div>
-        <div id="game-instructions">Try to guess the Pokémon!</div>
+        <div id="game-title-container">
+            <div id="game-title">Who is that Pokémon?</div>
+            <button class="info-button" (click)="openInstructions = true">?</button>
+        </div>
+        @if(openInstructions) {
+            <div id="game-instructions">
+                <h2>How to Play</h2>
+                <p>Welcome to "Who is that Pokémon?"! In this game, your goal is to guess the hidden Pokémon based on their silhouette.</p>
+                <p>The background colors will depend on the type of the Pokémon: </p>
+                <div class="instruction-images">
+                    <flip-card #flipCardI1 [autoLoad]="true" [size]="'20vh'" [showPokeName]="true" [selectedMode]="'manual'"
+                    [doubleTrouble]="false" [pokemonNames]="['bulbasaur']" [cardText]="'Normal'"></flip-card>
+                    <flip-card #flipCardI2 [autoLoad]="true" [size]="'20vh'" [showPokeName]="true" [selectedMode]="'manual'"
+                    [doubleTrouble]="true" [pokemonNames]="['golem','pyroar']" [cardText]="'Double Trouble'"></flip-card>
+                </div>
+                <p>In the normal mode, the two colors of the hidden Pokémon's types are shown.</p>
+                <br>
+                <p>In the "double trouble" mode, the four colors of the hidden Pokémon's types are shown.</p>
+                <button class="close-instructions-btn" (click)="openInstructions = false">X</button>
+            </div>
+        }
         @if (!modeSelected) {
             <div id="mode-config">Select Mode</div>
             <div id="mode-selection">

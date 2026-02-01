@@ -27,6 +27,8 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   noGuess: boolean = true;
   cardSize: string = '15vw';
 
+  openInstructions: boolean = false;
+
   private resizeListener: () => void;
   private isBrowser: boolean;
 

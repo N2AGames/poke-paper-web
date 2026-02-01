@@ -4,13 +4,13 @@
             <img src="imgs/reverso_carta.png" class="back-template">
         </div>
         <div class="card-face card-back">
-            <img id="fondo-carta" [src]="fondoCarta" class="back-template">
+            <img #fondoCartaImg [src]="fondoCarta" class="back-template">
             <!-- Pokémon revelados (detrás) -->
-            @for (imgSrc of cardInfo.imgsSrc; track imgSrc; let i = $index) {
+            @for (imgSrc of cardInfo.imgsSrc; track i; let i = $index) {
                 <img [src]="imgSrc" [style.width.%]="pokePorcentaje" class="back-content back-content-revealed"/>
             }
             <!-- Pokémon sombreados (adelante) -->
-            @for (imgSrc of cardInfo.imgsSrc; track imgSrc; let i = $index) {
+            @for (imgSrc of cardInfo.imgsSrc; track i; let i = $index) {
                 @if (checkShadowed(i)) {
                     <img [src]="imgSrc" [style.width.%]="pokePorcentaje" class="back-content back-content-shadowed"/>
                 }

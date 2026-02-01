@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, signal, Inject, PLATFORM_ID, CreateSignalOptions, WritableSignal, computed } from '@angular/core';
+import { Component, Input, OnInit, signal, Inject, PLATFORM_ID, CreateSignalOptions, WritableSignal, computed, ViewChild, ElementRef } from '@angular/core';
 import { CardInfo } from '../../models/card-info.model';
 import { CommonModule } from '@angular/common';
 import { PokemonDataService } from '../../services/pokemon-data.service';
@@ -20,6 +20,8 @@ export class FlipCard implements OnInit {
   @Input() autoLoad: boolean = false;
   @Input() selectedMode: string = '1gen';
   @Input() doubleTrouble: boolean = false;
+  @Input() cardText: string = '';
+  @Input() pokemonNames: string[] = [];
   
   pokemonAmount: number = 1;
 
@@ -29,6 +31,7 @@ export class FlipCard implements OnInit {
   cardInfo: CardInfo = new CardInfo();
 
   fondoCarta: string = 'imgs/fondo_carta.png';
+  @ViewChild('fondoCartaImg') fondoCartaImg?: ElementRef<HTMLImageElement>;
 
   constructor(
     private readonly pokemonDataService: PokemonDataService,
@@ -36,6 +39,7 @@ export class FlipCard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.pokemonNames);
     if (this.autoLoad) {
       this.loadPokemon(this.selectedMode);
     }
@@ -50,7 +54,7 @@ export class FlipCard implements OnInit {
       console.log('Loading pokemon data...');
       const amount = Math.max(1, this.pokemonAmount || 1);
       const pokemonDataList = await Promise.all(
-        Array.from({ length: amount }, () => this.getPokemonDataByMode(this.selectedMode))
+        Array.from({ length: amount }, (_, index) => this.getPokemonDataByMode(this.selectedMode, index))
       );
       this.cardInfo = this.parseFromPokemonData(pokemonDataList);
       this.initShadowSignals(this.cardInfo.imgsSrc.length);
@@ -62,7 +66,7 @@ export class FlipCard implements OnInit {
     }
   }
 
-  async getPokemonDataByMode(selectedMode: string): Promise<PokemonApiResponse> {
+  async getPokemonDataByMode(selectedMode: string, index: number): Promise<PokemonApiResponse> {
     if(selectedMode === '1gen') {
       return this.pokemonDataService.getPokemonDataRandom(1);
     } else if (selectedMode === 'classics') {
@@ -71,6 +75,8 @@ export class FlipCard implements OnInit {
       return this.pokemonDataService.getPokemonDataRandom(9);
     } else if (selectedMode === 'daily') {
       return this.pokemonDataService.getDailyPokemonData();
+    } else if (selectedMode === 'manual' && this.pokemonNames) {
+      return this.pokemonDataService.getPokemonData(this.pokemonNames[index]);
     } else {
       throw new Error('Invalid mode selected');
     }
@@ -78,7 +84,7 @@ export class FlipCard implements OnInit {
 
   parseFromPokemonData(data: PokemonApiResponse[]): CardInfo {
     return {
-      title: data.map(p => p.name).join(' + '),
+      title: this.cardText ? this.cardText : data.map(p => p.name).join(' + '),
       imgsSrc: data.map(p => p.sprites.front_default),
       criesUrl: data.map(p => p.cries.legacy ? p.cries.legacy : p.cries.latest),
       colors: this.parseColorsFromData(data),
@@ -182,7 +188,7 @@ export class FlipCard implements OnInit {
   resetImage() {
     // Only run in browser environment
     if (isPlatformBrowser(this.platformId)) {
-      const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
+      const fondoCartaElement = this.fondoCartaImg?.nativeElement;
       if (fondoCartaElement) {
         fondoCartaElement.src = 'imgs/fondo_carta.png';
       }
@@ -193,7 +199,7 @@ export class FlipCard implements OnInit {
     this.resetImage();
     // Only run in browser environment
     if (isPlatformBrowser(this.platformId)) {
-      const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
+      const fondoCartaElement = this.fondoCartaImg?.nativeElement;
       if (fondoCartaElement) {
         // TODO Handle multiple colors
         Utils.tintImage(fondoCartaElement, this.cardInfo.colors);
