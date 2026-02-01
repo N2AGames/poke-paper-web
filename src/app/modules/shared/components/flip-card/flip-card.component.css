@@ -91,9 +91,17 @@
     width: 76%;
     height: auto;
     max-height: 60%;
-    z-index: 2;
     object-fit: cover;
     border-radius: 0.2vmin;
+}
+
+.back-content-revealed {
+    z-index: 2;
+}
+
+.back-content-shadowed {
+    z-index: 3;
+    filter: brightness(0) drop-shadow(0 0 0.8vmin rgba(0,0,0,0.8));
 }
 
 .back-content.shadowed {

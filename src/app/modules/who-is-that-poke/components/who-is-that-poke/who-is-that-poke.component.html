@@ -6,12 +6,14 @@
             <div id="mode-config">Select Mode</div>
             <div id="mode-selection">
                 <button class="config-btn" (click)="selectMode('1gen')">1 Generation</button>
-                <button class="config-btn" (click)="selectMode('classics')">Classics (Generations 1, 2 & 3)</button>
+                <button class="config-btn" (click)="selectMode('classics')">Classics (Gens 1, 2 & 3)</button>
                 <button class="config-btn" (click)="selectMode('all')">All Generations</button>
                 <button class="config-btn" (click)="selectMode('daily')">Daily Pokémon</button>
+                <button class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
             </div>
         } @else {
-            <flip-card #flipCard [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"></flip-card>
+            <flip-card #flipCard [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"
+            [doubleTrouble]="isDoubleTrouble"></flip-card>
             <input-auto id="poke-input" [pokemonNames]="pokeNames" (onSelect)="pokemonSelected($event)"></input-auto>
             @if (!isResultVisible) {
                 <button id="submit-btn" (click)="submitGuess()" [disabled]="flipCard.isRevealing() || noGuess">Submit Guess</button>

@@ -5,8 +5,16 @@
         </div>
         <div class="card-face card-back">
             <img id="fondo-carta" [src]="fondoCarta" class="back-template">
-            <img [src]="cardInfo.imgSrc" [style.width.%]="pokePorcentaje" class="back-content"
-                 [class.shadowed]="isShadowed()">
+            <!-- Pokémon revelados (detrás) -->
+            @for (imgSrc of cardInfo.imgsSrc; track imgSrc; let i = $index) {
+                <img [src]="imgSrc" [style.width.%]="pokePorcentaje" class="back-content back-content-revealed"/>
+            }
+            <!-- Pokémon sombreados (adelante) -->
+            @for (imgSrc of cardInfo.imgsSrc; track imgSrc; let i = $index) {
+                @if (checkShadowed(i)) {
+                    <img [src]="imgSrc" [style.width.%]="pokePorcentaje" class="back-content back-content-shadowed"/>
+                }
+            }
             @if(showPokeName) {
                 <div class="back-text">
                     <div class="name-box">

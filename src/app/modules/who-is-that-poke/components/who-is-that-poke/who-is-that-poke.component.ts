@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, PLATFORM_ID, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-who-is-that-poke',
-  imports: [FlipCard, InputAuto],
+  imports: [FlipCard, InputAuto, CommonModule, FormsModule],
   templateUrl: './who-is-that-poke.component.html',
   styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -18,6 +19,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   selectedMode: string = '1gen';
   modeSelected: boolean = false;
+  isDoubleTrouble: boolean = false;
 
   pokeNames: string[] = [];
   resultMessage: string = '';
@@ -30,7 +32,8 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   constructor(
     private readonly pokemonDataService: PokemonDataService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private cdr: ChangeDetectorRef
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.resizeListener = () => this.setCardSize();
@@ -85,20 +88,28 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   submitGuess() {
     const userGuess = this.inputAutoComponent.getInputValue().toLowerCase();
     const pokeInfo = this.flipCardComponent.getPokemonInfo();
-    const correctName = pokeInfo.title.toLowerCase();
-    if (userGuess === correctName) {
-      this.resultMessage = "Correct! It's " + pokeInfo.title + "!";
-    } else {
+    const correctNames = pokeInfo.title.toLowerCase().split(' + ');
+    const indexOfCorrect = correctNames.findIndex(name => name === userGuess);
+    if (indexOfCorrect == -1) {
       this.resultMessage = "Wrong! It was " + pokeInfo.title + ".";
+      this.flipCardComponent.unshadowAll();
+      this.isResultVisible = true;
+    } else {
+        this.flipCardComponent.unshadow(indexOfCorrect);
+        if(this.flipCardComponent.checkAllShadowsRemoved()) {
+          this.resultMessage = "Correct! You found all: " + pokeInfo.title + "!";
+          this.isResultVisible = true;
+        } else {
+          this.resultMessage = "Correct! You found " + pokeInfo.pokeData[indexOfCorrect].name + "! Keep going!";
+        }
     }
-    this.flipCardComponent.unshadow();
-    this.isResultVisible = true;
+    this.inputAutoComponent.clearInput();
   }
 
   skipGuess() {
     const pokeInfo = this.flipCardComponent.getPokemonInfo();
     this.resultMessage = "Skipped! It was " + pokeInfo.title + ".";
-    this.flipCardComponent.unshadow();
+    this.flipCardComponent.unshadowAll();
     this.isResultVisible = true;
   }
 
@@ -127,5 +138,11 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   pokemonSelected($event: string) {
     this.noGuess = !$event || $event.trim() === '';
+  }
+
+  toggleDoubleTrouble() {
+    this.isDoubleTrouble = !this.isDoubleTrouble;
+    console.log('isDoubleTrouble:', this.isDoubleTrouble);
+    this.cdr.markForCheck();
   }
 }

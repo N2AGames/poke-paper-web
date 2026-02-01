@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, signal, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, signal, Inject, PLATFORM_ID, CreateSignalOptions, WritableSignal, computed } from '@angular/core';
 import { CardInfo } from '../../models/card-info.model';
 import { CommonModule } from '@angular/common';
 import { PokemonDataService } from '../../services/pokemon-data.service';
 import { PokemonApiResponse } from '../../models/pokemon-api.model';
 import { Utils } from '../../utils';
 import { isPlatformBrowser } from '@angular/common';
+import { sign } from 'crypto';
 
 @Component({
   selector: 'flip-card',
@@ -18,8 +19,11 @@ export class FlipCard implements OnInit {
   @Input() showPokeName: boolean = true;
   @Input() autoLoad: boolean = false;
   @Input() selectedMode: string = '1gen';
+  @Input() doubleTrouble: boolean = false;
+  
+  pokemonAmount: number = 1;
 
-  isShadowed = signal(true);
+  isShadowed: WritableSignal<boolean>[] = new Array<WritableSignal<boolean>>();;
   isFlipped = signal(false);
   isRevealing = signal(false);
   cardInfo: CardInfo = new CardInfo();
@@ -38,13 +42,20 @@ export class FlipCard implements OnInit {
   }
 
   async loadPokemon(selectedMode: string): Promise<void> {
+    if(this.doubleTrouble) {
+      this.pokemonAmount = 2;
+    }
     this.selectedMode = selectedMode;
     try {
       console.log('Loading pokemon data...');
-      const pokemonData = await this.getPokemonDataByMode(this.selectedMode);
-      this.cardInfo = this.parseFromPokemonData(pokemonData);
+      const amount = Math.max(1, this.pokemonAmount || 1);
+      const pokemonDataList = await Promise.all(
+        Array.from({ length: amount }, () => this.getPokemonDataByMode(this.selectedMode))
+      );
+      this.cardInfo = this.parseFromPokemonData(pokemonDataList);
+      this.initShadowSignals(this.cardInfo.imgsSrc.length);
       this.isFlipped.set(true);
-      this.isShadowed.set(true);
+      this.isShadowed.forEach(signal => signal.set(true));
       this.tintCardBackground();
     } catch (error) {
       console.error('Error fetching pokemon data:', error);
@@ -65,13 +76,15 @@ export class FlipCard implements OnInit {
     }
   }
 
-  parseFromPokemonData(data: PokemonApiResponse): CardInfo {
+  parseFromPokemonData(data: PokemonApiResponse[]): CardInfo {
     return {
-      title: data.name,
-      imgSrc: data.sprites.front_default,
-      cryUrl: data.cries.legacy ? data.cries.legacy : data.cries.latest,
-      color: data.types.length > 0 ? Utils.getColorByType(data.types[0].type.name) : '#FFFFFF',
-      flipped: true
+      title: data.map(p => p.name).join(' + '),
+      imgsSrc: data.map(p => p.sprites.front_default),
+      criesUrl: data.map(p => p.cries.legacy ? p.cries.legacy : p.cries.latest),
+      colors: data.map(p => p.types.length > 0 ? Utils.getColorByType(p.types[0].type.name) : '#FFFFFF'),
+      pokeData: data,
+      flipped: true,
+      shadowed: Array(data.length).fill(true)
     };
   }
 
@@ -92,29 +105,58 @@ export class FlipCard implements OnInit {
     this.isFlipped.update(value => !value);
   }
 
-  shadow() {
-    this.isShadowed.set(true);
+  shadow(i: number = 0) {
+    this.isShadowed[i].set(true);
   }
 
-  unshadow() {
+  unshadow(i: number = 0) {
     this.isRevealing.set(true);
+    this.cardInfo.shadowed[i] = false;
     setTimeout(() => {
-      this.isShadowed.set(false);
+      this.isShadowed[i].set(false);
       this.isRevealing.set(false);
       this.launchCry();
     }, 1000);
   }
 
-  launchCry() {
-    new Audio(this.cardInfo.cryUrl).play();
+  unshadowAll() {
+    this.isRevealing.set(true);
+    this.cardInfo.shadowed.fill(false);
+    setTimeout(() => {
+      this.isShadowed.forEach(signal => signal.set(false));
+      this.isRevealing.set(false);
+      this.launchCry();
+    }, 1000);
+  }
+  
+  checkAllShadowsRemoved() {
+    return this.cardInfo.shadowed.every(shadow => !shadow);
   }
 
-  togleShadow() {
-    if (this.isShadowed()) {
-      this.unshadow();
+  launchCry() {
+    // TODO Handle multiple cries
+    new Audio(this.cardInfo.criesUrl[0]).play();
+  }
+
+  togleShadow(i: number = 0) {
+    if (this.isShadowed[i]()) {
+      this.unshadow(i);
     } else {
-      this.shadow();
+      this.shadow(i);
     }
+  }
+
+  checkShadowed(i: number = 0): boolean {
+    const shadowSignal = this.isShadowed[i];
+    return shadowSignal ? shadowSignal() : true;
+  }
+
+  initShadowSignals(count: number) {
+    this.isShadowed = Array.from({ length: count }, () => signal(true));
+  }
+
+  removeShadowAt(indexOfCorrect: number) {
+    this.isShadowed[indexOfCorrect].set(false);
   }
 
   resetImage() {
@@ -133,7 +175,8 @@ export class FlipCard implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
       if (fondoCartaElement) {
-        Utils.tintImage(fondoCartaElement, this.cardInfo.color);
+        // TODO Handle multiple colors
+        Utils.tintImage(fondoCartaElement, this.cardInfo.colors[0]);
       }
     }
   }
