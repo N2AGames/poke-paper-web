@@ -94,7 +94,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       this.resultMessage = "Wrong! It was " + pokeInfo.title + ".";
       this.flipCardComponent.unshadowAll();
       this.isResultVisible = true;
-    } else {
+    } else if (this.isDoubleTrouble) {
         this.flipCardComponent.unshadow(indexOfCorrect);
         if(this.flipCardComponent.checkAllShadowsRemoved()) {
           this.resultMessage = "Correct! You found all: " + pokeInfo.title + "!";
@@ -102,6 +102,10 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
         } else {
           this.resultMessage = "Correct! You found " + pokeInfo.pokeData[indexOfCorrect].name + "! Keep going!";
         }
+    } else {
+      this.resultMessage = "Correct! It was " + pokeInfo.title + "!";
+      this.flipCardComponent.unshadowAll();
+      this.isResultVisible = true;
     }
     this.inputAutoComponent.clearInput();
   }

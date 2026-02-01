@@ -8,7 +8,7 @@
                 <button class="config-btn" (click)="selectMode('1gen')">1 Generation</button>
                 <button class="config-btn" (click)="selectMode('classics')">Classics (Gens 1, 2 & 3)</button>
                 <button class="config-btn" (click)="selectMode('all')">All Generations</button>
-                <button class="config-btn" (click)="selectMode('daily')">Daily Pokémon</button>
+                <button class="config-btn" [disabled]="isDoubleTrouble" (click)="selectMode('daily')">Daily Pokémon</button>
                 <button class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
             </div>
         } @else {
