@@ -115,7 +115,7 @@ export class FlipCard implements OnInit {
     setTimeout(() => {
       this.isShadowed[i].set(false);
       this.isRevealing.set(false);
-      this.launchCry();
+      this.launchCry(i);
     }, 1000);
   }
 
@@ -125,7 +125,7 @@ export class FlipCard implements OnInit {
     setTimeout(() => {
       this.isShadowed.forEach(signal => signal.set(false));
       this.isRevealing.set(false);
-      this.launchCry();
+      this.launchCryAll();
     }, 1000);
   }
   
@@ -133,9 +133,14 @@ export class FlipCard implements OnInit {
     return this.cardInfo.shadowed.every(shadow => !shadow);
   }
 
-  launchCry() {
-    // TODO Handle multiple cries
-    new Audio(this.cardInfo.criesUrl[0]).play();
+  launchCry(i: number = 0) {
+      new Audio(this.cardInfo.criesUrl[i]).play();
+  }
+
+  launchCryAll() {
+    for(let i = 0; i < this.cardInfo.criesUrl.length; i++) {
+      new Audio(this.cardInfo.criesUrl[i]).play();
+    }
   }
 
   togleShadow(i: number = 0) {
