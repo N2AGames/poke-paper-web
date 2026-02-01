@@ -138,7 +138,6 @@ src/
 - `classics`: Generaciones clásicas (1-386)
 - `all`: Todas las generaciones (1-1025)
 - `daily`: Pokémon diario determinista
-- `manual`: Modo manual con Pokémon específicos
 
 ### Características Avanzadas
 - **Change Detection Strategy**: OnPush para optimización de rendimiento
@@ -166,9 +165,6 @@ src/
 
 ## 🚀 Características por implementar
 
-- **Mejoras del modo Doble Amenaza**:
-    - Diferenciación visual progresiva de las siluetas al fallar (cambio de color o separación)
-    - Sistema de pistas visuales adicionales
 - **Sistema de puntuación y estadísticas**:
     - Tabla de puntuaciones (leaderboard)
     - Estadísticas de acierto por jugador
