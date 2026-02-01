@@ -30,7 +30,7 @@ export class Utils {
         return this.TYPE_COLOR_MAP[type] || '#ffffff';
     }
 
-    static async tintImage(element: HTMLImageElement, color: string): Promise<void> {
+    static async tintImage(element: HTMLImageElement, colors: string[]): Promise<void> {
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = element.src;
@@ -52,7 +52,7 @@ export class Utils {
             const data = imageData.data;
 
             // Convertir el color Hex/RGB a valores numéricos
-            const tint = Utils.hexToRgb(color);
+            const tints = colors.map(color => Utils.hexToRgb(color));
 
             // 3. Iterar sobre los píxeles (de 4 en 4: R, G, B, A)
             for (let i = 0; i < data.length; i += 4) {
@@ -67,6 +67,15 @@ export class Utils {
 
                 if (!isWhite) {
                     // Aplicar el tinte (mezcla simple al porcentaje establecido)
+                    // Elegir un color de tinte basado en la posición del píxel
+                    // - Lado izquierdo arriba usa el primer color
+                    // - Lado derecho arriba usa el segundo color (si existe)
+                    // - Lado izquierdo abajo usa el tercer color (si existe)
+                    // - Lado derecho abajo usa el cuarto color (si existe)
+                    const x = (i / 4) % canvas.width;
+                    const y = Math.floor((i / 4) / canvas.width);
+                    const tintIndex = (x < canvas.width / 2 ? 0 : 1) + (y < canvas.height / 2 ? 0 : 2);
+                    const tint = tints[Math.min(tintIndex, tints.length - 1)];
                     data[i]     = r * 0.6 + tint.r * stauration;
                     data[i + 1] = g * 0.6 + tint.g * stauration;
                     data[i + 2] = b * 0.6 + tint.b * stauration;

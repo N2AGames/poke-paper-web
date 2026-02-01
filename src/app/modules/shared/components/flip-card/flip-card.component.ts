@@ -81,11 +81,26 @@ export class FlipCard implements OnInit {
       title: data.map(p => p.name).join(' + '),
       imgsSrc: data.map(p => p.sprites.front_default),
       criesUrl: data.map(p => p.cries.legacy ? p.cries.legacy : p.cries.latest),
-      colors: data.map(p => p.types.length > 0 ? Utils.getColorByType(p.types[0].type.name) : '#FFFFFF'),
+      colors: this.parseColorsFromData(data),
       pokeData: data,
       flipped: true,
       shadowed: Array(data.length).fill(true)
     };
+  }
+
+  parseColorsFromData(data: PokemonApiResponse[]): string[] {
+    let colors: string[] = [];
+    for(let i = 0; i < data.length; i++) {
+      const color1 = Utils.getColorByType(data[i].types[0].type.name);
+      const color2 = data[i].types[1] ? Utils.getColorByType(data[i].types[1].type.name) : color1;
+      colors.push(color1);
+      colors.push(color2);
+    }
+    if(colors.length == 2) {
+      colors.push(colors[0]);
+      colors.push(colors[1]);
+    }
+    return colors;
   }
 
   getPokemonInfo(): CardInfo {
@@ -181,7 +196,7 @@ export class FlipCard implements OnInit {
       const fondoCartaElement = document.getElementById('fondo-carta') as HTMLImageElement;
       if (fondoCartaElement) {
         // TODO Handle multiple colors
-        Utils.tintImage(fondoCartaElement, this.cardInfo.colors[0]);
+        Utils.tintImage(fondoCartaElement, this.cardInfo.colors);
       }
     }
   }
