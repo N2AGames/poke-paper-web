@@ -155,12 +155,16 @@ export class FlipCard implements OnInit {
   }
 
   launchCry(i: number = 0) {
-      new Audio(this.cardInfo.criesUrl[i]).play();
+      const audio = new Audio(this.cardInfo.criesUrl[i]);
+      audio.volume = 0.2;
+      audio.play();
   }
 
   launchCryAll() {
     for(let i = 0; i < this.cardInfo.criesUrl.length; i++) {
-      new Audio(this.cardInfo.criesUrl[i]).play();
+      const audio = new Audio(this.cardInfo.criesUrl[i]);
+      audio.volume = 0.2;
+      audio.play();
     }
   }
 
