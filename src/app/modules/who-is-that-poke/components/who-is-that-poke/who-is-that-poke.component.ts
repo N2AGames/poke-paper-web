@@ -28,6 +28,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   isResultVisible: boolean = false;
   noGuess: boolean = true;
   cardSize: string = '15vw';
+  cardSizeInfo: string = '10vw';
 
   openInstructions: boolean = false;
   openScore: boolean = false;
@@ -58,21 +59,28 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   setCardSize() {
     if (!this.isBrowser) {
       this.cardSize = '15vw';
+      this.cardSizeInfo = '10vw';
       return;
     }
 
     const width = window.innerWidth;
     let size = '15vw';
+    let infoSize = '10vw';
     if (width < 400) {
       size = '60vw';
+      infoSize = '40vw';
     } else if (width < 600) {
       size = '40vw';
+      infoSize = '30vw';
     } else if (width < 800) {
       size = '30vw';
+      infoSize = '20vw';
     } else if (width < 1000) {
       size = '20vw';
+      infoSize = '10vw';
     }
     this.cardSize = size;
+    this.cardSizeInfo = infoSize;
   }
 
   ngOnInit(): void {

@@ -107,3 +107,12 @@ button:disabled {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-panel {
+    max-width: 80%;
+    left: 10%;
+    top: 5%;
+  }
+}

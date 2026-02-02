@@ -34,7 +34,7 @@ app.use((req, res, next) => {
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is; " +
     "style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://*.cdnfonts.com https://fonts.googleapis.com; " +
     "font-src 'self' data: https://fonts.cdnfonts.com https://*.cdnfonts.com https://fonts.gstatic.com; " +
-    "connect-src 'self' https://cloud.umami.is https://pokeapi.co; " +
+    "connect-src 'self' https://cloud.umami.is https://api-gateway.umami.dev https://pokeapi.co; " +
     "img-src 'self' data: https://raw.githubusercontent.com; " +
     "media-src 'self' https://raw.githubusercontent.com;"
   );

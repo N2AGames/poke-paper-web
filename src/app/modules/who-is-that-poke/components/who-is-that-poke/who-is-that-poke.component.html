@@ -10,9 +10,9 @@
                 <p>Welcome to "Who is that Pokémon?"! In this game, your goal is to guess the hidden Pokémon based on their silhouette.</p>
                 <p>The background colors will depend on the type of the Pokémon: </p>
                 <div class="info-images">
-                    <flip-card #flipCardI1 [autoLoad]="true" [size]="'20vh'" [showPokeName]="true" [selectedMode]="'manual'"
+                    <flip-card #flipCardI1 [autoLoad]="true" [size]="cardSizeInfo" [showPokeName]="true" [selectedMode]="'manual'"
                     [doubleTrouble]="false" [pokemonNames]="['bulbasaur']" [cardText]="'Normal'"></flip-card>
-                    <flip-card #flipCardI2 [autoLoad]="true" [size]="'20vh'" [showPokeName]="true" [selectedMode]="'manual'"
+                    <flip-card #flipCardI2 [autoLoad]="true" [size]="cardSizeInfo" [showPokeName]="true" [selectedMode]="'manual'"
                     [doubleTrouble]="true" [pokemonNames]="['golem','pyroar']" [cardText]="'Double Trouble'"></flip-card>
                 </div>
                 <p>In the normal mode, the two colors of the hidden Pokémon's types are shown.</p>
