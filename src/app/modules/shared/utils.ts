@@ -26,6 +26,12 @@ export class Utils {
         '#4D5253', // gris oscuro
     ];
 
+    static GAME_MODES = [
+        { key: '1gen', label: 'Primera Generación' },
+        { key: 'classic', label: 'Clásico' },
+        { key: 'all', label: 'Todos' }
+    ];
+
     static getColorByType(type: string): string {
         return this.TYPE_COLOR_MAP[type] || '#ffffff';
     }

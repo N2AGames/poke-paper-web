@@ -25,6 +25,23 @@ const angularApp = new AngularNodeAppEngine();
  */
 
 /**
+ * Set Content Security Policy headers
+ */
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://*.cdnfonts.com https://fonts.googleapis.com; " +
+    "font-src 'self' data: https://fonts.cdnfonts.com https://*.cdnfonts.com https://fonts.gstatic.com; " +
+    "connect-src 'self' https://cloud.umami.is https://pokeapi.co; " +
+    "img-src 'self' data: https://raw.githubusercontent.com; " +
+    "media-src 'self' https://raw.githubusercontent.com;"
+  );
+  next();
+});
+
+/**
  * Serve static files from /browser
  */
 app.use(

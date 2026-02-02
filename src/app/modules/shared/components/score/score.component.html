@@ -1,0 +1,11 @@
+@if (showScore) {
+    <div id="score-container">
+        <div id="score-title">Score - {{ getTextMode(mode) | titlecase }}</div>
+        <div id="score-data">
+            <span id="success-label">Successes:</span>
+            <span id="success-value">{{ gameInfo.guessed.get(mode) }}</span>
+            <span id="tries-label">Tries:</span>
+            <span id="tries-value">{{ gameInfo.tries.get(mode) }}</span>
+        </div>
+    </div>
+}

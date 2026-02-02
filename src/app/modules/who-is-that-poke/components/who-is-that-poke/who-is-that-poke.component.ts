@@ -4,10 +4,11 @@ import { PokemonDataService } from '../../../shared/services/pokemon-data.servic
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
 import { FormsModule } from '@angular/forms';
+import { Score } from "../../../shared/components/score/score.component";
 
 @Component({
   selector: 'app-who-is-that-poke',
-  imports: [FlipCard, InputAuto, CommonModule, FormsModule],
+  imports: [FlipCard, InputAuto, CommonModule, FormsModule, Score],
   templateUrl: './who-is-that-poke.component.html',
   styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -16,6 +17,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   @ViewChild(FlipCard) flipCardComponent!: FlipCard;
   @ViewChild(InputAuto) inputAutoComponent!: InputAuto;
+  @ViewChild(Score) scoreComponent!: Score;
 
   selectedMode: string = '1gen';
   modeSelected: boolean = false;
@@ -28,6 +30,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   cardSize: string = '15vw';
 
   openInstructions: boolean = false;
+  openScore: boolean = false;
 
   private resizeListener: () => void;
   private isBrowser: boolean;
@@ -96,11 +99,15 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       this.resultMessage = "Wrong! It was " + pokeInfo.title + ".";
       this.flipCardComponent.unshadowAll();
       this.isResultVisible = true;
+      this.openScore = true;
+      this.scoreComponent.sumFailure(this.selectedMode);
     } else if (this.isDoubleTrouble) {
         this.flipCardComponent.unshadow(indexOfCorrect);
         if(this.flipCardComponent.checkAllShadowsRemoved()) {
           this.resultMessage = "Correct! You found all: " + pokeInfo.title + "!";
           this.isResultVisible = true;
+          this.openScore = true;
+          this.scoreComponent.sumSucess(this.selectedMode + '-DT');
         } else {
           this.resultMessage = "Correct! You found " + pokeInfo.pokeData[indexOfCorrect].name + "! Keep going!";
         }
@@ -108,7 +115,10 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       this.resultMessage = "Correct! It was " + pokeInfo.title + "!";
       this.flipCardComponent.unshadowAll();
       this.isResultVisible = true;
+      this.openScore = true;
+      this.scoreComponent.sumSucess(this.selectedMode);
     }
+    this.cdr.markForCheck();
     this.inputAutoComponent.clearInput();
   }
 
@@ -117,6 +127,9 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     this.resultMessage = "Skipped! It was " + pokeInfo.title + ".";
     this.flipCardComponent.unshadowAll();
     this.isResultVisible = true;
+    this.openScore = true;
+    this.scoreComponent.sumFailure(this.selectedMode);
+    this.cdr.markForCheck();
   }
 
   resetPokemon(loadNew: boolean = true) {
@@ -129,16 +142,19 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     if (loadNew) {
       this.flipCardComponent.loadPokemon(this.selectedMode);
     }
+    this.openScore = false;
   }
 
   selectMode(mode: string) {
     this.selectedMode = mode;
     this.modeSelected = true;
     this.resetPokemon();
+    this.scoreComponent.showScore = true;
   }
 
   changeMode() {
     this.modeSelected = false;
+    this.scoreComponent.showScore = false;
     this.resetPokemon(false);
   }
 
