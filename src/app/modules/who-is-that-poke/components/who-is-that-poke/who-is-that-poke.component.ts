@@ -58,13 +58,13 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   setCardSize() {
     if (!this.isBrowser) {
-      this.cardSize = '15vw';
+      this.cardSize = '12vw';
       this.cardSizeInfo = '10vw';
       return;
     }
 
     const width = window.innerWidth;
-    let size = '15vw';
+    let size = '12vw';
     let infoSize = '10vw';
     if (width < 400) {
       size = '60vw';
@@ -76,7 +76,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       size = '30vw';
       infoSize = '20vw';
     } else if (width < 1000) {
-      size = '20vw';
+      size = '18vw';
       infoSize = '10vw';
     }
     this.cardSize = size;

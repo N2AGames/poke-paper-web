@@ -3,9 +3,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex: 1;
   padding: 16px;
   gap: 1vh;
+  width: 60%;
+  position: absolute;
+  top: 10%;
+  left: 20%;
 }
 
 #game-container {
@@ -109,98 +113,74 @@ flip-card {
   margin: 12px auto;
 }
 
-#submit-btn {
+#submit-btn,#skip-btn,#next-btn {
   margin-top: 12px;
   padding: 12px 20px;
   font-size: 12px;
   font-weight: bold;
-  color: #0f1a3a;
-  background: #cfd8ff;
-  border: 3px solid #0f1a3a;
   cursor: pointer;
-  box-shadow: 0 4px 0 #0f1a3a, 0 6px 0 #0b1226;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  border: 3px solid;
+  transition: transform .1s ease,box-shadow .1s ease,background .2s ease;
+}
+
+#submit-btn {
+  color: #0f1a3a;
+  background: #cfd8ff;
+  border-color: #0f1a3a;
+  box-shadow: 0 4px 0 #0f1a3a,0 6px 0 #0b1226;
 }
 
 #submit-btn:hover {
   background: #dbe2ff;
   transform: translateY(1px);
-  box-shadow: 0 3px 0 #0f1a3a, 0 5px 0 #0b1226;
+  box-shadow: 0 3px 0 #0f1a3a,0 5px 0 #0b1226;
 }
 
 #submit-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 #0f1a3a, 0 2px 0 #0b1226;
-}
-
-#submit-btn:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-  box-shadow: none;
+  box-shadow: 0 1px 0 #0f1a3a,0 2px 0 #0b1226;
 }
 
 #skip-btn {
-  margin-top: 12px;
-  padding: 12px 20px;
-  font-size: 12px;
-  font-weight: bold;
   color: #3b0b0b;
   background: #ffb3b3;
-  border: 3px solid #3b0b0b;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #3b0b0b, 0 6px 0 #2a0808;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  border-color: #3b0b0b;
+  box-shadow: 0 4px 0 #3b0b0b,0 6px 0 #2a0808;
 }
 
 #skip-btn:hover {
   background: #ffc1c1;
   transform: translateY(1px);
-  box-shadow: 0 3px 0 #3b0b0b, 0 5px 0 #2a0808;
+  box-shadow: 0 3px 0 #3b0b0b,0 5px 0 #2a0808;
 }
 
 #skip-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 #3b0b0b, 0 2px 0 #2a0808;
-}
-
-#skip-btn:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-  box-shadow: none;
+  box-shadow: 0 1px 0 #3b0b0b,0 2px 0 #2a0808;
 }
 
 #next-btn {
-  margin-top: 12px;
-  padding: 12px 20px;
-  font-size: 12px;
-  font-weight: bold;
   color: #3a3200;
   background: #ffe78a;
-  border: 3px solid #3a3200;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #3a3200, 0 6px 0 #2a2400;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  border-color: #3a3200;
+  box-shadow: 0 4px 0 #3a3200,0 6px 0 #2a2400;
 }
 
 #next-btn:hover {
   background: #fff0a7;
   transform: translateY(1px);
-  box-shadow: 0 3px 0 #3a3200, 0 5px 0 #2a2400;
+  box-shadow: 0 3px 0 #3a3200,0 5px 0 #2a2400;
 }
 
 #next-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 #3a3200, 0 2px 0 #2a2400;
+  box-shadow: 0 1px 0 #3a3200,0 2px 0 #2a2400;
 }
 
-#next-btn:disabled {
-  background: #cccccc;
+#submit-btn:disabled,#skip-btn:disabled,#next-btn:disabled {
+  background: #ccc;
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -296,10 +276,6 @@ flip-card {
   padding: 4px;
 }
 
-.info-button {
-  
-}
-
 .info-icon::before {
   content: attr(data-tooltip);
   position: absolute;
@@ -357,26 +333,111 @@ flip-card {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width:768px) {
+  #container {
+    width: 98%;
+    left: 1%;
+    top: 15%;
+    padding-bottom: 200px;
+  }
   #game-container {
-    padding: 24px;
+    padding: 16px;
+    max-height: 75vh;
   }
-
   #game-title {
-    font-size: 18px;
-  }
-
-  #game-instructions {
-    font-size: 14px;
-  }
-
-  #submit-btn {
-    padding: 10px 24px;
-    font-size: 14px;
-  }
-
-  #result-message {
     font-size: 16px;
-    padding: 12px 16px;
+  }
+  #game-instructions {
+    font-size: 12px;
+  }
+  #submit-btn,#skip-btn,#next-btn {
+    padding: 8px 16px;
+    font-size: 11px;
+  }
+  #result-message {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}
+
+@media (orientation:portrait) {
+  #container {
+    width: 100%;
+    left: 0;
+    top: 8%;
+    padding-bottom: 220px;
+  }
+  #game-container {
+    padding: 12px;
+    max-height: 65vh;
+  }
+  #game-title {
+    font-size: 14px;
+  }
+  #game-title-container {
+    gap: 4px;
+  }
+  #submit-btn,#skip-btn,#next-btn {
+    padding: 6px 12px;
+    font-size: 10px;
+    margin-top: 8px;
+  }
+  flip-card {
+    margin: 8px auto;
+  }
+}
+
+@media (orientation:landscape) and (max-height:600px) {
+  #container {
+    width: 70%;
+    left: 15%;
+    top: 5%;
+    padding: 16px;
+    padding-bottom: 140px;
+  }
+  #game-container {
+    padding: 12px 20px;
+    max-height: 85vh;
+  }
+  #game-title {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  #mode-config {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  #mode-selection {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  #submit-btn,#skip-btn,#next-btn {
+    padding: 8px 16px;
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  flip-card {
+    margin: 6px auto;
+  }
+  #result-message {
+    font-size: 13px;
+    padding: 8px 12px;
+    margin-top: 8px;
+  }
+}
+
+@media (orientation:landscape) and (min-height:600px) {
+  #container {
+    width: 60%;
+    left: 20%;
+    top: 8%;
+    padding-bottom: 160px;
+  }
+  #game-container {
+    padding: 16px 24px;
+    max-height: 90vh;
+  }
+  #game-title {
+    font-size: 28px;
   }
 }

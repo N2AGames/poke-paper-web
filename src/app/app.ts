@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { PokemonDataService } from './modules/shared/services/pokemon-data.service';
 import { PokemonApiResponse } from './modules/shared/models/pokemon-api.model';
+import { FooterComponent } from './modules/shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule],
+  imports: [RouterOutlet, CommonModule, FooterComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css', '../styles.css']
 })

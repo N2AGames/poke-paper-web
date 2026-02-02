@@ -1,6 +1,13 @@
 {
   "name": "poke-paper-web",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Guess the Pokémon game - A fun memory game where you try to guess the Pokémon by its silhouette",
+  "author": "n2agames",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n2agames/poke-paper-web"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
