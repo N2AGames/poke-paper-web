@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import packageJson from '../../../../../../package.json';
 
 @Component({
   selector: 'app-footer',
@@ -8,7 +9,7 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
-  version = '1.0.0';
+  version = packageJson.version;
   creator = 'n2agames';
   repositoryUrl = 'https://github.com/n2agames/poke-paper-web';
 }
