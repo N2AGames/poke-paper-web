@@ -108,7 +108,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       this.flipCardComponent.unshadowAll();
       this.isResultVisible = true;
       this.openScore = true;
-      this.scoreComponent.sumFailure(this.selectedMode);
+      this.scoreComponent.sumFailure(this.selectedMode + (this.isDoubleTrouble ? '-DT' : ''));
     } else if (this.isDoubleTrouble) {
         this.flipCardComponent.unshadow(indexOfCorrect);
         if(this.flipCardComponent.checkAllShadowsRemoved()) {
