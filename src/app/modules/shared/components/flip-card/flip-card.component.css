@@ -71,7 +71,7 @@
 .card-back {
     transform: rotateY(180deg);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     border-radius: 0.2vmin;
 }
 
@@ -190,4 +190,53 @@
     height: 100%;
     z-index: 1;
     pointer-events: none;
+}
+/* Styles for separated revealed Pokémon in Double Trouble mode */
+.card.is-fully-revealed .back-content-revealed {
+    transition: all 0.6s ease-out;
+    animation: separatePokemons 0.6s ease-out forwards;
+}
+
+.card.is-fully-revealed .back-content-revealed[data-index="0"] {
+    animation: separatePokemon0 0.6s ease-out forwards;
+}
+
+.card.is-fully-revealed .back-content-revealed[data-index="1"] {
+    animation: separatePokemon1 0.6s ease-out forwards;
+}
+
+@keyframes separatePokemons {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes separatePokemon0 {
+    from {
+        left: 50%;
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0;
+    }
+    to {
+        left: -15%;
+        transform: translateX(0) scale(0.95);
+        opacity: 1;
+    }
+}
+
+@keyframes separatePokemon1 {
+    from {
+        left: 50%;
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0;
+    }
+    to {
+        left: auto;
+        right: -15%;
+        transform: translateX(0) scale(0.95);
+        opacity: 1;
+    }
 }

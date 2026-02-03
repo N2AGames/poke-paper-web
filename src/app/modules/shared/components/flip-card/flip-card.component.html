@@ -1,5 +1,5 @@
 <div class="card-container" [style.width]="size">
-    <div class="card" [class.is-flipped]="isFlipped()" [class.is-revealing]="isRevealing()">
+    <div class="card" [class.is-flipped]="isFlipped()" [class.is-revealing]="isRevealing()" [class.is-fully-revealed]="isFullyRevealed()">
         <div class="card-face card-front">
             <img src="imgs/reverso_carta.png" class="back-template">
         </div>
@@ -7,7 +7,7 @@
             <img #fondoCartaImg [src]="fondoCarta" class="back-template">
             <!-- Pokémon revelados (detrás) -->
             @for (imgSrc of cardInfo.imgsSrc; track i; let i = $index) {
-                <img [src]="imgSrc" [style.width.%]="pokePorcentaje" class="back-content back-content-revealed"/>
+                <img [src]="imgSrc" [style.width.%]="pokePorcentaje" class="back-content back-content-revealed" [class.reveal-position]="isFullyRevealed()" [attr.data-index]="i"/>
             }
             <!-- Pokémon sombreados (adelante) -->
             @for (imgSrc of cardInfo.imgsSrc; track i; let i = $index) {

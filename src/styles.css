@@ -9,8 +9,8 @@
 body {
   font-family: 'Press Start 2P', cursive;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
   padding: 10px;
   margin: 0;
 }

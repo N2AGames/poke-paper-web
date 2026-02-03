@@ -28,6 +28,7 @@ export class FlipCard implements OnInit {
   isShadowed: WritableSignal<boolean>[] = new Array<WritableSignal<boolean>>();;
   isFlipped = signal(false);
   isRevealing = signal(false);
+  isFullyRevealed = signal(false);
   cardInfo: CardInfo = new CardInfo();
 
   fondoCarta: string = 'imgs/fondo_carta.png';
@@ -59,6 +60,7 @@ export class FlipCard implements OnInit {
       this.cardInfo = this.parseFromPokemonData(pokemonDataList);
       this.initShadowSignals(this.cardInfo.imgsSrc.length);
       this.isFlipped.set(true);
+      this.isFullyRevealed.set(false);
       this.isShadowed.forEach(signal => signal.set(true));
       this.tintCardBackground();
     } catch (error) {
@@ -136,6 +138,10 @@ export class FlipCard implements OnInit {
     setTimeout(() => {
       this.isShadowed[i].set(false);
       this.isRevealing.set(false);
+      // Check if all shadows are removed
+      if (this.checkAllShadowsRemoved()) {
+        this.isFullyRevealed.set(true);
+      }
       this.launchCry(i);
     }, 1000);
   }
@@ -146,6 +152,7 @@ export class FlipCard implements OnInit {
     setTimeout(() => {
       this.isShadowed.forEach(signal => signal.set(false));
       this.isRevealing.set(false);
+      this.isFullyRevealed.set(true);
       this.launchCryAll();
     }, 1000);
   }
