@@ -21,14 +21,20 @@
                 <button class="close-info-btn" (click)="openInstructions = false">X</button>
             </div>
         }
-        <app-score [mode]="selectedMode + (isDoubleTrouble ? '-DT' : '')"></app-score>
+        <app-score
+            [mode]="selectedMode + (isDoubleTrouble ? '-DT' : '')"
+            [scoreMode]="scoreEventMode"
+            [scoreType]="scoreEventType"
+            [scoreTick]="scoreEventTick"
+            [showScore]="showScore"
+        ></app-score>
         @if (!modeSelected) {
             <div id="mode-config">Select Mode</div>
             <div id="mode-selection">
                 <button class="config-btn" (click)="selectMode('1gen')">1 Generation</button>
                 <button class="config-btn" (click)="selectMode('classics')">Classics (Gens 1, 2 & 3)</button>
                 <button class="config-btn" (click)="selectMode('all')">All Generations</button>
-                <button class="config-btn" [disabled]="isDoubleTrouble" (click)="selectMode('daily')">Daily Pokémon</button>
+                <button class="config-btn" [disabled]="isDoubleTrouble || isDailyComplete()" (click)="selectMode('daily')">Daily Pokémon</button>
                 <button class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
             </div>
         } @else {
@@ -39,7 +45,9 @@
                 <button id="submit-btn" (click)="submitGuess()" [disabled]="flipCard.isRevealing() || noGuess">Submit Guess</button>
                 <button id="skip-btn" (click)="skipGuess()" [disabled]="flipCard.isRevealing()">Skip Guess</button>
             } @else {
-                <button id="next-btn" (click)="resetPokemon()" [disabled]="flipCard.isRevealing()">Next Pokémon</button>
+                @if (selectedMode !== 'daily') {
+                    <button id="next-btn" (click)="resetPokemon()" [disabled]="flipCard.isRevealing()">Next Pokémon</button>
+                }
             }
             <button id="next-btn" (click)="changeMode()" [disabled]="flipCard.isRevealing()">Change mode</button>
             <div id="result-message">{{ resultMessage }}</div>

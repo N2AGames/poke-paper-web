@@ -5,6 +5,7 @@ import { FlipCard } from "../../../shared/components/flip-card/flip-card.compone
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
 import { FormsModule } from '@angular/forms';
 import { Score } from "../../../shared/components/score/score.component";
+import { Utils } from '../../../shared/utils';
 
 @Component({
   selector: 'app-who-is-that-poke',
@@ -32,6 +33,11 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   openInstructions: boolean = false;
   openScore: boolean = false;
+  showScore: boolean = false;
+
+  scoreEventMode: string = '';
+  scoreEventType: 'success' | 'failure' | '' = '';
+  scoreEventTick: number = 0;
 
   private resizeListener: () => void;
   private isBrowser: boolean;
@@ -108,14 +114,14 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       this.flipCardComponent.unshadowAll();
       this.isResultVisible = true;
       this.openScore = true;
-      this.scoreComponent.sumFailure(this.selectedMode + (this.isDoubleTrouble ? '-DT' : ''));
+      this.triggerScoreEvent('failure', this.selectedMode + (this.isDoubleTrouble ? '-DT' : ''));
     } else if (this.isDoubleTrouble) {
         this.flipCardComponent.unshadow(indexOfCorrect);
         if(this.flipCardComponent.checkAllShadowsRemoved()) {
           this.resultMessage = "Correct! You found all: " + pokeInfo.title + "!";
           this.isResultVisible = true;
           this.openScore = true;
-          this.scoreComponent.sumSucess(this.selectedMode + '-DT');
+          this.triggerScoreEvent('success', this.selectedMode + '-DT');
         } else {
           this.resultMessage = "Correct! You found " + pokeInfo.pokeData[indexOfCorrect].name + "! Keep going!";
         }
@@ -124,7 +130,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       this.flipCardComponent.unshadowAll();
       this.isResultVisible = true;
       this.openScore = true;
-      this.scoreComponent.sumSucess(this.selectedMode);
+      this.triggerScoreEvent('success', this.selectedMode);
     }
     this.cdr.markForCheck();
     this.inputAutoComponent.clearInput();
@@ -136,7 +142,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     this.flipCardComponent.unshadowAll();
     this.isResultVisible = true;
     this.openScore = true;
-    this.scoreComponent.sumFailure(this.selectedMode);
+    this.triggerScoreEvent('failure', this.selectedMode);
     this.cdr.markForCheck();
   }
 
@@ -157,12 +163,12 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     this.selectedMode = mode;
     this.modeSelected = true;
     this.resetPokemon();
-    this.scoreComponent.showScore = true;
+    this.showScore = true;
   }
 
   changeMode() {
     this.modeSelected = false;
-    this.scoreComponent.showScore = false;
+    this.showScore = false;
     this.resetPokemon(false);
   }
 
@@ -174,5 +180,24 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     this.isDoubleTrouble = !this.isDoubleTrouble;
     console.log('isDoubleTrouble:', this.isDoubleTrouble);
     this.cdr.markForCheck();
+  }
+
+  private triggerScoreEvent(type: 'success' | 'failure', mode: string) {
+    this.scoreEventType = type;
+    this.scoreEventMode = mode;
+    this.scoreEventTick += 1;
+  }
+
+  isDailyComplete(): boolean {
+    if (!this.scoreComponent) return false;
+    const today = this.getDateKey(new Date());
+    return this.scoreComponent.gameInfo.dailyMap.has(today);
+  }
+
+  private getDateKey(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
