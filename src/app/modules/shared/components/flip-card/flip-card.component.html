@@ -1,5 +1,5 @@
 <div class="card-container" [style.width]="size">
-    <div class="card" [class.is-flipped]="isFlipped()" [class.is-revealing]="isRevealing()" [class.is-fully-revealed]="isFullyRevealed() && selectedMode.includes('-DT')">
+    <div class="card" [class.is-flipped]="isFlipped()" [class.is-revealing]="isRevealing()" [class.is-fully-revealed]="isFullyRevealed() && doubleTrouble">
         <div class="card-face card-front">
             <img src="imgs/reverso_carta.png" class="back-template">
         </div>
