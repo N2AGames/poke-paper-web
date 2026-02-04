@@ -1,6 +1,7 @@
 <div id="container">
     <div id="game-container" [class.flipping]="modeSelected">
         <div id="game-title-container">
+            <button class="return-button" (click)="return()"><mat-icon>arrow_back</mat-icon></button>
             <div id="game-title">Who is that Pokémon?</div>
             <button class="info-button" (click)="openInstructions = true">?</button>
         </div>

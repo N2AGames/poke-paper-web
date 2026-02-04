@@ -92,7 +92,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6vw;
 }
 
 #game-title-container .info-button {
@@ -113,76 +113,11 @@ flip-card {
   margin: 12px auto;
 }
 
-#submit-btn,#skip-btn,#next-btn {
+#submit-btn,
+#skip-btn,
+#next-btn,
+.config-btn {
   margin-top: 12px;
-  padding: 12px 20px;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 3px solid;
-  transition: transform .1s ease,box-shadow .1s ease,background .2s ease;
-}
-
-#submit-btn {
-  color: #0f1a3a;
-  background: #cfd8ff;
-  border-color: #0f1a3a;
-  box-shadow: 0 4px 0 #0f1a3a,0 6px 0 #0b1226;
-}
-
-#submit-btn:hover {
-  background: #dbe2ff;
-  transform: translateY(1px);
-  box-shadow: 0 3px 0 #0f1a3a,0 5px 0 #0b1226;
-}
-
-#submit-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #0f1a3a,0 2px 0 #0b1226;
-}
-
-#skip-btn {
-  color: #3b0b0b;
-  background: #ffb3b3;
-  border-color: #3b0b0b;
-  box-shadow: 0 4px 0 #3b0b0b,0 6px 0 #2a0808;
-}
-
-#skip-btn:hover {
-  background: #ffc1c1;
-  transform: translateY(1px);
-  box-shadow: 0 3px 0 #3b0b0b,0 5px 0 #2a0808;
-}
-
-#skip-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #3b0b0b,0 2px 0 #2a0808;
-}
-
-#next-btn {
-  color: #3a3200;
-  background: #ffe78a;
-  border-color: #3a3200;
-  box-shadow: 0 4px 0 #3a3200,0 6px 0 #2a2400;
-}
-
-#next-btn:hover {
-  background: #fff0a7;
-  transform: translateY(1px);
-  box-shadow: 0 3px 0 #3a3200,0 5px 0 #2a2400;
-}
-
-#next-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #3a3200,0 2px 0 #2a2400;
-}
-
-#submit-btn:disabled,#skip-btn:disabled,#next-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-  box-shadow: none;
 }
 
 #result-message {
@@ -312,6 +247,11 @@ flip-card {
   pointer-events: none;
 }
 
+.return-button {
+  border-radius: 20px;
+  padding: 10px;
+}
+
 .config-btn:hover .info-icon {
   background: rgba(255, 255, 255, 0.5);
 }
@@ -375,7 +315,7 @@ flip-card {
     font-size: 14px;
   }
   #game-title-container {
-    gap: 4px;
+    gap: 5vw;
   }
   #submit-btn,#skip-btn,#next-btn {
     padding: 6px 12px;
@@ -384,6 +324,11 @@ flip-card {
   }
   flip-card {
     margin: 8px auto;
+  }
+  .return-button, .info-button {
+    padding: 2vw;
+    width: 12vw;
+    height: auto;
   }
 }
 

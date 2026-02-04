@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 * {
   margin: 0;
@@ -20,39 +21,6 @@ h1 {
   color: #fff;
   text-align: center;
   margin-bottom: 10px;
-}
-
-button {
-  background-color: #e2e2e2;
-  color: #222;
-  border: 3px solid #222;
-  padding: 12px 20px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 12px;
-  border-radius: 0;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #444, 0 6px 0 #111;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #f0f0f0;
-  transform: translateY(1px);
-  box-shadow: 0 3px 0 #444, 0 5px 0 #111;
-}
-
-button:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #444, 0 2px 0 #111;
-}
-
-button:disabled {
-  background-color: #cfcfcf;
-  color: #777;
-  cursor: not-allowed;
-  box-shadow: 0 2px 0 #888;
 }
 
 .info-panel {

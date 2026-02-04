@@ -5,13 +5,14 @@ import { FlipCard } from "../../../shared/components/flip-card/flip-card.compone
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
 import { FormsModule } from '@angular/forms';
 import { Score } from "../../../shared/components/score/score.component";
-import { Utils } from '../../../shared/utils';
+import { Router } from '@angular/router';
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: 'app-who-is-that-poke',
-  imports: [FlipCard, InputAuto, CommonModule, FormsModule, Score],
+  imports: [FlipCard, InputAuto, CommonModule, FormsModule, Score, MatIconModule],
   templateUrl: './who-is-that-poke.component.html',
-  styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css'],
+  styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css', '../../../shared/styles/buttons.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WhoIsThatPoke implements OnInit, OnDestroy {
@@ -45,7 +46,8 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   constructor(
     private readonly pokemonDataService: PokemonDataService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private readonly router: Router
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     this.resizeListener = () => this.setCardSize();
@@ -199,5 +201,11 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  return(): void {
+    if (this.isBrowser) {
+      this.router.navigate(['/main']);
+    }
   }
 }

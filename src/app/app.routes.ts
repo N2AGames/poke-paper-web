@@ -6,8 +6,12 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/who-is-that-poke/who-is-that-poke.routing.module').then(m => m.WHO_IS_THAT_POKE_ROUTES)
   },
   {
+    path: 'main',
+    loadChildren: () => import('./modules/main-menu/main-menu-routing-module').then(m => m.MainMenuRoutingModule)
+  },
+  {
     path: '',
-    redirectTo: '/who-is-that-poke',
+    redirectTo: '/main',
     pathMatch: 'full'
   }
 ];
