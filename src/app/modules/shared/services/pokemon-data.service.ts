@@ -61,13 +61,23 @@ export class PokemonDataService {
     // Format date as YYYY-MM-DD to ensure consistency across timezones
     const dateString = date.toISOString().split('T')[0];
     
-    // Simple hash function using date string
+    // Improved hash function with better randomization
+    // Uses multiple rounds and mixing operations to avoid sequential patterns
     let hash = 0;
+    
+    // Initial hash with better distribution
     for (let i = 0; i < dateString.length; i++) {
       const char = dateString.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32bit integer
     }
+    
+    // Apply additional mixing operations to improve randomization
+    hash = hash ^ (hash >>> 16);
+    hash = (hash * 2654435761) | 0;
+    hash = hash ^ (hash >>> 15);
+    hash = (hash * 2246822519) | 0;
+    hash = hash ^ (hash >>> 13);
     
     // Convert hash to valid pokemon index (1 to GENERATION_LIMITS)
     const maxPokemon = GENERATION_LIMITS[LAST_GENERATION];
