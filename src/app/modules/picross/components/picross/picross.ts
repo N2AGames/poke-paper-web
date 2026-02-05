@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit, inject } from '@angular/core';
-import { Utils } from '../../../shared/utils';
-import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
+﻿import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit, inject, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { PokemonApiResponse } from '../../../shared/models/pokemon-api.model';
+import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
+import { processImageData, ProcessingResult } from 'picross-image-processor';
 
 @Component({
   selector: 'app-picross',
@@ -21,13 +22,16 @@ export class Picross implements OnInit, AfterViewInit {
 
   private cdr = inject(ChangeDetectorRef);
   private pokemonDataService = inject(PokemonDataService);
+  private platformId = inject(PLATFORM_ID);
 
   constructor() {
-    this.initializeBoard(32, 32); // Initialize a 72x72 board
+    this.initializeBoard(32, 32); // Initialize a 32x32 board
   }
 
   ngOnInit() {
-    this.loadData();
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadData();
+    }
   }
 
   loadData() {
@@ -40,13 +44,17 @@ export class Picross implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.calculateCellSize();
-    this.cdr.detectChanges();
+    if (isPlatformBrowser(this.platformId)) {
+      this.calculateCellSize();
+      this.cdr.detectChanges();
+    }
   }
 
   @HostListener('window:resize')
   onResize() {
-    this.calculateCellSize();
+    if (isPlatformBrowser(this.platformId)) {
+      this.calculateCellSize();
+    }
   }
 
   calculateCellSize() {
@@ -81,7 +89,11 @@ export class Picross implements OnInit, AfterViewInit {
 
   initializeBoard(rows: number, cols: number) {
     this.board = Array.from({ length: rows }, () => Array(cols).fill(0));
-    setTimeout(() => this.calculateCellSize(), 0);
+    setTimeout(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        this.calculateCellSize();
+      }
+    }, 0);
   }
 
   toggleCell(rowIndex: number, colIndex: number): void {
@@ -89,6 +101,10 @@ export class Picross implements OnInit, AfterViewInit {
   }
 
   processPokeImage() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     console.log('Processing Pokemon image for:', this.pokeData.name);
     const imageUrl = this.pokeData.sprites.front_default;
     if (!imageUrl) return;
@@ -97,161 +113,37 @@ export class Picross implements OnInit, AfterViewInit {
     img.crossOrigin = 'Anonymous';
     
     img.onload = () => {
-      // First, draw the original image to find the bounding box
-      const tempCanvas = document.createElement('canvas');
-      const tempCtx = tempCanvas.getContext('2d');
-      if (!tempCtx) return;
+      try {
+        // Use canvas to get image data
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-      tempCanvas.width = img.width;
-      tempCanvas.height = img.height;
-      tempCtx.drawImage(img, 0, 0);
+        // Set canvas size to match board dimensions
+        const boardSize = this.board.length;
+        canvas.width = boardSize;
+        canvas.height = boardSize;
 
-      const tempImageData = tempCtx.getImageData(0, 0, img.width, img.height);
-      const tempData = tempImageData.data;
+        // Draw the image to the canvas
+        ctx.drawImage(img, 0, 0, boardSize, boardSize);
 
-      // Find bounding box of opaque pixels
-      let minX = img.width;
-      let minY = img.height;
-      let maxX = 0;
-      let maxY = 0;
-
-      for (let y = 0; y < img.height; y++) {
-        for (let x = 0; x < img.width; x++) {
-          const index = (y * img.width + x) * 4;
-          const alpha = tempData[index + 3];
-          
-          if (alpha > 128) {
-            minX = Math.min(minX, x);
-            minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x);
-            maxY = Math.max(maxY, y);
-          }
-        }
-      }
-
-      // Calculate cropped dimensions
-      const cropWidth = maxX - minX + 1;
-      const cropHeight = maxY - minY + 1;
-
-      // Now draw the cropped image to the board canvas
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      const boardSize = this.board.length;
-      canvas.width = boardSize;
-      canvas.height = boardSize;
-
-      // Draw the cropped and scaled image
-      ctx.drawImage(
-        img,
-        minX, minY, cropWidth, cropHeight,  // source rectangle (cropped)
-        0, 0, boardSize, boardSize           // destination rectangle (scaled)
-      );
-
-      // Get image data
-      const imageData = ctx.getImageData(0, 0, boardSize, boardSize);
-      const data = imageData.data;
-
-      // Helper function to get pixel color
-      const getPixelData = (row: number, col: number) => {
-        if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
-          return { r: 0, g: 0, b: 0, a: 0 };
-        }
-        const index = (row * boardSize + col) * 4;
-        return {
-          r: data[index],
-          g: data[index + 1],
-          b: data[index + 2],
-          a: data[index + 3]
-        };
-      };
-
-      // Helper function to check if a pixel is opaque
-      const isOpaque = (row: number, col: number): boolean => {
-        const pixel = getPixelData(row, col);
-        return pixel.a > 128;
-      };
-
-      // Helper function to calculate color difference between two pixels
-      const colorDifference = (pixel1: { r: number, g: number, b: number, a: number }, 
-                               pixel2: { r: number, g: number, b: number, a: number }): number => {
-        // If either pixel is transparent, don't calculate color difference
-        if (pixel1.a <= 128 || pixel2.a <= 128) {
-          return 0;
-        }
+        // Get image data and process with library
+        const imageData = ctx.getImageData(0, 0, boardSize, boardSize);
         
-        // Calculate Euclidean distance in RGB space
-        const dr = pixel1.r - pixel2.r;
-        const dg = pixel1.g - pixel2.g;
-        const db = pixel1.b - pixel2.b;
-        return Math.sqrt(dr * dr + dg * dg + db * db);
-      };
+        // Use the picross-image-processor library to process the image
+        const result = processImageData(imageData, {
+          boardSize,
+          colorThreshold: 80,
+          alphaThreshold: 128
+        });
 
-      // Helper function to check if a pixel has at least one transparent neighbor
-      const hasTransparentNeighbor = (row: number, col: number): boolean => {
-        const neighbors = [
-          [row - 1, col],     // top
-          [row + 1, col],     // bottom
-          [row, col - 1],     // left
-          [row, col + 1],     // right
-        ];
-
-        for (const [r, c] of neighbors) {
-          if (r < 0 || r >= boardSize || c < 0 || c >= boardSize) {
-            // Edge of image counts as transparent neighbor
-            return true;
-          }
-          if (!isOpaque(r, c)) {
-            return true;
-          }
-        }
-        return false;
-      };
-
-      // Helper function to check if pixel has significant color change with neighbors
-      const hasSignificantColorChange = (row: number, col: number): boolean => {
-        if (!isOpaque(row, col)) {
-          return false;
-        }
-
-        const currentPixel = getPixelData(row, col);
-        const colorThreshold = 80; // Adjust this value to control sensitivity
-
-        const neighbors = [
-          [row - 1, col],     // top
-          [row + 1, col],     // bottom
-          [row, col - 1],     // left
-          [row, col + 1],     // right
-        ];
-
-        for (const [r, c] of neighbors) {
-          if (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
-            const neighborPixel = getPixelData(r, c);
-            if (neighborPixel.a > 128) {  // Only compare with opaque neighbors
-              const diff = colorDifference(currentPixel, neighborPixel);
-              if (diff > colorThreshold) {
-                return true;
-              }
-            }
-          }
-        }
-        return false;
-      };
-
-      // Convert image to binary matrix based on contour and color change detection
-      for (let row = 0; row < boardSize; row++) {
-        for (let col = 0; col < boardSize; col++) {
-          // Mark cell as filled if it's opaque AND (has transparent neighbor OR significant color change)
-          if (isOpaque(row, col) && (hasTransparentNeighbor(row, col) || hasSignificantColorChange(row, col))) {
-            this.board[row][col] = 1;
-          } else {
-            this.board[row][col] = 0;
-          }
-        }
+        // Update board with processed data
+        this.board = result.board;
+        this.calculateCellSize();
+        this.cdr.detectChanges();
+      } catch (error) {
+        console.error('Error processing image:', error);
       }
-      
-      this.cdr.detectChanges();
     };
 
     img.onerror = () => {
