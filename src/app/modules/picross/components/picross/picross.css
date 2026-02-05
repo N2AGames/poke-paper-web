@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+  padding: 16px;
+  gap: 2vh;
+  width: min(80vw, 80vh);
+  height: min(80vw, 80vh);
+  max-width: 900px;
+  max-height: 900px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #d1ceb4;
+  border-radius: 6px;
+  border: 3px solid #111;
+  box-shadow: 0 6px 0 #333, 0 10px 0 #111;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: 'Pokemon Solid';
+  font-size: 30px;
+  color: #ffcb05;
+  text-shadow:
+    -3px -3px 0 #1f2f7a,
+    0 -3px 0 #1f2f7a,
+    3px -3px 0 #1f2f7a,
+    -3px 0 0 #1f2f7a,
+    3px 0 0 #1f2f7a,
+    -3px 3px 0 #1f2f7a,
+    0 3px 0 #1f2f7a,
+    3px 3px 0 #1f2f7a,
+    0 5px 0 #0b1226;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.game-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 2px solid #111;
+  background: #fff;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  gap: 0;
+}
+
+.cell {
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #fff;
+  transition: background-color 0.2s ease;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell:hover {
+  background: #f0f0f0;
+}
+
+.cell.filled {
+  background: #333;
+}
+
+.cell.empty {
+  background: #fff;
+}
+
+.cell.empty::after {
+  content: '×';
+  color: #999;
+  font-size: 20px;
+}

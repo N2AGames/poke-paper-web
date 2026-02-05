@@ -1,0 +1,16 @@
+<div class="container" #container>
+    <div class="title">Picross Game</div>
+    <div class="game-board" #gameBoard>
+        @for (row of board; track i; let i = $index) {
+            <div class="row">
+                @for (cell of row; track j; let j = $index) {
+                    <div class="cell" (click)="toggleCell(i, j)"
+                        [class.filled]="cell === 1" [class.empty]="cell === 0"
+                        [style.width.px]="cellSize"
+                        [style.height.px]="cellSize">
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
