@@ -4,12 +4,12 @@
   justify-content: flex-start;
   align-items: center;
   flex: 1;
-  padding: 16px;
+  padding: 10px;
   gap: 2vh;
-  width: min(80vw, 80vh);
-  height: min(80vw, 80vh);
-  max-width: 900px;
-  max-height: 900px;
+  width: min(88vw, 88vh);
+  height: min(88vw, 88vh);
+  max-width: 800px;
+  max-height: 800px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -63,22 +63,97 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 700;
+  color: #2f2f2f;
+  user-select: none;
 }
 
 .cell:hover {
   background: #f0f0f0;
 }
 
-.cell.filled {
-  background: #333;
+.cell.unmarked {
+  background: #e6e6e6;
 }
 
-.cell.empty {
-  background: #fff;
+.cell.cross {
+  font-size: 0.7em;
 }
 
-.cell.empty::after {
-  content: '×';
-  color: #999;
-  font-size: 20px;
+.picross-grid {
+  display: grid;
+  grid-template-columns: var(--row-hint-size, 0px) auto;
+  grid-template-rows: var(--col-hint-size, 0px) auto;
+  gap: 0;
+  align-items: start;
+  justify-items: start;
 }
+
+.corner {
+  width: var(--row-hint-size, 0px);
+  height: var(--col-hint-size, 0px);
+  background: #d1ceb4;
+  border: 2px solid #111;
+  box-sizing: border-box;
+}
+
+.row-hints {
+  display: flex;
+  flex-direction: column;
+  width: var(--row-hint-size, 0px);
+  border: 2px solid #111;
+  border-right: none;
+  background: #f5f1d6;
+  box-sizing: border-box;
+}
+
+.row-hint {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: var(--cell-size, 0px);
+  padding-right: 4px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #d4d1b8;
+}
+
+.col-hints {
+  display: flex;
+  width: 100%;
+  height: var(--col-hint-size, 0px);
+  border: 2px solid #111;
+  border-bottom: none;
+  background: #f5f1d6;
+  box-sizing: border-box;
+}
+
+.col-hint {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: var(--cell-size, 0px);
+  height: 100%;
+  padding-bottom: 4px;
+  box-sizing: border-box;
+  border-right: 1px solid #d4d1b8;
+}
+
+.hint-number {
+  width: var(--cell-size, 0px);
+  height: var(--cell-size, 0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6vw;
+  font-weight: 700;
+  color: #1f2f7a;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .container {
+    display: none;
+  }
+}
+

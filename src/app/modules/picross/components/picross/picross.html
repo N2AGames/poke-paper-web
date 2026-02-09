@@ -1,16 +1,44 @@
 <div class="container" #container>
     <div class="title">Picross Game</div>
-    <div class="game-board" #gameBoard>
-        @for (row of board; track i; let i = $index) {
-            <div class="row">
-                @for (cell of row; track j; let j = $index) {
-                    <div class="cell" (click)="toggleCell(i, j)"
-                        [class.filled]="cell === 1" [class.empty]="cell === 0"
-                        [style.width.px]="cellSize"
-                        [style.height.px]="cellSize">
-                    </div>
-                }
-            </div>
-        }
+    <div class="picross-grid"
+        [style.--cell-size.px]="cellSize"
+        [style.--row-hint-size.px]="maxRowHintCount * cellSize"
+        [style.--col-hint-size.px]="maxColHintCount * cellSize">
+        <div class="corner"></div>
+        <div class="col-hints">
+            @for (colHint of colHints; track colIndex; let colIndex = $index) {
+                <div class="col-hint">
+                    @for (hint of colHint; track hintIndex; let hintIndex = $index) {
+                        <div class="hint-number">{{ hint }}</div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="row-hints">
+            @for (rowHint of rowHints; track rowIndex; let rowIndex = $index) {
+                <div class="row-hint">
+                    @for (hint of rowHint; track hintIndex; let hintIndex = $index) {
+                        <div class="hint-number">{{ hint }}</div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="game-board" #gameBoard>
+            @for (row of solutionBoard; track i; let i = $index) {
+                <div class="row">
+                    @for (cell of row; track j; let j = $index) {
+                        <div class="cell" (click)="toggleCell(i, j)"
+                            [class.marked]="isMarked(i, j)"
+                            [class.unmarked]="!isMarked(i, j)"
+                            [class.cross]="getCellText(i, j) !== ''"
+                            [style.width.px]="cellSize"
+                            [style.height.px]="cellSize"
+                            [style.background-color]="getCellBackground(i, j)">
+                            {{ getCellText(i, j) }}
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
 </div>

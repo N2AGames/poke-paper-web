@@ -1,8 +1,8 @@
-﻿import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit, inject, Inject, PLATFORM_ID } from '@angular/core';
+﻿import { Component, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { PokemonApiResponse } from '../../../shared/models/pokemon-api.model';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
-import { processImageData, ProcessingResult } from 'picross-image-processor';
+import { indexToColor, processCanvasImage, ProcessingConfig } from 'picross-image-processor';
 
 @Component({
   selector: 'app-picross',
@@ -15,7 +15,13 @@ export class Picross implements OnInit, AfterViewInit {
   @ViewChild('gameBoard', { static: false }) gameBoard!: ElementRef;
   @ViewChild('container', { static: false }) container!: ElementRef;
 
-  board: number[][] = [];
+  board: boolean[][] = [];
+  solutionBoard: number[][] = [];
+  rowHints: number[][] = [];
+  colHints: number[][] = [];
+  maxRowHintCount: number = 0;
+  maxColHintCount: number = 0;
+  boardSize: number = 18;
   cellSize: number = 30;
 
   pokeData: PokemonApiResponse = {} as PokemonApiResponse;
@@ -25,7 +31,7 @@ export class Picross implements OnInit, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
 
   constructor() {
-    this.initializeBoard(32, 32); // Initialize a 32x32 board
+    this.initializeBoard(this.boardSize, this.boardSize); // Initialize a 36x36 board
   }
 
   ngOnInit() {
@@ -70,25 +76,32 @@ export class Picross implements OnInit, AfterViewInit {
       
       const containerWidth = containerElement.clientWidth - paddingLeft - paddingRight;
       const containerHeight = containerElement.clientHeight - paddingTop - paddingBottom;
-      
-      // Reserve space for title and padding
-      const titleHeight = 60; // Approximate title height
-      const availableHeight = containerHeight - titleHeight;
-      
-      // Use 90% of the available space
-      const boardMaxSize = Math.min(containerWidth, availableHeight) * 0.9;
-      
-      // Calculate cell size based on the maximum number of cells (rows or cols)
-      const maxCells = Math.max(this.board.length, this.board[0]?.length || 0);
-      
-      if (maxCells > 0) {
-        this.cellSize = Math.floor(boardMaxSize / maxCells);
+
+      const titleElement = containerElement.querySelector('.title') as HTMLElement | null;
+      const titleHeight = titleElement ? titleElement.getBoundingClientRect().height : 0;
+      const gapValue = parseFloat(computedStyle.rowGap || computedStyle.gap || '0');
+      const availableHeight = containerHeight - titleHeight - gapValue;
+
+      const rows = this.board.length;
+      const cols = this.board[0]?.length || 0;
+      const gridRows = rows + this.maxColHintCount;
+      const gridCols = cols + this.maxRowHintCount;
+
+      const borderAllowance = 8;
+      const maxWidth = containerWidth - borderAllowance;
+      const maxHeight = availableHeight - borderAllowance;
+
+      if (gridRows > 0 && gridCols > 0) {
+        const nextSize = Math.floor(Math.min(maxWidth / gridCols, maxHeight / gridRows));
+        this.cellSize = Math.max(1, nextSize);
       }
     }
   }
 
   initializeBoard(rows: number, cols: number) {
-    this.board = Array.from({ length: rows }, () => Array(cols).fill(0));
+    this.board = this.createMarkedBoard(rows, cols, true);
+    this.solutionBoard = this.createBoard(rows, cols, 0);
+    this.updateHintsFromSolution();
     setTimeout(() => {
       if (isPlatformBrowser(this.platformId)) {
         this.calculateCellSize();
@@ -96,8 +109,113 @@ export class Picross implements OnInit, AfterViewInit {
     }, 0);
   }
 
+  private createBoard(rows: number, cols: number, fillValue: number): number[][] {
+    return Array.from({ length: rows }, () => Array(cols).fill(fillValue));
+  }
+
+  private createMarkedBoard(rows: number, cols: number, fillValue: boolean): boolean[][] {
+    return Array.from({ length: rows }, () => Array(cols).fill(fillValue));
+  }
+
+  private updateHintsFromSolution(): void {
+    const rows = this.solutionBoard.length;
+    const cols = this.solutionBoard[0]?.length ?? 0;
+
+    if (rows === 0 || cols === 0) {
+      this.rowHints = [];
+      this.colHints = [];
+      this.maxRowHintCount = 0;
+      this.maxColHintCount = 0;
+      return;
+    }
+
+    this.rowHints = this.solutionBoard.map(row => this.buildHintsFromLine(row));
+    this.colHints = Array.from({ length: cols }, (_, colIndex) => {
+      const colValues = this.solutionBoard.map(row => row[colIndex]);
+      return this.buildHintsFromLine(colValues);
+    });
+
+    this.maxRowHintCount = Math.max(...this.rowHints.map(hints => hints.length));
+    this.maxColHintCount = Math.max(...this.colHints.map(hints => hints.length));
+  }
+
+  private buildHintsFromLine(values: number[]): number[] {
+    const hints: number[] = [];
+    let run = 0;
+
+    for (const value of values) {
+      if (value > 0) {
+        run += 1;
+        continue;
+      }
+
+      if (run > 0) {
+        hints.push(run);
+        run = 0;
+      }
+    }
+
+    if (run > 0) {
+      hints.push(run);
+    }
+
+    return hints.length > 0 ? hints : [0];
+  }
+
   toggleCell(rowIndex: number, colIndex: number): void {
-    this.board[rowIndex][colIndex] = this.board[rowIndex][colIndex] === 1 ? 0 : 1;
+    if (!this.board[rowIndex]) {
+      return;
+    }
+
+    this.board[rowIndex][colIndex] = !this.board[rowIndex][colIndex];
+  }
+
+  markAllCells(): void {
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        this.board[i][j] = true;
+      }
+    }
+  }
+
+  isMarked(rowIndex: number, colIndex: number): boolean {
+    return this.board[rowIndex]?.[colIndex] ?? false;
+  }
+
+  getCellBackground(rowIndex: number, colIndex: number): string {
+    const marked = this.isMarked(rowIndex, colIndex);
+    const value = this.solutionBoard[rowIndex]?.[colIndex] ?? 0;
+
+    if (!marked) {
+      return '#e6e6e6';
+    }
+
+    if (value <= 0) {
+      return '#e6e6e6';
+    }
+
+    const color = indexToColor(value);
+    return this.rgbToHex(color.r, color.g, color.b);
+  }
+
+  getCellText(rowIndex: number, colIndex: number): string {
+    const marked = this.isMarked(rowIndex, colIndex);
+    const value = this.solutionBoard[rowIndex]?.[colIndex] ?? 0;
+
+    if (!marked || value <= 0) {
+      return 'X';
+    }
+
+    return '';
+  }
+
+  private rgbToHex(r: number, g: number, b: number): string {
+    const toHex = (value: number) => {
+      const clamped = Math.max(0, Math.min(255, Math.round(value)));
+      return clamped.toString(16).padStart(2, '0');
+    };
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
   }
 
   processPokeImage() {
@@ -112,33 +230,19 @@ export class Picross implements OnInit, AfterViewInit {
     const img = new Image();
     img.crossOrigin = 'Anonymous';
     
-    img.onload = () => {
+    img.onload = async () => {
       try {
-        // Use canvas to get image data
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+        const config: ProcessingConfig = {
+          boardSize: this.boardSize,
+          colorThreshold: 40,
+          alphaThreshold: 128,
+          colorMode: true
+        };
 
-        // Set canvas size to match board dimensions
-        const boardSize = this.board.length;
-        canvas.width = boardSize;
-        canvas.height = boardSize;
-
-        // Draw the image to the canvas
-        ctx.drawImage(img, 0, 0, boardSize, boardSize);
-
-        // Get image data and process with library
-        const imageData = ctx.getImageData(0, 0, boardSize, boardSize);
-        
-        // Use the picross-image-processor library to process the image
-        const result = processImageData(imageData, {
-          boardSize,
-          colorThreshold: 80,
-          alphaThreshold: 128
-        });
-
-        // Update board with processed data
-        this.board = result.board;
+        const result = await processCanvasImage(img, config);
+        this.solutionBoard = result.board;
+        this.board = this.createMarkedBoard(this.solutionBoard.length, this.solutionBoard[0]?.length ?? 0, true);
+        this.updateHintsFromSolution();
         this.calculateCellSize();
         this.cdr.detectChanges();
       } catch (error) {

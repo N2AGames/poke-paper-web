@@ -23,6 +23,24 @@ export interface PokemonSprites {
       front_shiny: string;
     };
   };
+  versions?: {
+    'generation-i'?: PokemonSpritesVersions;
+    'generation-ii'?: PokemonSpritesVersions;
+    'generation-iii'?: PokemonSpritesVersions;
+    'generation-iv'?: PokemonSpritesVersions;
+    'generation-v'?: PokemonSpritesVersions;
+    'generation-vi'?: PokemonSpritesVersions;
+    'generation-vii'?: PokemonSpritesVersions;
+    'generation-viii'?: PokemonSpritesVersions;
+    'generation-ix'?: PokemonSpritesVersions;
+  }
+}
+
+export interface PokemonSpritesVersions {
+  icons:{
+    front_default: string;
+    front_female?: string;
+  }
 }
 
 export interface PokemonType {
