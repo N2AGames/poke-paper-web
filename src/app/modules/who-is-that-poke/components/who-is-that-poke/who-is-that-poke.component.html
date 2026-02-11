@@ -5,6 +5,30 @@
             <div id="game-title">Who is that Pokémon?</div>
             <button class="info-button" (click)="openInstructions = true">?</button>
         </div>
+        @if (!modeSelected) {
+            <div id="mode-config">Select Mode</div>
+            <div id="mode-selection">
+                <button class="config-btn" (click)="selectMode('1gen')">1 Generation</button>
+                <button class="config-btn" (click)="selectMode('classics')">Classics (Gens 1, 2 & 3)</button>
+                <button class="config-btn" (click)="selectMode('all')">All Generations</button>
+                <button class="config-btn" [disabled]="isDoubleTrouble || isDailyComplete()" (click)="selectMode('daily')">Daily Pokémon</button>
+                <button class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
+            </div>
+        } @else {
+            <flip-card #flipCard [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"
+            [doubleTrouble]="isDoubleTrouble"></flip-card>
+            <input-auto id="poke-input" [pokemonNames]="pokeNames" (onSelect)="pokemonSelected($event)"></input-auto>
+            @if (!isResultVisible) {
+                <button id="submit-btn" (click)="submitGuess()" [disabled]="flipCard.isRevealing() || noGuess">Submit Guess</button>
+                <button id="skip-btn" (click)="skipGuess()" [disabled]="flipCard.isRevealing()">Skip Guess</button>
+            } @else {
+                @if (selectedMode !== 'daily') {
+                    <button id="next-btn" (click)="resetPokemon()" [disabled]="flipCard.isRevealing()">Next Pokémon</button>
+                }
+            }
+            <button id="mode-btn" (click)="changeMode()" [disabled]="flipCard.isRevealing()">Change mode</button>
+            <div id="result-message">{{ resultMessage }}</div>
+        }
         @if(openInstructions) {
             <div class="info-panel">
                 <h2>How to Play</h2>
@@ -29,29 +53,5 @@
             [scoreTick]="scoreEventTick"
             [showScore]="showScore"
         ></app-score>
-        @if (!modeSelected) {
-            <div id="mode-config">Select Mode</div>
-            <div id="mode-selection">
-                <button class="config-btn" (click)="selectMode('1gen')">1 Generation</button>
-                <button class="config-btn" (click)="selectMode('classics')">Classics (Gens 1, 2 & 3)</button>
-                <button class="config-btn" (click)="selectMode('all')">All Generations</button>
-                <button class="config-btn" [disabled]="isDoubleTrouble || isDailyComplete()" (click)="selectMode('daily')">Daily Pokémon</button>
-                <button class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
-            </div>
-        } @else {
-            <flip-card #flipCard [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"
-            [doubleTrouble]="isDoubleTrouble"></flip-card>
-            <input-auto id="poke-input" [pokemonNames]="pokeNames" (onSelect)="pokemonSelected($event)"></input-auto>
-            @if (!isResultVisible) {
-                <button id="submit-btn" (click)="submitGuess()" [disabled]="flipCard.isRevealing() || noGuess">Submit Guess</button>
-                <button id="skip-btn" (click)="skipGuess()" [disabled]="flipCard.isRevealing()">Skip Guess</button>
-            } @else {
-                @if (selectedMode !== 'daily') {
-                    <button id="next-btn" (click)="resetPokemon()" [disabled]="flipCard.isRevealing()">Next Pokémon</button>
-                }
-            }
-            <button id="next-btn" (click)="changeMode()" [disabled]="flipCard.isRevealing()">Change mode</button>
-            <div id="result-message">{{ resultMessage }}</div>
-        }
     </div>
 </div>

@@ -91,6 +91,84 @@ h1 {
   transform: translateY(1px);
 }
 
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 16px;
+  gap: 1vh;
+  width: 60%;
+  position: absolute;
+  top: 10%;
+  left: 20%;
+}
+
+#game-container {
+  background: #d1ceb4;
+  border-radius: 6px;
+  border: 3px solid #111;
+  padding: 1vh 4vw;
+  box-shadow: 0 6px 0 #333, 0 10px 0 #111;
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+}
+
+#game-title {
+  font-family: 'Pokemon Solid';
+  font-size: 30px;
+  color: #ffcb05;
+  text-shadow:
+    -3px -3px 0 #1f2f7a,
+    0 -3px 0 #1f2f7a,
+    3px -3px 0 #1f2f7a,
+    -3px 0 0 #1f2f7a,
+    3px 0 0 #1f2f7a,
+    -3px 3px 0 #1f2f7a,
+    0 3px 0 #1f2f7a,
+    3px 3px 0 #1f2f7a,
+    0 5px 0 #0b1226;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+#game-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6vw;
+}
+
+#game-title-container .info-button {
+  border-radius: 20px;
+  padding: 10px;
+}
+
+#mode-config {
+  margin-bottom: 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  color: #222;
+}
+
+#mode-selection {
+  margin-top: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .info-panel {
@@ -108,9 +186,34 @@ h1 {
   .info-panel p {
     font-size: 9px;
   }
+
+  #container {
+    width: 98%;
+    left: 1%;
+    top: 15%;
+    padding-bottom: 200px;
+  }
+
+  #game-container {
+    padding: 16px;
+    max-height: 75vh;
+  }
+
+  #game-title {
+    font-size: 16px;
+  }
+  
+  #game-instructions {
+    font-size: 12px;
+  }
+
 }
 
 @media (orientation:portrait) {
+  #game-title-container {
+    gap: 5vw;
+  }
+
   .info-panel {
     max-width: 95%;
     left: 2.5%;
@@ -122,6 +225,29 @@ h1 {
   .info-images {
     gap: 8px;
   }
+
+  #container {
+    width: 100%;
+    left: 0;
+    top: 8%;
+    padding-bottom: 220px;
+  }
+
+  #game-container {
+    padding: 12px;
+    max-height: 65vh;
+  }
+
+  #game-title {
+    font-size: 14px;
+  }
+
+  .return-button, .info-button {
+    padding: 2vw;
+    width: 12vw;
+    height: auto;
+  }
+
 }
 
 @media (orientation:landscape) {
@@ -147,5 +273,44 @@ h1 {
   .close-info-btn {
     padding: 6px 14px;
     font-size: 10px;
+  }
+}
+
+@media (orientation:landscape) and (max-height: 600px) {
+  #container {
+    width: 70%;
+    left: 15%;
+    top: 5%;
+    padding: 16px;
+    padding-bottom: 140px;
+  }
+
+  #game-container {
+    padding: 12px 20px;
+    max-height: 85vh;
+  }
+
+  #game-title {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+
+}
+
+@media (orientation:landscape) and (min-height: 600px) {
+  #container {
+    width: 60%;
+    left: 20%;
+    top: 8%;
+    padding-bottom: 160px;
+  }
+
+  #game-container {
+    padding: 16px 24px;
+    max-height: 90vh;
+  }
+
+  #game-title {
+    font-size: 28px;
   }
 }

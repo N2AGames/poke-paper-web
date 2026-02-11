@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GameConfig } from './game-config.component';
+import { Picross } from './picross.component';
 
-describe('GameConfig', () => {
-  let component: GameConfig;
-  let fixture: ComponentFixture<GameConfig>;
+describe('Picross', () => {
+  let component: Picross;
+  let fixture: ComponentFixture<Picross>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameConfig]
+      imports: [Picross]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GameConfig);
+    fixture = TestBed.createComponent(Picross);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
