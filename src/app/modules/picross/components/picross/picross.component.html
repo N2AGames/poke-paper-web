@@ -10,6 +10,12 @@
             <div id="mode-selection">
                 <button class="config-btn" (click)="selectMode('10x10')">10x10</button>
             </div>
+            <div id="mode-selection">
+                <button class="config-btn" (click)="selectMode('15x15')">15x15</button>
+            </div>
+            <div id="mode-selection">
+                <button class="config-btn" (click)="selectMode('20x20')">20x20</button>
+            </div>
         } @else {
             <picross-board [rows]="rows" [columns]="cols"></picross-board>
             <button id="mode-btn" (click)="changeMode()">Change mode</button>

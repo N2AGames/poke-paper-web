@@ -114,3 +114,91 @@
     transform: translateY(-1px);
     box-shadow: inset 0 1px 0 var(--cell-highlight), 0 3px 0 var(--cell-shadow);
 }
+
+/* Responsive design for different screen sizes */
+@media (max-width: 768px) {
+    .picross-board {
+        --clue-size: 8vh;
+        padding: 4px;
+    }
+    
+    .clue-text {
+        font-size: 8px;
+    }
+    
+    .clue-column,
+    .clue-row {
+        border-width: 1px;
+        padding: 2px;
+    }
+}
+
+@media (orientation: portrait) {
+    .picross-board {
+        --clue-size: 7vh;
+        gap: 1px;
+        padding: 3px;
+    }
+    
+    .board-wrapper {
+        gap: 2px;
+    }
+    
+    .row {
+        gap: 1px;
+    }
+    
+    .clue-text {
+        font-size: 7px;
+    }
+    
+    .cell {
+        border-width: 1px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .picross-board {
+        --clue-size: 6vh;
+        padding: 2px;
+    }
+    
+    .clue-column,
+    .clue-row {
+        padding: 2px;
+        border-width: 1px;
+    }
+    
+    .clue-text {
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 480px) {
+    .picross-board {
+        --clue-size: 5vh;
+        padding: 2px;
+        gap: 0.5px;
+    }
+    
+    .board-wrapper {
+        gap: 2px;
+    }
+    
+    .row {
+        gap: 0.5px;
+    }
+    
+    .clue-text {
+        font-size: 6px;
+    }
+    
+    .cell {
+        border-width: 1px;
+        box-shadow: inset 0 0.5px 0 var(--cell-highlight), 0 1px 0 var(--cell-shadow);
+    }
+    
+    .cell:hover {
+        box-shadow: inset 0 0.5px 0 var(--cell-highlight), 0 2px 0 var(--cell-shadow);
+    }
+}

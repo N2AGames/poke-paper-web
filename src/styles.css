@@ -103,6 +103,7 @@ h1 {
   position: absolute;
   top: 10%;
   left: 20%;
+  max-height: 95vh;
 }
 
 #game-container {
@@ -169,7 +170,6 @@ h1 {
 }
 
 
-/* Responsive */
 @media (max-width: 768px) {
   .info-panel {
     max-width: 90%;
@@ -207,6 +207,58 @@ h1 {
     font-size: 12px;
   }
 
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0.5vmin;
+  }
+
+  .info-panel {
+    max-width: 95%;
+    left: 2.5%;
+    top: 25%;
+    font-size: 8px;
+    padding: 8px 10px;
+    max-height: 50vh;
+  }
+  
+  .info-panel h2 {
+    font-size: 10px;
+    margin-bottom: 6px;
+  }
+  
+  .info-panel p {
+    font-size: 7px;
+    margin: 3px 0;
+  }
+
+  #container {
+    width: 98%;
+    left: 1%;
+    top: 12%;
+    gap: 0.5vh;
+    padding-bottom: 150px;
+  }
+
+  #game-container {
+    padding: 12px;
+    max-height: 70vh;
+    border: 2px solid #111;
+  }
+
+  #game-title {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  #game-title-container {
+    gap: 3vw;
+  }
+  
+  #game-instructions {
+    font-size: 10px;
+  }
 }
 
 @media (orientation:portrait) {
