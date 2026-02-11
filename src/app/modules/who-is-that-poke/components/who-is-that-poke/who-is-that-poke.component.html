@@ -1,5 +1,5 @@
 <div id="container">
-    <div id="game-container" [class.flipping]="modeSelected">
+    <div id="game-container">
         <div id="game-title-container">
             <button class="return-button" (click)="return()"><mat-icon>arrow_back</mat-icon></button>
             <div id="game-title">Who is that Pokémon?</div>
@@ -19,14 +19,14 @@
             [doubleTrouble]="isDoubleTrouble"></flip-card>
             <input-auto id="poke-input" [pokemonNames]="pokeNames" (onSelect)="pokemonSelected($event)"></input-auto>
             @if (!isResultVisible) {
-                <button id="submit-btn" (click)="submitGuess()" [disabled]="flipCard.isRevealing() || noGuess">Submit Guess</button>
-                <button id="skip-btn" (click)="skipGuess()" [disabled]="flipCard.isRevealing()">Skip Guess</button>
+                <button id="submit-btn" (click)="submitGuess()" [disabled]="noGuess">Submit Guess</button>
+                <button id="skip-btn" (click)="skipGuess()">Skip Guess</button>
             } @else {
                 @if (selectedMode !== 'daily') {
-                    <button id="next-btn" (click)="resetPokemon()" [disabled]="flipCard.isRevealing()">Next Pokémon</button>
+                    <button id="next-btn" (click)="resetPokemon()">Next Pokémon</button>
                 }
             }
-            <button id="mode-btn" (click)="changeMode()" [disabled]="flipCard.isRevealing()">Change mode</button>
+            <button id="mode-btn" (click)="changeMode()">Change mode</button>
             <div id="result-message">{{ resultMessage }}</div>
         }
         @if(openInstructions) {

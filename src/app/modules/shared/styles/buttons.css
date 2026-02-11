@@ -124,6 +124,14 @@ button:disabled {
   background: #ffe46c !important;
 }
 
+button:disabled {
+  background: #cfcfcf !important;
+  color: #777 !important;
+  border-color: #777 !important;
+  box-shadow: 0 2px 0 #888 !important;
+  cursor: not-allowed !important;
+}
+
 @media (max-width: 768px) {
   #submit-btn,
   #skip-btn,
