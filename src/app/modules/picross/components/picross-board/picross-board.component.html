@@ -6,7 +6,7 @@
       
       <!-- Top right: Column clues -->
       <div class="clues-container column-clues">
-        @for (clue of board.columnClues; track $index) {
+        @for (clue of board?.columnClues; track $index) {
           <div class="clue-column">
             <div class="clue-text">{{ clue.join(' ') }}</div>
           </div>
@@ -15,7 +15,7 @@
 
       <!-- Bottom left: Row clues -->
       <div class="clues-container row-clues">
-        @for (clue of board.rowClues; track $index) {
+        @for (clue of board?.rowClues; track $index) {
           <div class="clue-row">
             <div class="clue-text">{{ clue.join(' ') }}</div>
           </div>
@@ -24,7 +24,7 @@
 
       <!-- Bottom right: Game board -->
       <div class="board-grid">
-        @for (row of board.rows; track $index) {
+        @for (row of board?.rows; track $index) {
           <div class="row">
             @for (cell of row.cells; track $index) {
               <div class="cell" (click)="pushCell(cell)" [class.cell-border]="cell.pushed && !cell.correct" [style.background-color]="cell.pushed ? cell.color : 'lightgray'">{{ cell.text }}</div>

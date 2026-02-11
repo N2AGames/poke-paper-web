@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
-import { PicrossBoardData, PicrossCellData } from '../../../shared/models/picross-board-data.model';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
-import { indexToColor, processImageUrl, ProcessingConfig } from 'picross-image-processor';
+import { indexToColor, PicrossBoardData, PicrossCellData, processImageUrl, ProcessingConfig } from 'picross-image-processor';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -15,7 +14,7 @@ export class PicrossBoard implements OnInit, OnChanges {
   @Input() rows: number = 5;
   @Input() columns: number = 5;
 
-  board: PicrossBoardData = { rows: [], rowClues: [], columnClues: [] };
+  board: PicrossBoardData | undefined;
   boardLoaded = false;
   boardStyles: any = {};
   private isBrowser: boolean = false;
@@ -52,22 +51,19 @@ export class PicrossBoard implements OnInit, OnChanges {
     this.pokeDataService.getPokemonDataRandom(9).then(pokeData => {
       const imageUrl = pokeData.sprites.front_default;
       if (!imageUrl) {
-        this.generateRandomBoard();
+        console.warn('No se pudo obtener la imagen del Pokémon');
         return;
       }
       this.processPokeImage(imageUrl).then(board => {
-        this.generateBoard(board);
+        this.board = board;
+        this.boardLoaded = true;
+        this.cdr.detectChanges();
       }).catch(() => {
-        this.generateRandomBoard();
+        console.warn('Error al procesar la imagen del Pokémon');
       });
     }).catch(() => {
-      this.generateRandomBoard();
+      console.log('Error al obtener datos del Pokémon');
     });
-  }
-
-  generateRandomBoard(): void {
-    const board = Array.from({ length: this.rows }, () => Array(this.columns).fill(0));
-    this.generateBoard(board);
   }
 
   private updateBoardStyles(): void {
@@ -76,7 +72,7 @@ export class PicrossBoard implements OnInit, OnChanges {
     this.boardStyles = { '--cell-size': `${cellSize}px` };
   }
 
-  processPokeImage(imgSrc: string) {
+  processPokeImage(imgSrc: string): Promise<PicrossBoardData> {
     const config: ProcessingConfig = {
       boardSize: this.rows,
       colorThreshold: 100,
@@ -86,40 +82,13 @@ export class PicrossBoard implements OnInit, OnChanges {
     return processImageUrl(imgSrc, config).then(result => {
       return result.board;
     }).catch(() => {
-      return Array.from({ length: this.rows }, () => Array(this.columns).fill(0));
+      const rows = Array.from({ length: this.rows }, () => Array(this.columns).fill(0));
+      return {
+        rows: rows,
+        rowClues: Array(this.rows).fill([]),
+        columnClues: Array(this.columns).fill([])
+      } as unknown as PicrossBoardData;
     });
-  }
-
-  generateBoard(board: number[][]) {
-    const newRows: typeof this.board.rows = [];
-    const newRowClues: number[][] = [];
-    const newColumnClues: number[][] = [];
-
-    for (let i = 0; i < board.length; i++) {
-      const row = { cells: [] as PicrossCellData[]};
-      for (let j = 0; j < board[i].length; j++) {
-        const color = board[i][j];
-        if (color === -1) {
-          row.cells.push({ color: 'lightgray', enabled: true, pushed: false, correct: false, text: '' });
-        } else {
-          const rgbColor = indexToColor(color);
-          row.cells.push({ color: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b})`, enabled: true, pushed: false, correct: true, text: '' });
-        }
-      }
-      newRows.push(row);
-    }
-
-    for (let i = 0; i < board.length; i++) {
-      newRowClues.push(this.generateClues());
-    }
-
-    for (let i = 0; i < board[0].length; i++) {
-      newColumnClues.push(this.generateClues());
-    }
-    
-    this.board = { rows: newRows, rowClues: newRowClues, columnClues: newColumnClues };
-    this.boardLoaded = true;
-    this.cdr.detectChanges();
   }
 
   private generateClues(): number[] {
