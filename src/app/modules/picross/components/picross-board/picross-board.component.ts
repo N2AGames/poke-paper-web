@@ -100,10 +100,10 @@ export class PicrossBoard implements OnInit, OnChanges {
       for (let j = 0; j < board[i].length; j++) {
         const color = board[i][j];
         if (color === -1) {
-          row.cells.push({ color: 'lightgray', enabled: true, pushed: false });
+          row.cells.push({ color: 'lightgray', enabled: true, pushed: false, correct: false, text: '' });
         } else {
           const rgbColor = indexToColor(color);
-          row.cells.push({ color: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b})`, enabled: true, pushed: false });
+          row.cells.push({ color: `rgb(${rgbColor.r}, ${rgbColor.g}, ${rgbColor.b})`, enabled: true, pushed: false, correct: true, text: '' });
         }
       }
       newRows.push(row);
@@ -129,6 +129,16 @@ export class PicrossBoard implements OnInit, OnChanges {
       clues.push(Math.floor(Math.random() * 5) + 1);
     }
     return clues;
+  }
+
+  pushCell(cell: PicrossCellData): void {
+    if(!cell.enabled) return;
+    cell.pushed = !cell.pushed;
+
+    if(!cell.correct) {
+      cell.text = cell.pushed ? 'x' : '';
+      cell.color = '#ffb3b3';
+    }
   }
 }
 

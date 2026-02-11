@@ -12,4 +12,6 @@ export interface PicrossCellData {
     color: string;
     enabled: boolean;
     pushed: boolean;
+    correct: boolean;
+    text?: string;
 }
