@@ -1,5 +1,7 @@
 export interface PicrossBoardData {
   rows: PicrossRowData[];
+  rowClues: number[][];
+  columnClues: number[][];
 }
 
 export interface PicrossRowData {

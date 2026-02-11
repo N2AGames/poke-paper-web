@@ -1,9 +1,35 @@
 <div class="picross-board">
-  @for (row of board.rows; track $index) {
-    <div class="row">
-      @for (cell of row.cells; track $index) {
-        <div class="cell" [style.background-color]="cell.color"></div>
+  <div class="board-wrapper">
+    <!-- Top left: spacer -->
+    <div class="clues-spacer"></div>
+    
+    <!-- Top right: Column clues -->
+    <div class="clues-container column-clues">
+      @for (clue of board.columnClues; track $index) {
+        <div class="clue-column">
+          <div class="clue-text">{{ clue.join(' ') }}</div>
+        </div>
       }
     </div>
-  }
+
+    <!-- Bottom left: Row clues -->
+    <div class="clues-container row-clues">
+      @for (clue of board.rowClues; track $index) {
+        <div class="clue-row">
+          <div class="clue-text">{{ clue.join(' ') }}</div>
+        </div>
+      }
+    </div>
+
+    <!-- Bottom right: Game board -->
+    <div class="board-grid">
+      @for (row of board.rows; track $index) {
+        <div class="row">
+          @for (cell of row.cells; track $index) {
+            <div class="cell" [style.background-color]="cell.color"></div>
+          }
+        </div>
+      }
+    </div>
+  </div>
 </div>
