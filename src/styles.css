@@ -23,6 +23,10 @@ h1 {
   margin-bottom: 10px;
 }
 
+:root {
+  --footer-space: 110px;
+}
+
 .info-panel {
   position: fixed;
   font-family: 'Press Start 2P', cursive;
@@ -96,30 +100,31 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex: 1;
-  padding: 16px;
-  gap: 1vh;
-  width: 60%;
-  position: absolute;
-  top: 10%;
-  left: 20%;
-  max-height: 95vh;
+  width: min(100%, 1060px);
+  height: calc(100dvh - 20px - var(--footer-space));
+  max-height: calc(100dvh - 20px - var(--footer-space));
+  margin: 0 auto;
+  padding: 8px;
+  gap: 8px;
 }
 
 #game-container {
   background: #d1ceb4;
   border-radius: 6px;
   border: 3px solid #111;
-  padding: 1vh 4vw;
+  padding: clamp(8px, 1.6vh, 16px) clamp(10px, 2.2vw, 26px);
   box-shadow: 0 6px 0 #333, 0 10px 0 #111;
-  max-width: 800px;
+  max-width: none;
   width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin-inline: auto;
   text-align: center;
   animation: fadeIn 0.5s ease-in;
-  overflow: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
+  gap: 8px;
 }
 
 #game-title {
@@ -169,8 +174,53 @@ h1 {
   gap: 12px;
 }
 
+#result-message {
+  margin-top: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 3px solid #111;
+  min-height: 20px;
+  transition: all 0.3s ease;
+}
+
+#result-message:empty {
+  padding: 0;
+  min-height: 0;
+}
+
+#result-message.correct {
+  background: #b8f7b8;
+  color: #0b2a0b;
+  box-shadow: 0 4px 0 #0b2a0b;
+  animation: slideIn 0.5s ease-out;
+}
+
+#result-message.incorrect {
+  background: #ffb3b3;
+  color: #3b0b0b;
+  box-shadow: 0 4px 0 #3b0b0b;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 @media (max-width: 768px) {
+  :root {
+    --footer-space: 150px;
+  }
+
   .info-panel {
     max-width: 90%;
     left: 5%;
@@ -188,15 +238,15 @@ h1 {
   }
 
   #container {
-    width: 98%;
-    left: 1%;
-    top: 15%;
-    padding-bottom: 200px;
+    width: 100%;
+    height: calc(100dvh - 8px - var(--footer-space));
+    max-height: calc(100dvh - 8px - var(--footer-space));
+    padding: 4px;
   }
 
   #game-container {
-    padding: 16px;
-    max-height: 75vh;
+    padding: 8px;
+    gap: 6px;
   }
 
   #game-title {
@@ -205,6 +255,11 @@ h1 {
   
   #game-instructions {
     font-size: 12px;
+  }
+
+  #result-message {
+    font-size: 14px;
+    padding: 10px 12px;
   }
 
 }
@@ -233,17 +288,7 @@ h1 {
     margin: 3px 0;
   }
 
-  #container {
-    width: 98%;
-    left: 1%;
-    top: 12%;
-    gap: 0.5vh;
-    padding-bottom: 150px;
-  }
-
   #game-container {
-    padding: 12px;
-    max-height: 70vh;
     border: 2px solid #111;
   }
 
@@ -266,6 +311,10 @@ h1 {
     gap: 5vw;
   }
 
+  :root {
+    --footer-space: 150px;
+  }
+
   .info-panel {
     max-width: 95%;
     left: 2.5%;
@@ -276,18 +325,6 @@ h1 {
   
   .info-images {
     gap: 8px;
-  }
-
-  #container {
-    width: 100%;
-    left: 0;
-    top: 8%;
-    padding-bottom: 220px;
-  }
-
-  #game-container {
-    padding: 12px;
-    max-height: 65vh;
   }
 
   #game-title {
@@ -329,17 +366,19 @@ h1 {
 }
 
 @media (orientation:landscape) and (max-height: 600px) {
+  :root {
+    --footer-space: 90px;
+  }
+
   #container {
-    width: 70%;
-    left: 15%;
-    top: 5%;
-    padding: 16px;
-    padding-bottom: 140px;
+    height: calc(100dvh - 6px - var(--footer-space));
+    max-height: calc(100dvh - 6px - var(--footer-space));
+    padding: 2px;
   }
 
   #game-container {
-    padding: 12px 20px;
-    max-height: 85vh;
+    padding: 6px 10px;
+    gap: 4px;
   }
 
   #game-title {
@@ -347,21 +386,15 @@ h1 {
     margin-bottom: 6px;
   }
 
+  #result-message {
+    font-size: 13px;
+    padding: 8px 12px;
+    margin-top: 8px;
+  }
+
 }
 
 @media (orientation:landscape) and (min-height: 600px) {
-  #container {
-    width: 60%;
-    left: 20%;
-    top: 8%;
-    padding-bottom: 160px;
-  }
-
-  #game-container {
-    padding: 16px 24px;
-    max-height: 90vh;
-  }
-
   #game-title {
     font-size: 28px;
   }

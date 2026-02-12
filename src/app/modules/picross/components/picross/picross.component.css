@@ -1,0 +1,73 @@
+#game-title-container {
+    gap: clamp(10px, 3vw, 24px);
+    flex-shrink: 0;
+}
+
+picross-board {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.action-btns {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    margin-top: 6px;
+    align-items: center;
+}
+
+.action-btns button {
+    margin-top: 0;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 10px;
+}
+
+#result-message {
+    margin-top: 6px;
+    padding: 8px 10px;
+    font-size: clamp(11px, 1.5vh, 14px);
+}
+
+#guess-btn {
+    background-color: #85beff;
+} 
+
+#mark-btn { 
+    background-color: #ff9b3d;
+}
+
+#reset-btn {
+    background-color: #ffb3b3;
+}
+
+@media (max-width: 768px), (orientation: portrait) {
+    .action-btns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .action-btns button {
+        min-height: 38px;
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    #game-title {
+        font-size: 18px;
+    }
+
+    .action-btns {
+        gap: 4px;
+    }
+
+    .action-btns button {
+        min-height: 34px;
+        padding: 4px 6px;
+        font-size: 9px;
+    }
+}

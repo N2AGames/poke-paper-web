@@ -12,7 +12,7 @@
                 <button class="config-btn" (click)="selectMode('classics')">Classics (Gens 1, 2 & 3)</button>
                 <button class="config-btn" (click)="selectMode('all')">All Generations</button>
                 <button class="config-btn" [disabled]="isDoubleTrouble || isDailyComplete()" (click)="selectMode('daily')">Daily Pokémon</button>
-                <button class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
+                <button id="dt-mode-btn" class="config-btn toggle-btn" [class.active]="isDoubleTrouble" (click)="toggleDoubleTrouble()">Double Trouble<span class="info-icon" data-tooltip="Guess two Pokémon at time">?</span></button>
             </div>
         } @else {
             <flip-card #flipCard [autoLoad]="true" [size]="cardSize" [showPokeName]="false" [selectedMode]="selectedMode"

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { PicrossBoard } from "../picross-board/picross-board.component";
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class Picross {
 
+  @ViewChild(PicrossBoard) picrossBoard!: PicrossBoard;
+
   selectedMode: string = '10x10';
   modeSelected: boolean = false;
 
@@ -19,6 +21,8 @@ export class Picross {
   cols: number = 10;
 
   openInstructions: boolean = false;
+
+  action: string = 'guess'; // 'guess' o 'mark'
 
   private isBrowser: boolean;
 
@@ -39,9 +43,29 @@ export class Picross {
     this.cdr.markForCheck();
   }
 
+  changeAction(action: string) {
+    this.action = action;
+  }
+
+  reset(): void {
+    this.picrossBoard.resetBoard();
+  }
+
+  reload(): void {
+    this.picrossBoard.reloadBoard();
+  }
+
   changeMode(): void {
     this.modeSelected = false;
     this.selectedMode = '';
+  }
+
+  isGameFinished(): boolean {
+    if(this.picrossBoard) {
+      return this.picrossBoard.isGameFinished();
+    } else {
+      return false;
+    }
   }
 
   return(): void {

@@ -124,6 +124,11 @@ button:disabled {
   background: #ffe46c !important;
 }
 
+.toggle-btn.active {
+  box-shadow: none !important;
+  transform: translateY(4px);
+}
+
 button:disabled {
   background: #cfcfcf !important;
   color: #777 !important;
@@ -131,6 +136,10 @@ button:disabled {
   box-shadow: 0 2px 0 #888 !important;
   cursor: not-allowed !important;
 }
+
+.action-btns { display: flex; align-self: anchor-center; gap: 12px; margin-top: 5px; }
+.action-btns button { padding: 1vh 2vw; max-height: 6vh;}
+.action-btns button mat-icon { font-size: 25px; vertical-align: middle;}
 
 @media (max-width: 768px) {
   #submit-btn,

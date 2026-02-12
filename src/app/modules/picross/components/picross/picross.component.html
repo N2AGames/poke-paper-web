@@ -17,8 +17,21 @@
                 <button class="config-btn" (click)="selectMode('20x20')">20x20</button>
             </div>
         } @else {
-            <picross-board [rows]="rows" [columns]="cols"></picross-board>
-            <button id="mode-btn" (click)="changeMode()">Change mode</button>
+            <picross-board [rows]="rows" [columns]="cols" [action]="action"></picross-board>
+            @if(!isGameFinished()) {
+                <div class="action-btns">
+                    <button id="guess-btn" class="toggle-btn" [class.active]="action === 'guess'" (click)="changeAction('guess')"><mat-icon>edit</mat-icon></button>
+                    <button id="mark-btn" class="toggle-btn" [class.active]="action === 'mark'" (click)="changeAction('mark')"><mat-icon>flag</mat-icon></button>
+                    <button id="reset-btn" (click)="reset()"><mat-icon>refresh</mat-icon></button>
+                </div>
+                <button id="mode-btn" (click)="changeMode()">Change mode</button>
+            } @else {
+                <div id="result-message">{{ picrossBoard.resultMessage}}</div>
+                <div class="action-btns">
+                    <button id="mode-btn" (click)="reload()">Try another Pokémon</button>
+                    <button id="mode-btn" (click)="changeMode()">Change mode</button>
+                </div>
+            }
         }
     </div>
 </div>

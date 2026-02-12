@@ -35,7 +35,13 @@
         @for (row of board?.rows; track $index) {
           <div class="row">
             @for (cell of row.cells; track $index) {
-              <div class="cell" (click)="pushCell(cell)" [class.cell-border]="cell.pushed && !cell.correct" [style.background-color]="cell.pushed ? cell.color : 'lightgray'">{{ cell.text }}</div>
+              <div class="cell" [style.color]="getCellColor(cell)" (click)="pushCell(cell)" [class.cell-border]="cell.pushed && !cell.correct" [style.background-color]="cell.pushed ? cell.color : 'lightgray'">
+                @if(cell.marked) {
+                  <mat-icon class="mark-icon">flag_circle</mat-icon>
+                } @else if (cell.pushed && !cell.correct) {
+                  {{ cell.text }}
+                }
+              </div>
             }
           </div>
         }

@@ -23,7 +23,6 @@
   }
 }
 
-
 #poke-input {
   margin-top: 16px;
   width: 100%;
@@ -37,96 +36,8 @@ flip-card {
   margin: 12px auto;
 }
 
-
-#result-message {
-  margin-top: 12px;
-  padding: 12px 16px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  border: 3px solid #111;
-  min-height: 20px;
-  transition: all 0.3s ease;
-}
-
-#result-message:empty {
-  padding: 0;
-  min-height: 0;
-}
-
-#result-message.correct {
-  background: #b8f7b8;
-  color: #0b2a0b;
-  box-shadow: 0 4px 0 #0b2a0b;
-  animation: slideIn 0.5s ease-out;
-}
-
-#result-message.incorrect {
-  background: #ffb3b3;
-  color: #3b0b0b;
-  box-shadow: 0 4px 0 #3b0b0b;
-  animation: slideIn 0.5s ease-out;
-}
-
-.toggle-btn {
-  margin-top: 12px;
-  padding: 12px 20px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #555;
-  background: #b3b3b3 !important;
-  border: 3px solid #555 !important;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #555, 0 6px 0 #333 !important;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease, border-color 0.2s ease !important;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.toggle-btn:hover:not(.active) {
-  background: #c7c7c7 !important;
-  transform: translateY(1px);
-  box-shadow: 0 3px 0 #555, 0 5px 0 #333 !important;
-}
-
-.toggle-btn:active:not(.active) {
-  transform: translateY(4px);
-  box-shadow: none !important;
-  border-top-width: 1px !important;
-  border-left-width: 1px !important;
-}
-
-.toggle-btn.active {
-  color: #3a3200 !important;
+#dt-mode-btn:is(.active) {
   background: #ffe78a !important;
-  border-color: #3a3200 !important;
-  box-shadow: none !important;
-  transform: translateY(4px);
-}
-
-.toggle-btn.active:hover {
-  background: #ffe78a !important;
-  transform: translateY(4px);
-  box-shadow: none !important;
-}
-
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width:768px) {
-  #result-message {
-    font-size: 14px;
-    padding: 10px 12px;
-  }
 }
 
 @media (orientation:portrait) {
@@ -139,12 +50,4 @@ flip-card {
   flip-card {
     margin: 6px auto;
   }
-  #result-message {
-    font-size: 13px;
-    padding: 8px 12px;
-    margin-top: 8px;
-  }
-}
-
-@media (orientation:landscape) and (min-height:600px) {
 }
