@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, PLATFORM_ID, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, OnDestroy, PLATFORM_ID, Inject, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { FlipCard } from "../../../shared/components/flip-card/flip-card.component";
@@ -15,7 +15,7 @@ import { MatIconModule } from "@angular/material/icon";
   styleUrls: ['./who-is-that-poke.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WhoIsThatPoke implements OnInit, OnDestroy {
+export class WhoIsThatPoke implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(FlipCard) flipCardComponent!: FlipCard;
   @ViewChild(InputAuto) inputAutoComponent!: InputAuto;
@@ -39,6 +39,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   scoreEventMode: string = '';
   scoreEventType: 'success' | 'failure' | '' = '';
   scoreEventTick: number = 0;
+  dailyCompletedToday: boolean = false;
 
   private resizeListener: () => void;
   private isBrowser: boolean;
@@ -94,11 +95,17 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setCardSize();
+    this.dailyCompletedToday = this.getDailyCompleteFromStorage();
     if (this.isBrowser) {
       window.addEventListener('resize', this.resizeListener);
     }
     // Cargar datos en el siguiente ciclo para evitar ExpressionChangedAfterItHasBeenCheckedError
     setTimeout(() => this.loadData(), 0);
+  }
+
+  ngAfterViewInit(): void {
+    this.dailyCompletedToday = this.isDailyComplete();
+    this.cdr.markForCheck();
   }
 
   ngOnDestroy(): void {
@@ -194,9 +201,24 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   }
 
   isDailyComplete(): boolean {
-    if (!this.scoreComponent) return true;
+    if (!this.scoreComponent) return this.dailyCompletedToday;
     const today = this.getDateKey(new Date());
-    return this.scoreComponent.gameInfo.dailyMap.has(today);
+    const completed = this.scoreComponent.gameInfo.dailyMap.has(today);
+    this.dailyCompletedToday = completed;
+    return completed;
+  }
+
+  private getDailyCompleteFromStorage(): boolean {
+    if (!this.isBrowser) return false;
+    try {
+      const gameInfoRaw = localStorage.getItem('who-is-that-poke-game-info');
+      if (!gameInfoRaw) return false;
+      const gameInfo = JSON.parse(gameInfoRaw);
+      const today = this.getDateKey(new Date());
+      return Boolean(gameInfo?.dailyMap?.[today]);
+    } catch {
+      return false;
+    }
   }
 
   private getDateKey(date: Date): string {

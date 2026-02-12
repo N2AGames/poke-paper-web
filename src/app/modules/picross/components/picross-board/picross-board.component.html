@@ -1,51 +1,57 @@
-<div class="picross-board" [style]="boardStyles">
-  @if (boardLoaded) {
-    <div class="board-wrapper">
-      <!-- Top left: spacer -->
-      <div class="clues-spacer"></div>
-      
-      <!-- Top right: Column clues -->
-      <div class="clues-container column-clues">
-        @for (clue of board?.columnClues; track $index) {
-          <div class="clue-column">
-            @for (item of clue; track $index) {
-              <div class="clue-text-container">
-                <div class="clue-text" [class.completed]="item.completed">{{ item.value }}</div>
-              </div>
-            }
-          </div>
-        }
-      </div>
+@if(!isGameFinished()) {
+  <div class="picross-board" [style]="boardStyles">
+    @if (boardLoaded) {
+      <div class="board-wrapper">
+        <!-- Top left: spacer -->
+        <div class="clues-spacer"></div>
+        
+        <!-- Top right: Column clues -->
+        <div class="clues-container column-clues">
+          @for (clue of board?.columnClues; track $index) {
+            <div class="clue-column">
+              @for (item of clue; track $index) {
+                <div class="clue-text-container">
+                  <div class="clue-text" [class.completed]="item.completed">{{ item.value }}</div>
+                </div>
+              }
+            </div>
+          }
+        </div>
 
-      <!-- Bottom left: Row clues -->
-      <div class="clues-container row-clues">
-        @for (clue of board?.rowClues; track $index) {
-          <div class="clue-row">
-            @for (item of clue; track $index) {
-              <div class="clue-text-container">
-                <div class="clue-text" [class.completed]="item.completed">{{ item.value }}</div>
-              </div>
-            }
-          </div>
-        }
-      </div>
+        <!-- Bottom left: Row clues -->
+        <div class="clues-container row-clues">
+          @for (clue of board?.rowClues; track $index) {
+            <div class="clue-row">
+              @for (item of clue; track $index) {
+                <div class="clue-text-container">
+                  <div class="clue-text" [class.completed]="item.completed">{{ item.value }}</div>
+                </div>
+              }
+            </div>
+          }
+        </div>
 
-      <!-- Bottom right: Game board -->
-      <div class="board-grid">
-        @for (row of board?.rows; track $index) {
-          <div class="row">
-            @for (cell of row.cells; track $index) {
-              <div class="cell" [style.color]="getCellColor(cell)" (click)="pushCell(cell)" [class.cell-border]="cell.pushed && !cell.correct" [style.background-color]="cell.pushed ? cell.color : 'lightgray'">
-                @if(cell.marked) {
-                  <mat-icon class="mark-icon">flag_circle</mat-icon>
-                } @else if (cell.pushed && !cell.correct) {
-                  {{ cell.text }}
-                }
-              </div>
-            }
-          </div>
-        }
+        <!-- Bottom right: Game board -->
+        <div class="board-grid">
+          @for (row of board?.rows; track $index) {
+            <div class="row">
+              @for (cell of row.cells; track $index) {
+                <div class="cell" [style.color]="getCellColor(cell)" (click)="pushCell(cell)" [class.cell-border]="cell.pushed && !cell.correct" [style.background-color]="cell.pushed ? cell.color : 'lightgray'">
+                  @if(cell.marked) {
+                    <mat-icon class="mark-icon">flag_circle</mat-icon>
+                  } @else if (cell.pushed && !cell.correct) {
+                    {{ cell.text }}
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
       </div>
-    </div>
-  }
-</div>
+    }
+  </div>
+} @else {
+  <div class="pokemon-image">
+      <img [src]="pokemonImg" [alt]="pokemonName || 'Pokémon Image'">
+  </div>
+}

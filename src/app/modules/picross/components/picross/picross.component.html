@@ -8,6 +8,9 @@
         @if (!modeSelected) {
             <div id="mode-config">Select Mode</div>
             <div id="mode-selection">
+                <button class="config-btn" (click)="selectMode('5x5')">5x5</button>
+            </div>
+            <div id="mode-selection">
                 <button class="config-btn" (click)="selectMode('10x10')">10x10</button>
             </div>
             <div id="mode-selection">
@@ -31,7 +34,7 @@
                 </div>
                 <button id="mode-btn" (click)="changeMode()">Change mode</button>
             } @else {
-                <div id="result-message">{{ picrossBoard.resultMessage}}</div>
+                <div id="result-message">{{ picrossBoard.resultMessage }}</div>
                 <div class="action-btns">
                     <button id="mode-btn" (click)="reload()">Try another Pokémon</button>
                     <button id="mode-btn" (click)="changeMode()">Change mode</button>

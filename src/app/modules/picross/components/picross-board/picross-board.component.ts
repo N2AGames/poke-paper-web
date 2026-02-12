@@ -29,6 +29,9 @@ export class PicrossBoard implements OnInit, OnChanges {
   lives: number = this.max_lives;
   resultMessage: string = '';
 
+  pokemonName: string = '';
+  pokemonImg: string = '';
+
   private isBrowser: boolean = false;
 
   constructor(
@@ -61,12 +64,13 @@ export class PicrossBoard implements OnInit, OnChanges {
   loadBoard(): void {
     this.boardLoaded = false;
     this.pokeDataService.getPokemonDataRandom(9).then(pokeData => {
-      const imageUrl = pokeData.sprites.front_default;
-      if (!imageUrl) {
+      this.pokemonName = pokeData.name;
+      this.pokemonImg = pokeData.sprites.front_default;
+      if (!this.pokemonImg) {
         console.warn('No se pudo obtener la imagen del Pokémon');
         return;
       }
-      this.processPokeImage(imageUrl).then(board => {
+      this.processPokeImage(this.pokemonImg).then(board => {
         this.board = board;
         this.boardLoaded = true;
         this.cdr.detectChanges();
@@ -152,7 +156,7 @@ export class PicrossBoard implements OnInit, OnChanges {
     if(!cell.correct && cell.pushed) {
       // Si el jugador ha adivinado mal, marcar la celda con una 'x' y luego desmarcarla después de un tiempo
       this.guessFailed(cell);
-    } else {
+    } else if (cell.correct && cell.pushed) {
       // Recalcular colores de pistas después de cada intento
       this.guessSuccess(cell);
     }
@@ -165,12 +169,16 @@ export class PicrossBoard implements OnInit, OnChanges {
 
       // Verificar si el juego ha terminado
       if (this.board && this.gameState === GameState.IN_PROGRESS) {
-        this.gameState = this.board.rows.every(row => row.cells.every(cell => cell.correct === cell.pushed)) ? GameState.FINISHED_OK : GameState.IN_PROGRESS;
+        // Comprobar si todas las celdas correctas han sido adivinadas
+        const allCellsCorrect = this.board.rows.every(row => row.cells.every(c => !c.correct || (c.correct && c.pushed)));
+        if (allCellsCorrect) {
+          this.gameState = GameState.FINISHED_OK;
+        }
       }
 
       // Si el juego ha terminado, mostrar mensaje de resultado
       if (this.gameState === GameState.FINISHED_OK) {
-        this.resultMessage = 'Congratulations! You solved the picross!';
+        this.resultMessage = 'Congratulations! You solved the picross! The pokemon was ' + this.pokemonName;
       }
 
       this.cdr.markForCheck();
@@ -185,10 +193,7 @@ export class PicrossBoard implements OnInit, OnChanges {
     if(this.lives <= 0) {
       this.gameState = GameState.FINISHED_FAIL;
       this.resultMessage = 'Game Over! You have no more lives left.';
-    } else {
-      setTimeout(() => {
-        this.markCell(cell);
-      }, 2000);
+      this.cdr.markForCheck();
     }
   }
 
