@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
-import { indexToColor, PicrossBoardData, PicrossCellData, processImageUrl, ProcessingConfig } from 'picross-image-processor';
+import { indexToColor, PicrossBoardData, PicrossCellData, PicrossClueData, processImageUrl, ProcessingConfig, recalculateClueColors } from 'picross-image-processor';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -85,19 +85,10 @@ export class PicrossBoard implements OnInit, OnChanges {
       const rows = Array.from({ length: this.rows }, () => Array(this.columns).fill(0));
       return {
         rows: rows,
-        rowClues: Array(this.rows).fill([]),
-        columnClues: Array(this.columns).fill([])
+        rowClues: Array(this.rows).fill([{ value: 0, completed: false }]),
+        columnClues: Array(this.columns).fill([{ value: 0, completed: false }])
       } as unknown as PicrossBoardData;
     });
-  }
-
-  private generateClues(): number[] {
-    const clueCount = Math.floor(Math.random() * 3) + 1;
-    const clues: number[] = [];
-    for (let i = 0; i < clueCount; i++) {
-      clues.push(Math.floor(Math.random() * 5) + 1);
-    }
-    return clues;
   }
 
   pushCell(cell: PicrossCellData): void {
@@ -107,6 +98,11 @@ export class PicrossBoard implements OnInit, OnChanges {
     if(!cell.correct) {
       cell.text = cell.pushed ? 'x' : '';
       cell.color = '#ffb3b3';
+    }
+
+    if (this.board) {
+      recalculateClueColors(this.board);
+      this.cdr.markForCheck();
     }
   }
 }

@@ -90,6 +90,14 @@
     line-height: 1.2;
 }
 
+.clue-text.completed {
+    color: #75757588;
+}
+
+.clue-text-container {
+    gap: 2vh;
+}
+
 .row {
     display: flex;
     flex-direction: row;

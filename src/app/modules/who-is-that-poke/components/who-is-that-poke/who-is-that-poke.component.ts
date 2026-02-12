@@ -191,7 +191,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
   }
 
   isDailyComplete(): boolean {
-    if (!this.scoreComponent) return false;
+    if (!this.scoreComponent) return true;
     const today = this.getDateKey(new Date());
     return this.scoreComponent.gameInfo.dailyMap.has(today);
   }
