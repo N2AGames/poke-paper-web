@@ -72,7 +72,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
     }
 
     const width = window.innerWidth;
-    let size = '12vw';
+    let size = '9.5vw';
     let infoSize = '10vw';
     if (width < 400) {
       size = '60vw';
@@ -84,9 +84,10 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
       size = '30vw';
       infoSize = '20vw';
     } else if (width < 1000) {
-      size = '18vw';
+      size = '12vw';
       infoSize = '10vw';
     }
+
     this.cardSize = size;
     this.cardSizeInfo = infoSize;
   }
@@ -126,6 +127,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
           this.triggerScoreEvent('success', this.selectedMode + '-DT');
         } else {
           this.resultMessage = "Correct! You found " + pokeInfo.pokeData[indexOfCorrect].name + "! Keep going!";
+          this.noGuess = true;
         }
     } else {
       this.resultMessage = "Correct! It was " + pokeInfo.title + "!";
@@ -180,6 +182,7 @@ export class WhoIsThatPoke implements OnInit, OnDestroy {
 
   toggleDoubleTrouble() {
     this.isDoubleTrouble = !this.isDoubleTrouble;
+    this.setCardSize();
     console.log('isDoubleTrouble:', this.isDoubleTrouble);
     this.cdr.markForCheck();
   }
