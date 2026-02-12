@@ -12,7 +12,7 @@ import { MatIconModule } from "@angular/material/icon";
   selector: 'app-who-is-that-poke',
   imports: [FlipCard, InputAuto, CommonModule, FormsModule, Score, MatIconModule],
   templateUrl: './who-is-that-poke.component.html',
-  styleUrls: ['./who-is-that-poke.component.css', '../../../../app.css', '../../../shared/styles/buttons.css'],
+  styleUrls: ['./who-is-that-poke.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WhoIsThatPoke implements OnInit, OnDestroy {

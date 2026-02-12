@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-picross',
   imports: [PicrossBoard, MatIconModule],
   templateUrl: './picross.component.html',
-  styleUrls: ['./picross.component.css', '../../../../app.css', '../../../shared/styles/buttons.css'],
+  styleUrls: ['./picross.component.css'],
 })
 export class Picross {
 
@@ -66,6 +66,12 @@ export class Picross {
     } else {
       return false;
     }
+  }
+
+  get lives(): boolean[] {
+    const totalLives = this.picrossBoard?.max_lives ?? 3;
+    const remainingLives = Math.max(0, Math.min(totalLives, this.picrossBoard?.lives ?? totalLives));
+    return Array.from({ length: totalLives }, (_, index) => index < remainingLives);
   }
 
   return(): void {

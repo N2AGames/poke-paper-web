@@ -43,7 +43,44 @@ picross-board {
     background-color: #ffb3b3;
 }
 
+#live-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px auto 2px;
+    padding: 6px 12px;
+    background: #e2e2e2;
+    border: 3px solid #222;
+    border-radius: 6px;
+    box-shadow: 0 3px 0 #444, 0 5px 0 #111;
+}
+
+.pokeball {
+    color: #d84343;
+    font-size: 30px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease;
+}
+
+.pokeball:hover {
+  transform: scale(1.1);
+}
+
 @media (max-width: 768px), (orientation: portrait) {
+    #live-container {
+        gap: 4px;
+        padding: 4px 8px;
+    }
+
+    .pokeball {
+        font-size: 26px;
+    }
+
     .action-btns {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 6px;

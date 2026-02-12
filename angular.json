@@ -25,7 +25,10 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/app/modules/shared/styles/buttons.css",
+              "src/app/app.css",
+              "@mdi/font/css/materialdesignicons.min.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",

@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-main-menu',
   imports: [MatIconModule],
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.css', '../../../../../styles.css', '../../../shared/styles/buttons.css'],
+  styleUrls: ['./main-menu.component.css'],
 })
 export class MainMenu {
   private isBrowser: boolean;

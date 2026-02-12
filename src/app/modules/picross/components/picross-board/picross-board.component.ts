@@ -12,7 +12,7 @@ enum GameState {
   selector: 'picross-board',
   imports: [MatIconModule],
   templateUrl: './picross-board.component.html',
-  styleUrls: ['./picross-board.component.css', '../../../../app.css', '../../../shared/styles/buttons.css'],
+  styleUrls: ['./picross-board.component.css'],
 })
 export class PicrossBoard implements OnInit, OnChanges {
 
@@ -25,8 +25,8 @@ export class PicrossBoard implements OnInit, OnChanges {
   boardStyles: any = {};
 
   gameState: GameState = GameState.IN_PROGRESS;
-  max_lifes: number = 3;
-  lifes: number = this.max_lifes;
+  max_lives: number = 3;
+  lives: number = this.max_lives;
   resultMessage: string = '';
 
   private isBrowser: boolean = false;
@@ -180,10 +180,11 @@ export class PicrossBoard implements OnInit, OnChanges {
   guessFailed(cell: PicrossCellData) {
     cell.text = 'x';
     cell.color = '#ffb3b3';
-    this.lifes--;
-    if(this.lifes <= 0) {
+    cell.enabled = false; // Deshabilitar la celda después de adivinar mal
+    this.lives--;
+    if(this.lives <= 0) {
       this.gameState = GameState.FINISHED_FAIL;
-      this.resultMessage = 'Game Over! You have no more lifes left.';
+      this.resultMessage = 'Game Over! You have no more lives left.';
     } else {
       setTimeout(() => {
         this.markCell(cell);
@@ -213,7 +214,7 @@ export class PicrossBoard implements OnInit, OnChanges {
       recalculateClueColors(this.board);
     }
     this.gameState = GameState.IN_PROGRESS;
-    this.lifes = this.max_lifes;
+    this.lives = this.max_lives;
     this.resultMessage = '';
     this.cdr.markForCheck();
   }

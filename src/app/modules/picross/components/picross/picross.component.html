@@ -17,6 +17,11 @@
                 <button class="config-btn" (click)="selectMode('20x20')">20x20</button>
             </div>
         } @else {
+            <div id="live-container">
+                @for(live of lives; track $index) {
+                    <span class="mdi mdi-pokeball pokeball" [style.color]="live ? '#ff4081' : 'transparent'"></span>
+                }
+            </div>
             <picross-board [rows]="rows" [columns]="cols" [action]="action"></picross-board>
             @if(!isGameFinished()) {
                 <div class="action-btns">

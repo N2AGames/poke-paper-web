@@ -11,7 +11,7 @@ import { sign } from 'crypto';
   selector: 'flip-card',
   imports: [CommonModule],
   templateUrl: './flip-card.component.html',
-  styleUrls: ['./flip-card.component.css', '../../../../../styles.css']
+  styleUrls: ['./flip-card.component.css']
 })
 export class FlipCard implements OnInit {
   @Input() size: string = '10vw';

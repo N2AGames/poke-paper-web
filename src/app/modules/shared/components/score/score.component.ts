@@ -8,7 +8,7 @@ import { last } from 'rxjs';
   selector: 'app-score',
   imports: [TitleCasePipe],
   templateUrl: './score.component.html',
-  styleUrls: ['./score.component.css', '../../../../../styles.css'],
+  styleUrls: ['./score.component.css'],
 })
 export class Score implements OnChanges {
 
