@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/picross/picross.routing.module').then(m => m.PicrossRoutingModule)
   },
   {
+    path: 'poke-table',
+    loadChildren: () => import('./modules/poke-table/poke-table.routing.module').then(m => m.PokeTableRoutingModule)
+  },
+  {
     path: 'main',
     loadChildren: () => import('./modules/main-menu/main-menu.routing.module').then(m => m.MainMenuRoutingModule)
   },

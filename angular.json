@@ -27,6 +27,7 @@
             "styles": [
               "src/styles.css",
               "src/app/modules/shared/styles/buttons.css",
+              "src/app/modules/shared/styles/tables.css",
               "src/app/app.css",
               "@mdi/font/css/materialdesignicons.min.css"
             ],

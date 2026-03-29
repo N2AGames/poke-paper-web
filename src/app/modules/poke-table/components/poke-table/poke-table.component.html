@@ -1,0 +1,26 @@
+<div id="container">
+    <div id="game-container">
+        <div id="game-title-container">
+            <button class="return-button" (click)="return()"><mat-icon>arrow_back</mat-icon></button>
+            <div id="game-title">PokeTable</div>
+            <button class="info-button" (click)="openInstructions = true">?</button>
+        </div>
+        @if(!modeSelected) {
+            <div id="mode-config">Select Mode</div>
+            <div id="mode-selection">
+                <button class="config-btn" (click)="selectMode('daily')">Daily table</button>
+            </div>
+        } @else {
+            <poke-table-board [mode]="selectedMode"></poke-table-board>
+            @if(!isGameFinished()) {
+                <button id="mode-btn" (click)="changeMode()">Change mode</button>
+            } @else {
+                <div id="result-message">{{ pokeTableBoard.resultMessage }}</div>
+                <div class="action-btns">
+                    <button id="mode-btn" (click)="reload()">Try another Pokémon</button>
+                    <button id="mode-btn" (click)="changeMode()">Change mode</button>
+                </div>
+            }
+        }
+    </div>
+</div>

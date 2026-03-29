@@ -94,4 +94,16 @@ export class InputAuto implements OnChanges {
     this.showDropdown = false;
     this.selectedIndex = -1;
   }
+
+  public setValue(value: string): void {
+    this.searchText = value;
+    this.onInputChange();
+  }
+
+  focus() {
+    const inputElement = document.querySelector<HTMLInputElement>('input');
+    if (inputElement) {
+      inputElement.focus();
+    }
+  }
 }

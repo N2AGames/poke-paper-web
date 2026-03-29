@@ -1,0 +1,86 @@
+:host {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+#ptBoard {
+  padding: 2rem;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto;
+  width: fit-content;
+
+  display: flex;
+  flex-direction: row; 
+  
+  .col {
+    margin: 0;
+    width: 7rem;
+    height: 7rem;
+  }
+
+  .selected {
+    border: 3px solid #888;
+    border-radius: 1rem;
+  }
+}
+
+.requests-side,
+.guesses-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.request-header-spacer {
+  min-height: 2.5rem;
+}
+
+.col-name {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.request-row {
+  gap: 8px;
+}
+
+.request-col {
+  align-items: center;
+  display: flex;
+  font-weight: 600;
+  height: auto !important;
+  justify-content: center;
+  min-height: 2.5rem;
+  text-align: center;
+}
+
+.request-row-col {
+  height: 7rem;
+  min-height: 7rem;
+}
+
+.guess-panel {
+  background-color: #f0f0f0;
+  border: 3px solid #bbb;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.guess-panel:hover {
+  border-color: #888;
+  cursor: pointer;
+}
+
+input-auto {
+  display: block;
+  margin: 0 auto;
+  max-width: 52rem;
+  width: min(100%, 52rem);
+}
