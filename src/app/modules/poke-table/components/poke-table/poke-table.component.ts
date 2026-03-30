@@ -49,10 +49,14 @@ export class PokeTable {
     this.gameFinishedState = false;
   }
 
-  reload(): void {
+  reload(failure: boolean = false): void {
     this.scoreEventType = '';
     this.gameFinishedState = false;
     this.pokeTableBoard.reset();
+    if(failure) {
+      this.scoreEventType = 'failure';
+      this.scoreEventTick++;
+    }
   }
 
   return() {

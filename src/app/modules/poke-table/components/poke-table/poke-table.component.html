@@ -14,6 +14,7 @@
             <poke-table-board [mode]="selectedMode" (gameFinished)="onGameFinished()"></poke-table-board>
             @if(!gameFinishedState) {
                 <button id="mode-btn" (click)="changeMode()">Change mode</button>
+                <button id="mode-btn" (click)="reload(true)">New table</button>
             } @else {
                 <div id="result-message">¡Tablero completado! ¡Felicidades!</div>
                 <div class="action-btns">

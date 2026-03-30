@@ -289,6 +289,7 @@ export class PokeTableBoard implements OnInit{
   reset(): void {
     this.currentGuess = undefined;
     this.resultMessage = '';
+    this.pokeInput.clearInput();
     this.initializeData();
   }
 
