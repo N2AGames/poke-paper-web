@@ -196,12 +196,50 @@ npm run build
 npm run deploy
 ```
 
+## 🚢 Proceso de Release y Deploy
+
+### 1. Subir versión (SemVer)
+
+Usa uno de estos comandos según el alcance de cambios:
+
+```bash
+npm version patch --no-git-tag-version
+npm version minor --no-git-tag-version
+npm version major --no-git-tag-version
+```
+
+### 2. Validar antes de publicar
+
+```bash
+npm install
+npm run test
+npm run github-build
+```
+
+### 3. Desplegar a GitHub Pages
+
+```bash
+npm run deploy
+```
+
+Este flujo publica el contenido de `dist/poke-paper-web/browser` en la rama `gh-pages`.
+
+### 4. Checklist rápido de publicación
+
+- Confirmar que la versión en `package.json` es la esperada
+- Verificar que `npm run github-build` no devuelve errores
+- Hacer commit con cambios de versión + README
+- Ejecutar `npm run deploy`
+- Validar la web publicada en `https://n2agames.github.io/poke-paper-web/`
+
 ## 📝 Scripts Disponibles
 
 | Script | Descripción |
 |--------|-------------|
 | `npm start` | Inicia el servidor de desarrollo |
 | `npm run build` | Compila para producción |
+| `npm run github-build` | Build de producción con `base-href` para GitHub Pages |
+| `npm run predeploy` | Prepara artefactos estáticos (`index.html` y `404.html`) |
 | `npm run test` | Ejecuta los tests unitarios |
 | `npm run watch` | Compilación en modo watch |
 | `npm run deploy` | Deploy automático en GitHub Pages |
