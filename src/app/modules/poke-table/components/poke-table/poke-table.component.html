@@ -11,16 +11,22 @@
                 <button class="config-btn" (click)="selectMode('daily')">Daily table</button>
             </div>
         } @else {
-            <poke-table-board [mode]="selectedMode"></poke-table-board>
-            @if(!isGameFinished()) {
+            <poke-table-board [mode]="selectedMode" (gameFinished)="onGameFinished()"></poke-table-board>
+            @if(!gameFinishedState) {
                 <button id="mode-btn" (click)="changeMode()">Change mode</button>
             } @else {
-                <div id="result-message">{{ pokeTableBoard.resultMessage }}</div>
+                <div id="result-message">¡Tablero completado! ¡Felicidades!</div>
                 <div class="action-btns">
-                    <button id="mode-btn" (click)="reload()">Try another Pokémon</button>
+                    <button id="mode-btn" (click)="reload()">Nueva partida</button>
                     <button id="mode-btn" (click)="changeMode()">Change mode</button>
                 </div>
             }
         }
+        <app-score
+            [mode]="'poke-table'"
+            [scoreType]="scoreEventType"
+            [scoreTick]="scoreEventTick"
+            [showScore]="showScore"
+        ></app-score>
     </div>
 </div>

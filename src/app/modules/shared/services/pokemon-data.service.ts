@@ -15,11 +15,36 @@ const GENERATION_LIMITS: { [key: number]: number } = {
 
 const LAST_GENERATION = 9;
 
+interface TypeListResponse {
+  results: Array<{
+    name: string;
+    url: string;
+  }>;
+}
+
+interface NameListResponse {
+  results: Array<{
+    name: string;
+    url: string;
+  }>;
+}
+
+interface TypePokemonResponse {
+  pokemon: Array<{
+    pokemon: {
+      name: string;
+      url: string;
+    };
+  }>;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonDataService {
   private readonly pokemonApiUrl = 'https://pokeapi.co/api/v2/pokemon/';
+  private readonly typeApiUrl = 'https://pokeapi.co/api/v2/type/';
+  private readonly typePokemonCache = new Map<string, string[]>();
 
   async getPokemonData(pokemonName: string): Promise<PokemonApiResponse> {
     const response = await fetch(`${this.pokemonApiUrl}${pokemonName.toLowerCase()}`);
@@ -87,10 +112,56 @@ export class PokemonDataService {
   }
 
   async getAllPokemonNames(): Promise<{ results: { name: string }[] }> {
-    const response = await fetch(`${this.pokemonApiUrl}?limit=${GENERATION_LIMITS[LAST_GENERATION]}`);
-    if (!response.ok) {
+    const [pokemonResponse, formsResponse] = await Promise.all([
+      fetch(`${this.pokemonApiUrl}?limit=2000`),
+      fetch('https://pokeapi.co/api/v2/pokemon-form?limit=2000'),
+    ]);
+
+    if (!pokemonResponse.ok || !formsResponse.ok) {
       throw new Error('Failed to fetch Pokemon names');
     }
-    return await response.json();
+
+    const [pokemonData, formsData] = await Promise.all([
+      pokemonResponse.json() as Promise<NameListResponse>,
+      formsResponse.json() as Promise<NameListResponse>,
+    ]);
+
+    const uniqueNames = new Set<string>([
+      ...pokemonData.results.map((entry) => entry.name),
+      ...formsData.results.map((entry) => entry.name),
+    ]);
+
+    return {
+      results: Array.from(uniqueNames).sort().map((name) => ({ name })),
+    };
+  }
+  
+  async getTypes(): Promise<string[]> {
+    const typesResponse = await fetch(this.typeApiUrl);
+    if (!typesResponse.ok) {
+      throw new Error('Failed to fetch Pokemon types');
+    }
+
+    const data = await typesResponse.json() as TypeListResponse;
+    return data.results.map((type) => type.name);
+  }
+
+  async getPokemonNamesByType(typeName: string): Promise<string[]> {
+    const normalizedType = typeName.toLowerCase();
+
+    if (this.typePokemonCache.has(normalizedType)) {
+      return this.typePokemonCache.get(normalizedType)!;
+    }
+
+    const response = await fetch(`${this.typeApiUrl}${normalizedType}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Pokemon for type "${typeName}"`);
+    }
+
+    const data = await response.json() as TypePokemonResponse;
+    const pokemonNames = data.pokemon.map((entry) => entry.pokemon.name);
+    this.typePokemonCache.set(normalizedType, pokemonNames);
+
+    return pokemonNames;
   }
 }

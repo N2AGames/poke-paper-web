@@ -3,7 +3,7 @@
     <div class="request-header-spacer"></div>
     @for(requestR of board.requestsR; track $index) {
       <div class="row request-row">
-        <div class="col request-col request-row-col">{{ requestR.text }}</div>
+        <div class="col request-col request-row-col" [class.completed-request]="requestR.isCompleted">{{ requestR.text }}</div>
       </div>
     }
   </div>
@@ -11,14 +11,20 @@
     <div class="row">
       <div class="col-name">
         @for (col of board.requestsC; track $index) {
-          <div class="col request-col">{{ col.text }}</div>
+          <div class="col request-col" [class.completed-request]="col.isCompleted">{{ col.text }}</div>
         }
       </div>
     </div>
     @for(row of board.guesses; track $index) {
         <div class="row guess-row">
           @for(col of row; track $index) {
-            <div class="col guess-panel" [class.selected]="col === currentGuess" (click)="checkForGuess(col)">
+            <div
+              class="col guess-panel"
+              [class.selected]="col === currentGuess"
+              [class.correct]="!!col.pokemon && col.isCorrect"
+              [class.incorrect]="!!col.pokemon && !col.isCorrect"
+              (click)="checkForGuess(col)"
+            >
               @if(col.pokemon) {
                 <img [src]="col.pokemon.sprites.front_default" [alt]="col.pokemon.name" />
               }

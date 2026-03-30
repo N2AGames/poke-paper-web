@@ -30,7 +30,8 @@ export class Utils {
         { key: '1gen', label: 'Primera Generación' },
         { key: 'classic', label: 'Clásico' },
         { key: 'all', label: 'Todos' },
-        { key: 'daily', label: 'Diario' }
+        { key: 'daily', label: 'Diario' },
+        { key: 'poke-table', label: 'Poke Table' }
     ];
 
     static getColorByType(type: string): string {

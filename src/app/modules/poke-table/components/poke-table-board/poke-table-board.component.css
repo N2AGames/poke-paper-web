@@ -51,12 +51,20 @@
 
 .request-col {
   align-items: center;
+  border: 2px solid #c8c8c8;
+  border-radius: 0.75rem;
   display: flex;
   font-weight: 600;
   height: auto !important;
   justify-content: center;
   min-height: 2.5rem;
   text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.completed-request {
+  background-color: #e9f9ee;
+  border-color: #36a269;
 }
 
 .request-row-col {
@@ -71,11 +79,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .guess-panel:hover {
   border-color: #888;
   cursor: pointer;
+}
+
+.guess-panel.correct {
+  background-color: #e9f9ee;
+  border-color: #36a269;
+}
+
+.guess-panel.incorrect {
+  background-color: #fdeeee;
+  border-color: #cc4b4b;
 }
 
 input-auto {

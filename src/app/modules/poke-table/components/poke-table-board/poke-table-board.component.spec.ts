@@ -10,6 +10,8 @@ describe('PokeTableBoard', () => {
   let pokemonDataServiceMock: {
     getAllPokemonNames: () => Promise<{ results: { name: string }[] }>;
     getPokemonData: (pokemonName: string) => Promise<PokemonApiResponse>;
+    getTypes: () => Promise<string[]>;
+    getPokemonNamesByType: (typeName: string) => Promise<string[]>;
   };
 
   const pokemonResponse = {
@@ -17,12 +19,48 @@ describe('PokeTableBoard', () => {
     sprites: {
       front_default: 'pikachu.png',
     },
+    types: [
+      { type: { name: 'electric', url: '' } }
+    ],
+  } as PokemonApiResponse;
+
+  const charizardResponse = {
+    name: 'charizard',
+    sprites: {
+      front_default: 'charizard.png',
+    },
+    types: [
+      { type: { name: 'fire', url: '' } },
+      { type: { name: 'flying', url: '' } },
+    ],
+  } as PokemonApiResponse;
+
+  const gyaradosResponse = {
+    name: 'gyarados',
+    sprites: {
+      front_default: 'gyarados.png',
+    },
+    types: [
+      { type: { name: 'water', url: '' } },
+      { type: { name: 'flying', url: '' } },
+    ],
   } as PokemonApiResponse;
 
   beforeEach(async () => {
+    const typePokemonMap: Record<string, string[]> = {
+      fire: ['charizard', 'rotom-heat', 'volcanion'],
+      water: ['rotom-wash', 'volcanion', 'lanturn'],
+      electric: ['rotom-heat', 'rotom-wash', 'lanturn'],
+      flying: ['charizard', 'gyarados', 'landorus-incarnate'],
+      ground: ['landorus-incarnate', 'golem', 'gastrodon'],
+      rock: ['golem', 'aerodactyl', 'omastar'],
+    };
+
     pokemonDataServiceMock = {
       getAllPokemonNames: async () => ({ results: [] }),
       getPokemonData: async () => pokemonResponse,
+      getTypes: async () => Object.keys(typePokemonMap),
+      getPokemonNamesByType: async (typeName: string) => typePokemonMap[typeName] ?? [],
     };
 
     await TestBed.configureTestingModule({
@@ -76,5 +114,64 @@ describe('PokeTableBoard', () => {
 
     expect(component.resultMessage).toBe('Por favor, selecciona una casilla para adivinar primero.');
     expect(getPokemonDataCalled).toBe(false);
+  });
+
+  it('should mark guess as correct when pokemon matches row and column types', fakeAsync(() => {
+    component.board = {
+      requestsC: [{ text: 'fire', isCompleted: false }],
+      requestsR: [{ text: 'flying', isCompleted: false }],
+      guesses: [[{ pokemon: undefined, isCorrect: false }]],
+    };
+
+    pokemonDataServiceMock.getPokemonData = async () => charizardResponse;
+
+    component.checkForGuess(component.board.guesses[0][0]);
+    component.pokemonSelected('charizard');
+    tick();
+
+    expect(component.board.guesses[0][0].isCorrect).toBe(true);
+    expect(component.board.requestsC[0].isCompleted).toBe(true);
+    expect(component.board.requestsR[0].isCompleted).toBe(true);
+  }));
+
+  it('should mark guess as incorrect when pokemon does not match both hint types', fakeAsync(() => {
+    component.board = {
+      requestsC: [{ text: 'fire', isCompleted: false }],
+      requestsR: [{ text: 'flying', isCompleted: false }],
+      guesses: [[{ pokemon: undefined, isCorrect: false }]],
+    };
+
+    pokemonDataServiceMock.getPokemonData = async () => gyaradosResponse;
+
+    component.checkForGuess(component.board.guesses[0][0]);
+    component.pokemonSelected('gyarados');
+    tick();
+
+    expect(component.board.guesses[0][0].isCorrect).toBe(false);
+    expect(component.board.requestsC[0].isCompleted).toBe(false);
+    expect(component.board.requestsR[0].isCompleted).toBe(false);
+    expect(component.isGameFinished()).toBe(false);
+  }));
+
+  it('should report game finished only when all guesses are correct', () => {
+    component.board = {
+      requestsC: [
+        { text: 'fire', isCompleted: true },
+        { text: 'water', isCompleted: true },
+      ],
+      requestsR: [{ text: 'flying', isCompleted: true }],
+      guesses: [[
+        { pokemon: charizardResponse, isCorrect: true },
+        { pokemon: gyaradosResponse, isCorrect: true },
+      ]],
+    };
+
+    expect(component.isGameFinished()).toBe(true);
+
+    component.board.guesses[0][1] = { pokemon: gyaradosResponse, isCorrect: false };
+    expect(component.isGameFinished()).toBe(false);
+
+    component.board.guesses[0][1] = { pokemon: undefined, isCorrect: false };
+    expect(component.isGameFinished()).toBe(false);
   });
 });
