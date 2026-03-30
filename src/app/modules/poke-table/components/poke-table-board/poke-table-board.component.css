@@ -7,7 +7,7 @@
 }
 
 #ptBoard {
-  padding: 2rem;
+  padding: 1rem;
   align-items: center;
   gap: 8px;
   margin: 0 auto;
@@ -23,8 +23,9 @@
   }
 
   .selected {
-    border: 3px solid #888;
-    border-radius: 1rem;
+    border: 3px solid #1f2f7a;
+    border-radius: 0;
+    box-shadow: 0 0 0 2px #ffcb05;
   }
 }
 
@@ -32,7 +33,7 @@
 .guesses-side {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .request-header-spacer {
@@ -51,20 +52,27 @@
 
 .request-col {
   align-items: center;
-  border: 2px solid #c8c8c8;
-  border-radius: 0.75rem;
+  background-color: #bbb8a0;
+  border: 3px solid #222;
+  border-radius: 0;
+  box-shadow: 0 3px 0 #444, 0 5px 0 #111;
   display: flex;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
   font-weight: 600;
   height: auto !important;
   justify-content: center;
   min-height: 2.5rem;
   text-align: center;
+  text-transform: capitalize;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .completed-request {
-  background-color: #e9f9ee;
-  border-color: #36a269;
+  background-color: #b8f7b8;
+  border-color: #0b2a0b;
+  box-shadow: 0 3px 0 #0b4a0b, 0 5px 0 #0b2a0b;
+  color: #0b2a0b;
 }
 
 .request-row-col {
@@ -73,28 +81,34 @@
 }
 
 .guess-panel {
-  background-color: #f0f0f0;
-  border: 3px solid #bbb;
-  border-radius: 1rem;
+  background-color: #e8e5d0;
+  border: 3px solid #222;
+  border-radius: 0;
+  box-shadow: 0 3px 0 #444, 0 5px 0 #111;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.1s ease;
 }
 
 .guess-panel:hover {
-  border-color: #888;
+  background-color: #f5f2dc;
+  border-color: #1f2f7a;
+  box-shadow: 0 4px 0 #1f2f7a, 0 6px 0 #0b1226;
   cursor: pointer;
+  transform: translateY(-1px);
 }
 
 .guess-panel.correct {
-  background-color: #e9f9ee;
-  border-color: #36a269;
+  background-color: #b8f7b8;
+  border-color: #0b2a0b;
+  box-shadow: 0 3px 0 #0b4a0b, 0 5px 0 #0b2a0b;
 }
 
 .guess-panel.incorrect {
-  background-color: #fdeeee;
-  border-color: #cc4b4b;
+  background-color: #ffb3b3;
+  border-color: #3b0b0b;
+  box-shadow: 0 3px 0 #6b1b1b, 0 5px 0 #3b0b0b;
 }
 
 input-auto {

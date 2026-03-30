@@ -3,7 +3,7 @@
     <div class="request-header-spacer"></div>
     @for(requestR of board.requestsR; track $index) {
       <div class="row request-row">
-        <div class="col request-col request-row-col" [class.completed-request]="requestR.isCompleted">{{ requestR.text }}</div>
+        <div class="col request-col request-row-col" [class.completed-request]="requestR.isCompleted" [ngStyle]="getHintStyle(requestR.text, requestR.isCompleted)">{{ requestR.text }}</div>
       </div>
     }
   </div>
@@ -11,7 +11,7 @@
     <div class="row">
       <div class="col-name">
         @for (col of board.requestsC; track $index) {
-          <div class="col request-col" [class.completed-request]="col.isCompleted">{{ col.text }}</div>
+          <div class="col request-col" [class.completed-request]="col.isCompleted" [ngStyle]="getHintStyle(col.text, col.isCompleted)">{{ col.text }}</div>
         }
       </div>
     </div>

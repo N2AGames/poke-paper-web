@@ -1,5 +1,8 @@
 export class Utils {
 
+    private static readonly PAPER_TONE = { r: 242, g: 237, b: 216 };
+    private static readonly PASTEL_TYPE_WEIGHT = 0.38;
+
     static TYPE_COLOR_MAP: { [key: string]: string } = {
         normal: '#c0be61',
         fire: '#e96500',
@@ -36,6 +39,53 @@ export class Utils {
 
     static getColorByType(type: string): string {
         return this.TYPE_COLOR_MAP[type] || '#ffffff';
+    }
+
+    static getPastelColorByType(type: string): string {
+        const baseColor = this.normalizeHexColor(this.getColorByType(type));
+        return this.pastelizeColor(baseColor);
+    }
+
+    static getReadableTextColor(backgroundColor: string): string {
+        const normalizedColor = this.normalizeHexColor(backgroundColor);
+        const red = Number.parseInt(normalizedColor.slice(1, 3), 16);
+        const green = Number.parseInt(normalizedColor.slice(3, 5), 16);
+        const blue = Number.parseInt(normalizedColor.slice(5, 7), 16);
+
+        const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+        return luminance > 0.6 ? '#111' : '#fff';
+    }
+
+    static normalizeHexColor(color: string): string {
+        const cleanColor = color.replace('#', '');
+
+        if (cleanColor.length === 3) {
+            const expanded = cleanColor.split('').map((char) => `${char}${char}`).join('');
+            return `#${expanded}`;
+        }
+
+        if (cleanColor.length === 6 || cleanColor.length === 8) {
+            return `#${cleanColor.slice(0, 6)}`;
+        }
+
+        return '#bbb8a0';
+    }
+
+    static pastelizeColor(hexColor: string): string {
+        const normalizedColor = this.normalizeHexColor(hexColor);
+        const red = Number.parseInt(normalizedColor.slice(1, 3), 16);
+        const green = Number.parseInt(normalizedColor.slice(3, 5), 16);
+        const blue = Number.parseInt(normalizedColor.slice(5, 7), 16);
+
+        const mixedRed = Math.round(red * this.PASTEL_TYPE_WEIGHT + this.PAPER_TONE.r * (1 - this.PASTEL_TYPE_WEIGHT));
+        const mixedGreen = Math.round(green * this.PASTEL_TYPE_WEIGHT + this.PAPER_TONE.g * (1 - this.PASTEL_TYPE_WEIGHT));
+        const mixedBlue = Math.round(blue * this.PASTEL_TYPE_WEIGHT + this.PAPER_TONE.b * (1 - this.PASTEL_TYPE_WEIGHT));
+
+        return `#${this.toHex(mixedRed)}${this.toHex(mixedGreen)}${this.toHex(mixedBlue)}`;
+    }
+
+    static toHex(value: number): string {
+        return value.toString(16).padStart(2, '0');
     }
 
     static async tintImage(element: HTMLImageElement, colors: string[]): Promise<void> {

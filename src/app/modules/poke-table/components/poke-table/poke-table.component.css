@@ -1,0 +1,29 @@
+#result-message {
+	font-family: 'Press Start 2P', cursive;
+	font-size: 13px;
+	color: #0b2a0b;
+	background-color: #b8f7b8;
+	border: 3px solid #0b2a0b;
+	box-shadow: 0 4px 0 #0b4a0b, 0 6px 0 #0b2a0b;
+	padding: 12px 16px;
+	text-align: center;
+	animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+	from { opacity: 0; transform: translateY(-8px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+.action-btns {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+poke-table-board {
+	overflow: auto;
+	max-height: calc(100dvh - 220px);
+}

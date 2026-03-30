@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputAuto } from '../../../shared/components/input-auto/input-auto.component';
 import { PokemonDataService } from '../../../shared/services/pokemon-data.service';
 import { CommonModule } from '@angular/common';
+import { Utils } from '../../../shared/utils';
 
 export interface PTBoard {
   requestsC: PTBoardRequest[];
@@ -261,6 +262,18 @@ export class PokeTableBoard implements OnInit{
     if (this.isGameFinished()) {
       this.gameFinished.emit();
     }
+  }
+
+  getHintStyle(type: string, isCompleted: boolean): { [key: string]: string } {
+    if (isCompleted) {
+      return {};
+    }
+
+    const pastelTypeColor = Utils.getPastelColorByType(type);
+    return {
+      'background-color': pastelTypeColor,
+      color: Utils.getReadableTextColor(pastelTypeColor),
+    };
   }
 
   isGameFinished(): boolean {
