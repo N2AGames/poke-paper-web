@@ -8,7 +8,7 @@
         @if(!modeSelected) {
             <div id="mode-config">Select Mode</div>
             <div id="mode-selection">
-                <button class="config-btn" (click)="selectMode('daily')">Daily table</button>
+                <button class="config-btn" (click)="selectMode('daily')">Random table</button>
             </div>
         } @else {
             <poke-table-board [mode]="selectedMode" (gameFinished)="onGameFinished()"></poke-table-board>
@@ -16,12 +16,22 @@
                 <button id="mode-btn" (click)="changeMode()">Change mode</button>
                 <button id="mode-btn" (click)="reload(true)">New table</button>
             } @else {
-                <div id="result-message">¡Tablero completado! ¡Felicidades!</div>
+                <div id="result-message">Table completed! Congratulations!</div>
                 <div class="action-btns">
-                    <button id="mode-btn" (click)="reload()">Nueva partida</button>
+                    <button id="mode-btn" (click)="reload()">New game</button>
                     <button id="mode-btn" (click)="changeMode()">Change mode</button>
                 </div>
             }
+        }
+        @if(openInstructions) {
+            <div class="info-panel">
+                <h2>How to Play</h2>
+                <p>PokeTable is a type-based Pokémon guessing game. Fill every cell in the grid with a valid Pokémon.</p>
+                <p>Each cell sits at the intersection of a <strong>row type</strong> and a <strong>column type</strong>. The Pokémon you enter must have <strong>both</strong> those types.</p>
+                <p>Click a cell to select it, then type the Pokémon's name in the search box below and select it from the list.</p>
+                <p>Complete all rows and columns to win!</p>
+                <button class="close-info-btn" (click)="openInstructions = false">X</button>
+            </div>
         }
         <app-score
             [mode]="'poke-table'"

@@ -41,5 +41,13 @@
                 </div>
             }
         }
-    </div>
-</div>
+        @if(openInstructions) {
+            <div class="info-panel">
+                <h2>How to Play</h2>
+                <p>Picross is a logic puzzle. Fill the correct cells in the grid to reveal a hidden Pokémon silhouette.</p>
+                <p>The <strong>numbers</strong> on each row and column tell you how many consecutive cells must be filled, in order.</p>
+                <p>Use the <strong>pencil</strong> button to fill cells. Use the <strong>flag</strong> button to mark cells you think should be empty.</p>
+                <p>Be careful — each wrong fill costs you one life! You have 3 pokeballs. Lose them all and the game is over.</p>
+                <button class="close-info-btn" (click)="openInstructions = false">X</button>
+            </div>
+        }
