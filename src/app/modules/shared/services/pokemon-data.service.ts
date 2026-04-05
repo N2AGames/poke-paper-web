@@ -38,13 +38,22 @@ interface TypePokemonResponse {
   }>;
 }
 
+interface GenerationResponse {
+  pokemon_species: Array<{
+    name: string;
+    url: string;
+  }>;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonDataService {
   private readonly pokemonApiUrl = 'https://pokeapi.co/api/v2/pokemon/';
   private readonly typeApiUrl = 'https://pokeapi.co/api/v2/type/';
+  private readonly generationApiUrl = 'https://pokeapi.co/api/v2/generation/';
   private readonly typePokemonCache = new Map<string, string[]>();
+  private readonly generationPokemonCache = new Map<number, string[]>();
 
   async getPokemonData(pokemonName: string): Promise<PokemonApiResponse> {
     const response = await fetch(`${this.pokemonApiUrl}${pokemonName.toLowerCase()}`);
@@ -163,5 +172,21 @@ export class PokemonDataService {
     this.typePokemonCache.set(normalizedType, pokemonNames);
 
     return pokemonNames;
+  }
+
+  async getPokemonNamesByGeneration(gen: number): Promise<string[]> {
+    if (this.generationPokemonCache.has(gen)) {
+      return this.generationPokemonCache.get(gen)!;
+    }
+
+    const response = await fetch(`${this.generationApiUrl}${gen}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Pokemon for generation ${gen}`);
+    }
+
+    const data = await response.json() as GenerationResponse;
+    const names = data.pokemon_species.map((entry) => entry.name);
+    this.generationPokemonCache.set(gen, names);
+    return names;
   }
 }

@@ -14,6 +14,8 @@ export interface PTBoard {
 
 export interface PTBoardRequest {
   text: string;
+  displayText: string;
+  kind: 'type' | 'generation';
   isCompleted: boolean;
 }
 
@@ -47,6 +49,10 @@ export class PokeTableBoard implements OnInit{
   private readonly excludedTypes = new Set(['unknown', 'shadow']);
   private readonly maxBoardGenerationAttempts = 120;
   private typePokemonMap = new Map<string, Set<string>>();
+  private generationPokemonMap = new Map<string, Set<string>>();
+  private readonly generationKeys = ['gen-1','gen-2','gen-3','gen-4','gen-5','gen-6','gen-7','gen-8','gen-9'];
+  private typeRequests: PTBoardRequest[] = [];
+  private generationRequests: PTBoardRequest[] = [];
 
   constructor(
     private readonly pokemonDataService: PokemonDataService,
@@ -62,6 +68,7 @@ export class PokeTableBoard implements OnInit{
     try {
       await this.loadPokemonNames();
       await this.setupTypeData();
+      await this.setupGenerationData();
       this.board = this.initializeBoard();
       this.resultMessage = '';
     } catch {
@@ -87,16 +94,37 @@ export class PokeTableBoard implements OnInit{
     }));
 
     this.typePokemonMap = new Map(typeEntries);
+    this.typeRequests = this.types.map((t) => this.makeTypeRequest(t));
+  }
+
+  private async setupGenerationData(): Promise<void> {
+    const genEntries = await Promise.all(this.generationKeys.map(async (genKey) => {
+      const genNum = parseInt(genKey.replace('gen-', ''));
+      const names = await this.pokemonDataService.getPokemonNamesByGeneration(genNum);
+      return [genKey, new Set(names)] as const;
+    }));
+
+    this.generationPokemonMap = new Map(genEntries);
+    this.generationRequests = this.generationKeys.map((g) => this.makeGenerationRequest(g));
+  }
+
+  private makeTypeRequest(type: string): PTBoardRequest {
+    return { text: type, displayText: type, kind: 'type', isCompleted: false };
+  }
+
+  private makeGenerationRequest(gen: string): PTBoardRequest {
+    const num = gen.replace('gen-', '');
+    return { text: gen, displayText: `Gen ${num}`, kind: 'generation', isCompleted: false };
   }
 
   initializeBoard(): PTBoard {
-    const boardTypes = this.selectCompatibleTypes();
-    return this.createEmptyBoard(boardTypes.columnTypes, boardTypes.rowTypes);
+    const { columnRequests, rowRequests } = this.selectCompatibleRequests();
+    return this.createEmptyBoard(columnRequests, rowRequests);
   }
 
-  private createEmptyBoard(columnTypes: string[], rowTypes: string[]): PTBoard {
-    const requestsC = columnTypes.map((type) => ({ text: type, isCompleted: false }));
-    const requestsR = rowTypes.map((type) => ({ text: type, isCompleted: false }));
+  private createEmptyBoard(columnRequests: PTBoardRequest[], rowRequests: PTBoardRequest[]): PTBoard {
+    const requestsC = columnRequests.map((r) => ({ ...r, isCompleted: false }));
+    const requestsR = rowRequests.map((r) => ({ ...r, isCompleted: false }));
     const guesses: PTBoardGuess[][] = [];
 
     for (let i = 0; i < this.height; i++) {
@@ -110,26 +138,66 @@ export class PokeTableBoard implements OnInit{
     return { requestsC, requestsR, guesses };
   }
 
-  private selectCompatibleTypes(): { columnTypes: string[]; rowTypes: string[] } {
-    if (this.types.length < this.width) {
-      throw new Error('Not enough unique types to build board columns');
+  private selectCompatibleRequests(): { columnRequests: PTBoardRequest[]; rowRequests: PTBoardRequest[] } {
+    // 1 = generations in columns, 2 = generations in rows (always one of the two)
+    const genPlacement = Math.random() < 0.5 ? 1 : 2;
+
+    const columnPool = genPlacement === 1
+      ? [...this.typeRequests, ...this.generationRequests]
+      : this.typeRequests;
+
+    const rowPool = genPlacement === 2
+      ? [...this.typeRequests, ...this.generationRequests]
+      : this.typeRequests;
+
+    if (columnPool.length < this.width || rowPool.length < this.height) {
+      throw new Error('Not enough requests to build board');
     }
 
     for (let attempt = 0; attempt < this.maxBoardGenerationAttempts; attempt++) {
-      const columnTypes = this.pickUniqueRandomTypes(this.width);
-      const compatibleRowTypes = this.types.filter((type) =>
-        columnTypes.every((columnType) => this.hasTypeIntersection(type, columnType))
+      const columnRequests = this.shuffle([...columnPool]).slice(0, this.width);
+
+      const compatibleRowRequests = rowPool.filter((r) =>
+        columnRequests.every((c) => this.hasIntersection(r, c))
       );
 
-      if (compatibleRowTypes.length >= this.height) {
+      if (compatibleRowRequests.length >= this.height) {
         return {
-          columnTypes,
-          rowTypes: this.shuffle([...compatibleRowTypes]).slice(0, this.height),
+          columnRequests,
+          rowRequests: this.shuffle([...compatibleRowRequests]).slice(0, this.height),
         };
       }
     }
 
-    throw new Error('Unable to generate a board with valid type combinations');
+    throw new Error('Unable to generate a board with valid request combinations');
+  }
+
+  private hasIntersection(a: PTBoardRequest, b: PTBoardRequest): boolean {
+    if (a.kind === 'type' && b.kind === 'type') {
+      return this.hasTypeIntersection(a.text, b.text);
+    }
+    if (a.kind === 'generation' && b.kind === 'type') {
+      return this.hasGenTypeIntersection(a.text, b.text);
+    }
+    if (a.kind === 'type' && b.kind === 'generation') {
+      return this.hasGenTypeIntersection(b.text, a.text);
+    }
+    // gen + gen: never valid
+    return false;
+  }
+
+  private hasGenTypeIntersection(gen: string, type: string): boolean {
+    const genSet = this.generationPokemonMap.get(gen);
+    const typeSet = this.typePokemonMap.get(type);
+    if (!genSet || !typeSet) return false;
+
+    const smaller = genSet.size <= typeSet.size ? genSet : typeSet;
+    const larger = genSet.size <= typeSet.size ? typeSet : genSet;
+
+    for (const name of smaller) {
+      if (larger.has(name)) return true;
+    }
+    return false;
   }
 
   private hasTypeIntersection(firstType: string, secondType: string): boolean {
@@ -150,10 +218,6 @@ export class PokeTableBoard implements OnInit{
     }
 
     return false;
-  }
-
-  private pickUniqueRandomTypes(amount: number): string[] {
-    return this.shuffle([...this.types]).slice(0, amount);
   }
 
   private shuffle<T>(list: T[]): T[] {
@@ -231,15 +295,25 @@ export class PokeTableBoard implements OnInit{
   }
 
   private isValidGuessForPosition(pokemon: PokemonApiResponse, rowIndex: number, columnIndex: number): boolean {
-    const rowType = this.board.requestsR[rowIndex]?.text;
-    const columnType = this.board.requestsC[columnIndex]?.text;
+    const rowRequest = this.board.requestsR[rowIndex];
+    const columnRequest = this.board.requestsC[columnIndex];
 
-    if (!rowType || !columnType) {
+    if (!rowRequest || !columnRequest) {
       return false;
     }
 
-    const pokemonTypes = new Set(pokemon.types.map((entry) => entry.type.name));
-    return pokemonTypes.has(rowType) && pokemonTypes.has(columnType);
+    return this.satisfiesRequest(pokemon, rowRequest) && this.satisfiesRequest(pokemon, columnRequest);
+  }
+
+  private satisfiesRequest(pokemon: PokemonApiResponse, request: PTBoardRequest): boolean {
+    if (request.kind === 'type') {
+      return pokemon.types.some((entry) => entry.type.name === request.text);
+    }
+    if (request.kind === 'generation') {
+      const genNum = parseInt(request.text.replace('gen-', ''));
+      return Utils.getGenerationFromId(pokemon.id) === genNum;
+    }
+    return false;
   }
 
   private updateRequestCompletion(): void {
@@ -264,15 +338,18 @@ export class PokeTableBoard implements OnInit{
     }
   }
 
-  getHintStyle(type: string, isCompleted: boolean): { [key: string]: string } {
+  getHintStyle(text: string, isCompleted: boolean): { [key: string]: string } {
     if (isCompleted) {
       return {};
     }
 
-    const pastelTypeColor = Utils.getPastelColorByType(type);
+    const pastelColor = Utils.isGenerationLabel(text)
+      ? Utils.getPastelColorByGeneration(text)
+      : Utils.getPastelColorByType(text);
+
     return {
-      'background-color': pastelTypeColor,
-      color: Utils.getReadableTextColor(pastelTypeColor),
+      'background-color': pastelColor,
+      color: Utils.getReadableTextColor(pastelColor),
     };
   }
 

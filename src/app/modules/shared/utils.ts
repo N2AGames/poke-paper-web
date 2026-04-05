@@ -3,6 +3,36 @@ export class Utils {
     private static readonly PAPER_TONE = { r: 242, g: 237, b: 216 };
     private static readonly PASTEL_TYPE_WEIGHT = 0.38;
 
+    static readonly GENERATION_LIMITS = [151, 251, 386, 493, 649, 721, 809, 905, 1025];
+
+    static readonly GENERATION_COLOR_MAP: { [key: string]: string } = {
+        'gen-1': '#e05c5c',
+        'gen-2': '#d4a017',
+        'gen-3': '#3a8f3a',
+        'gen-4': '#2060cc',
+        'gen-5': '#c05000',
+        'gen-6': '#8040c0',
+        'gen-7': '#00a080',
+        'gen-8': '#0070a0',
+        'gen-9': '#c0306a',
+    };
+
+    static getGenerationFromId(id: number): number {
+        for (let i = 0; i < this.GENERATION_LIMITS.length; i++) {
+            if (id <= this.GENERATION_LIMITS[i]) return i + 1;
+        }
+        return 9;
+    }
+
+    static isGenerationLabel(text: string): boolean {
+        return /^gen-\d+$/.test(text);
+    }
+
+    static getPastelColorByGeneration(_gen: string): string {
+        const baseColor = this.normalizeHexColor('#5566aa');
+        return this.pastelizeColor(baseColor);
+    }
+
     static TYPE_COLOR_MAP: { [key: string]: string } = {
         normal: '#c0be61',
         fire: '#e96500',
