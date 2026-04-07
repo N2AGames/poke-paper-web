@@ -146,7 +146,7 @@ input-auto {
 /* Medium phone / small tablet (541–767px) */
 @media (min-width: 541px) and (max-width: 767px) {
   :host {
-    --cell-size: 5.5rem;
+    --cell-size: 5rem;
     --board-gap: 6px;
     --req-font-size: 8px;
   }
@@ -155,7 +155,7 @@ input-auto {
 /* 720p / short-height landscape screens: ≤800px tall, wider than a phone */
 @media (max-height: 800px) and (min-width: 768px) {
   :host {
-    --cell-size: 5.5rem;
+    --cell-size: 5rem;
     --board-gap: 6px;
     --req-font-size: 9px;
   }
