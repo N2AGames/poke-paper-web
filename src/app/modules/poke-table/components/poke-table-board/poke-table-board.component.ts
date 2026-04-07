@@ -302,7 +302,15 @@ export class PokeTableBoard implements OnInit{
       return false;
     }
 
-    return this.satisfiesRequest(pokemon, rowRequest) && this.satisfiesRequest(pokemon, columnRequest);
+    return this.satisfiesRequests(pokemon, rowRequest, columnRequest);
+  }
+
+  private satisfiesRequests(pokemon: PokemonApiResponse, rowRequest: PTBoardRequest, columnRequest: PTBoardRequest): boolean {
+    if(rowRequest.kind === 'type' && columnRequest.kind === 'type' && rowRequest.text === columnRequest.text) {
+      return pokemon.types.every((entry) => entry.type.name === rowRequest.text);
+    } else {
+      return this.satisfiesRequest(pokemon, rowRequest) && this.satisfiesRequest(pokemon, columnRequest);
+    }
   }
 
   private satisfiesRequest(pokemon: PokemonApiResponse, request: PTBoardRequest): boolean {

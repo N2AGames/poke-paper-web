@@ -99,8 +99,8 @@ export class FlipCard implements OnInit {
   parseColorsFromData(data: PokemonApiResponse[]): string[] {
     let colors: string[] = [];
     for(let i = 0; i < data.length; i++) {
-      const color1 = Utils.getPastelColorByType(data[i].types[0].type.name);
-      const color2 = data[i].types[1] ? Utils.getPastelColorByType(data[i].types[1].type.name) : color1;
+      const color1 = Utils.getPastelColorByType(data[i].types[0].type.name, 0.68);
+      const color2 = data[i].types[1] ? Utils.getPastelColorByType(data[i].types[1].type.name, 0.68) : color1;
       colors.push(color1);
       colors.push(color2);
     }

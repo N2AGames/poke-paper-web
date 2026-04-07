@@ -34,24 +34,24 @@ export class Utils {
     }
 
     static TYPE_COLOR_MAP: { [key: string]: string } = {
-        normal: '#c0be61',
-        fire: '#e96500',
-        water: '#004df3',
-        electric: '#fbff00',
-        grass: '#5dc521',
-        ice: '#96D9D6',
-        fighting: '#bd06008f',
-        poison: '#8500b9',
-        ground: '#b17e1f',
-        flying: '#00eeff',
-        psychic: '#d400ff',
-        bug: '#869700',
-        rock: '#663a00',
-        ghost: '#2b2336',
-        dragon: '#2d00a0',
-        dark: '#303030',
-        steel: '#B7B7CE',
-        fairy: '#ff0080'
+        normal:   '#A8A060',
+        fire:     '#FF5500',
+        water:    '#0066FF',
+        electric: '#FFD700',
+        grass:    '#22BB33',
+        ice:      '#44DDCC',
+        fighting: '#DD2200',
+        poison:   '#9900BB',
+        ground:   '#CC8833',
+        flying:   '#88AAFF',
+        psychic:  '#FF1188',
+        bug:      '#779900',
+        rock:     '#886644',
+        ghost:    '#553388',
+        dragon:   '#4400CC',
+        dark:     '#445555',
+        steel:    '#AABBCC',
+        fairy:    '#FF88BB'
     };
 
     static AVOID_COLORS: string[] = [
@@ -71,9 +71,9 @@ export class Utils {
         return this.TYPE_COLOR_MAP[type] || '#ffffff';
     }
 
-    static getPastelColorByType(type: string): string {
+    static getPastelColorByType(type: string, weight?: number): string {
         const baseColor = this.normalizeHexColor(this.getColorByType(type));
-        return this.pastelizeColor(baseColor);
+        return this.pastelizeColor(baseColor, weight);
     }
 
     static getReadableTextColor(backgroundColor: string): string {
@@ -101,15 +101,16 @@ export class Utils {
         return '#bbb8a0';
     }
 
-    static pastelizeColor(hexColor: string): string {
+    static pastelizeColor(hexColor: string, weight?: number): string {
         const normalizedColor = this.normalizeHexColor(hexColor);
         const red = Number.parseInt(normalizedColor.slice(1, 3), 16);
         const green = Number.parseInt(normalizedColor.slice(3, 5), 16);
         const blue = Number.parseInt(normalizedColor.slice(5, 7), 16);
 
-        const mixedRed = Math.round(red * this.PASTEL_TYPE_WEIGHT + this.PAPER_TONE.r * (1 - this.PASTEL_TYPE_WEIGHT));
-        const mixedGreen = Math.round(green * this.PASTEL_TYPE_WEIGHT + this.PAPER_TONE.g * (1 - this.PASTEL_TYPE_WEIGHT));
-        const mixedBlue = Math.round(blue * this.PASTEL_TYPE_WEIGHT + this.PAPER_TONE.b * (1 - this.PASTEL_TYPE_WEIGHT));
+        const w = weight ?? this.PASTEL_TYPE_WEIGHT;
+        const mixedRed = Math.round(red * w + this.PAPER_TONE.r * (1 - w));
+        const mixedGreen = Math.round(green * w + this.PAPER_TONE.g * (1 - w));
+        const mixedBlue = Math.round(blue * w + this.PAPER_TONE.b * (1 - w));
 
         return `#${this.toHex(mixedRed)}${this.toHex(mixedGreen)}${this.toHex(mixedBlue)}`;
     }
