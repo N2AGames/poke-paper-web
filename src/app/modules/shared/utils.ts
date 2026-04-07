@@ -17,11 +17,28 @@ export class Utils {
         'gen-9': '#c0306a',
     };
 
+    static readonly REGIONAL_FORM_GENERATION: { [key: string]: number } = {
+        'alola': 7,
+        'galar': 8,
+        'hisui': 8,
+        'paldea': 9,
+    };
+
     static getGenerationFromId(id: number): number {
         for (let i = 0; i < this.GENERATION_LIMITS.length; i++) {
             if (id <= this.GENERATION_LIMITS[i]) return i + 1;
         }
         return 9;
+    }
+
+    static getGenerationFromPokemonName(name: string, id: number): number {
+        const parts = name.split('-');
+        for (const part of parts.slice(1)) {
+            if (this.REGIONAL_FORM_GENERATION[part] !== undefined) {
+                return this.REGIONAL_FORM_GENERATION[part];
+            }
+        }
+        return this.getGenerationFromId(id);
     }
 
     static isGenerationLabel(text: string): boolean {

@@ -319,7 +319,7 @@ export class PokeTableBoard implements OnInit{
     }
     if (request.kind === 'generation') {
       const genNum = parseInt(request.text.replace('gen-', ''));
-      return Utils.getGenerationFromId(pokemon.id) === genNum;
+      return Utils.getGenerationFromPokemonName(pokemon.name, pokemon.id) === genNum;
     }
     return false;
   }
