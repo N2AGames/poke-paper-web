@@ -4,12 +4,16 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
+
+  --cell-size: 7rem;
+  --board-gap: 8px;
+  --req-font-size: 10px;
 }
 
 #ptBoard {
   padding: 1rem;
   align-items: center;
-  gap: 8px;
+  gap: var(--board-gap);
   margin: 0 auto;
   width: fit-content;
 
@@ -18,8 +22,8 @@
   
   .col {
     margin: 0;
-    width: 7rem;
-    height: 7rem;
+    width: var(--cell-size);
+    height: var(--cell-size);
   }
 
   .selected {
@@ -33,7 +37,7 @@
 .guesses-side {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--board-gap);
 }
 
 .request-header-spacer {
@@ -43,11 +47,11 @@
 .col-name {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--board-gap);
 }
 
 .request-row {
-  gap: 8px;
+  gap: var(--board-gap);
 }
 
 .request-col {
@@ -58,7 +62,7 @@
   box-shadow: 0 3px 0 #444, 0 5px 0 #111;
   display: flex;
   font-family: 'Press Start 2P', cursive;
-  font-size: 10px;
+  font-size: var(--req-font-size);
   font-weight: 600;
   height: auto !important;
   justify-content: center;
@@ -76,8 +80,8 @@
 }
 
 .request-row-col {
-  height: 7rem;
-  min-height: 7rem;
+  height: var(--cell-size);
+  min-height: var(--cell-size);
 }
 
 .guess-panel {
@@ -89,6 +93,12 @@
   justify-content: center;
   align-items: center;
   transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.1s ease;
+}
+
+.guess-panel img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
 }
 
 .guess-panel:hover {
@@ -116,4 +126,63 @@ input-auto {
   margin: 0 auto;
   max-width: 52rem;
   width: min(100%, 52rem);
+}
+
+/* ── Responsive breakpoints ──────────────────────────────── */
+
+/* Small phone portrait (≤540px wide) */
+@media (max-width: 540px) {
+  :host {
+    --cell-size: 4.5rem;
+    --board-gap: 5px;
+    --req-font-size: 7px;
+  }
+
+  input-auto {
+    max-width: 100%;
+  }
+}
+
+/* Medium phone / small tablet (541–767px) */
+@media (min-width: 541px) and (max-width: 767px) {
+  :host {
+    --cell-size: 5.5rem;
+    --board-gap: 6px;
+    --req-font-size: 8px;
+  }
+}
+
+/* 720p / short-height landscape screens: ≤800px tall, wider than a phone */
+@media (max-height: 800px) and (min-width: 768px) {
+  :host {
+    --cell-size: 5.5rem;
+    --board-gap: 6px;
+    --req-font-size: 9px;
+  }
+}
+
+/* 1440p / 2K */
+@media (min-width: 1440px) {
+  :host {
+    --cell-size: 8rem;
+    --req-font-size: 11px;
+  }
+}
+
+/* 2.5K (2560p) */
+@media (min-width: 2560px) {
+  :host {
+    --cell-size: 10rem;
+    --board-gap: 10px;
+    --req-font-size: 13px;
+  }
+}
+
+/* 4K (3840p) */
+@media (min-width: 3840px) {
+  :host {
+    --cell-size: 13rem;
+    --board-gap: 14px;
+    --req-font-size: 18px;
+  }
 }

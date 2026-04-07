@@ -399,3 +399,40 @@ h1 {
     font-size: 28px;
   }
 }
+
+/* 2.5K (2560p) and above */
+@media (min-width: 2560px) {
+  #container {
+    width: min(100%, 1600px);
+  }
+
+  #game-title {
+    font-size: 42px;
+  }
+
+  #game-container {
+    padding: 20px 30px;
+    gap: 12px;
+  }
+}
+
+/* 4K (3840p) and above */
+@media (min-width: 3840px) {
+  #container {
+    width: min(100%, 2400px);
+  }
+
+  #game-title {
+    font-size: 60px;
+  }
+
+  #game-container {
+    padding: 28px 48px;
+    gap: 16px;
+  }
+
+  .return-button,
+  .info-button {
+    padding: 18px;
+  }
+}

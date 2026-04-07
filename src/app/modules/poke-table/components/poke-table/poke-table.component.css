@@ -1,6 +1,6 @@
 #result-message {
 	font-family: 'Press Start 2P', cursive;
-	font-size: 13px;
+	font-size: clamp(9px, 1.2vw, 13px);
 	color: #0b2a0b;
 	background-color: #b8f7b8;
 	border: 3px solid #0b2a0b;
@@ -26,4 +26,70 @@
 poke-table-board {
 	overflow: auto;
 	max-height: calc(100dvh - 220px);
+}
+
+/* Landscape phones: extra tight height budget */
+@media (max-height: 540px) {
+	poke-table-board {
+		max-height: calc(100dvh - 150px);
+	}
+}
+
+/* 720p / short-height landscape (≤800px tall, non-phone) */
+@media (max-height: 800px) and (min-width: 768px) {
+	poke-table-board {
+		max-height: calc(100dvh - 160px);
+	}
+
+	#mode-btn {
+		padding: 6px 12px;
+		font-size: 9px;
+		margin-top: 4px;
+		box-shadow: 0 3px 0 #444, 0 4px 0 #111;
+	}
+
+	#result-message {
+		font-size: 9px;
+		padding: 6px 10px;
+	}
+
+	.action-btns {
+		gap: 8px;
+	}
+}
+
+/* 2.5K (2560p) — widen game area */
+@media (min-width: 2560px) {
+	#container {
+		width: min(100%, 1600px);
+	}
+
+	#game-container {
+		padding: 20px 30px;
+	}
+
+	#result-message {
+		font-size: 18px;
+		padding: 16px 24px;
+	}
+}
+
+/* 4K (3840p) */
+@media (min-width: 3840px) {
+	#container {
+		width: min(100%, 2400px);
+	}
+
+	#game-container {
+		padding: 24px 40px;
+	}
+
+	#game-title {
+		font-size: 60px;
+	}
+
+	#result-message {
+		font-size: 24px;
+		padding: 20px 32px;
+	}
 }
