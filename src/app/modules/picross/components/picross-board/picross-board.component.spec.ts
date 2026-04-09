@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PicrossBoard } from './picross-board';
+import { PicrossBoard } from './picross-board.component';
 
 describe('PicrossBoard', () => {
   let component: PicrossBoard;

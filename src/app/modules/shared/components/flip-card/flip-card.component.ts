@@ -5,7 +5,6 @@ import { PokemonDataService } from '../../services/pokemon-data.service';
 import { PokemonApiResponse } from '../../models/pokemon-api.model';
 import { Utils } from '../../utils';
 import { isPlatformBrowser } from '@angular/common';
-import { sign } from 'crypto';
 
 @Component({
   selector: 'flip-card',

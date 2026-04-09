@@ -319,9 +319,19 @@ export class PokeTableBoard implements OnInit{
     }
     if (request.kind === 'generation') {
       const genNum = parseInt(request.text.replace('gen-', ''));
-      return Utils.getGenerationFromPokemonName(pokemon.name, pokemon.id) === genNum;
+      const effectiveId = this.getEffectivePokemonId(pokemon);
+      return Utils.getGenerationFromPokemonName(pokemon.name, effectiveId) === genNum;
     }
     return false;
+  }
+
+  private getEffectivePokemonId(pokemon: PokemonApiResponse): number {
+    const maxKnownId = Utils.GENERATION_LIMITS[Utils.GENERATION_LIMITS.length - 1];
+    if (pokemon.id > maxKnownId && pokemon.species?.url) {
+      const match = pokemon.species.url.match(/\/(\d+)\/?$/);
+      if (match) return parseInt(match[1], 10);
+    }
+    return pokemon.id;
   }
 
   private updateRequestCompletion(): void {
